@@ -5,9 +5,10 @@ services:
   #   image: postgres:16-alpine
   #   ports:
   #     - 5432:5432
-  # backend:
-  #   build:
-  #     context: ./backend
+  backend:
+    build: ./backend
+    ports:
+      - 8081:8080
   frontend:
     build: ./frontend
     ports:

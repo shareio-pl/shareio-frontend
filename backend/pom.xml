@@ -11,8 +11,16 @@
 	<groupId>org.shareio</groupId>
 	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	<name>backend</name>
 	<description>Shareio backend</description>
+	<modules>
+		<module>users</module>
+		<module>lib</module>
+		<module>bootstrap</module>
+		<module>offers</module>
+		<module>score</module>
+	</modules>
 	<properties>
 		<java.version>21</java.version>
 	</properties>

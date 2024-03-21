@@ -9,9 +9,32 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <packaging>jar</packaging>
-    <groupId>org.shareio.backend</groupId>
+    <packaging>war</packaging>
+    <groupId>org.shareio</groupId>
     <artifactId>bootstrap</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.shareio</groupId>
+            <artifactId>lib</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.shareio</groupId>
+            <artifactId>offers</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.shareio</groupId>
+            <artifactId>score</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.shareio</groupId>
+            <artifactId>users</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -32,17 +55,17 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skip>true</skip>
+                    <mainClass>org.shareio.backend.Main</mainClass>
                 </configuration>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-war-plugin</artifactId>-->
-<!--                <version>3.4.0</version>-->
-<!--                <configuration>-->
-<!--                    <failOnMissingWebXml>false</failOnMissingWebXml>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

@@ -1,4 +1,4 @@
-package org.shareio.backend.infrastructure;
+package org.shareio.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

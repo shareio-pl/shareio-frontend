@@ -1,5 +1,5 @@
 <template>
-  <Header :style="{ fontFamily: FONTS_PRIMARY }" />
+  <Header :style="{ fontFamily: FONTS.PRIMARY }" />
 </template>
 
 <script>
@@ -11,10 +11,10 @@ export default {
   components: {
     Header,
   },
-  data() {
-    return {
-      FONTS_PRIMARY: FONTS.PRIMARY, // Using FONTS.PRIMARY unfortunately doesn't work, as Vue doesn't seem to pick that up as a value if I import from consts.
-    };
+  computed: {
+    FONTS() {
+      return FONTS;
+    },
   },
 };
 </script>

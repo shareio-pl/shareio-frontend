@@ -4,3 +4,7 @@ export const COLORS = {
     TEXT_PRIMARY: '#000000',
     TEXT_SECONDARY: '#FFFFFF',
 }
+
+export const FONTS = {
+    PRIMARY: 'Abhaya Libre'
+}

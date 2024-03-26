@@ -10,6 +10,20 @@
     </parent>
 
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.shareio</groupId>
+            <artifactId>users</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.shareio</groupId>
+            <artifactId>offers</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
     <groupId>org.shareio</groupId>
     <artifactId>score</artifactId>
 

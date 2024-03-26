@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.shareio.backend.core.model.vo.Address;
 import org.shareio.backend.core.model.vo.Security;
 import org.shareio.backend.core.model.vo.UserId;
-import org.shareio.backend.core.model.vo.UserRating;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +19,6 @@ public class User {
     private String email;
     private String name;
     private LocalDateTime dateOfBirth;
-    private UserRating userRating;
     private Address address;
     private Security security;
 

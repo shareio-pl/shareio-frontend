@@ -1,5 +1,6 @@
 package org.shareio.backend.core.model;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 public class Offer {
+    @Setter(AccessLevel.NONE)
     private OfferId offerId;
     private User owner;
     private Address address;
@@ -23,4 +25,8 @@ public class Offer {
     private String title;
     private String description;
     private PhotoId photoId;
+
+    public OfferSnapshot toSnapshot() {
+        return new OfferSnapshot(this);
+    }
 }

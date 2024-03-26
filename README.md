@@ -2,5 +2,5 @@
 
 ## Running app
 ```console
-docker compose up --force-recreate --build
+docker compose --env-file env_test up --force-recreate --build
 ```

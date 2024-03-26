@@ -1,13 +1,16 @@
 services:
   db:
     image: 'postgres:16-alpine'
-    container_name: db
+    container_name: postgres
     environment:
       - POSTGRES_USER=${POSTGRES_USERNAME}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DATABASE}
+    volumes:
+      - db:/data/postgres
     ports:
       - 5432:5432
+
   backend:
     build: ./backend
     container_name: app
@@ -20,10 +23,12 @@ services:
     ports:
       - 8081:8081
     depends_on:
-        - db
+      - db
   frontend:
     build: ./frontend
     ports:
       - 8080:80
     depends_on:
       - backend
+volumes:
+  db:

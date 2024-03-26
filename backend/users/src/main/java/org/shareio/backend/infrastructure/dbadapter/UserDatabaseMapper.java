@@ -6,13 +6,15 @@ import org.shareio.backend.core.model.vo.Address;
 
 public class UserDatabaseMapper {
     public static UserEntity map(UserSnapshot userSnapshot) {
-        return new UserEntity(userSnapshot.userId().getId(), userSnapshot.email(),
+        return new UserEntity(null, userSnapshot.userId().getId(), userSnapshot.email(),
                 userSnapshot.name(), userSnapshot.dateOfBirth(),
                 UserDatabaseMapper.mapAddress(userSnapshot.address()), UserDatabaseMapper.mapSecurity(userSnapshot));
     }
 
     public static AddressEntity mapAddress(final Address address) {
-        return new AddressEntity(address.getCountry(),
+        return new AddressEntity(
+                null,
+                address.getCountry(),
                 address.getRegion(),
                 address.getCity(),
                 address.getHouseNumber(),
@@ -23,7 +25,9 @@ public class UserDatabaseMapper {
     }
 
     private static SecurityEntity mapSecurity(UserSnapshot userSnapshot) {
-        return new SecurityEntity(userSnapshot.security().getPwHash(),
+        return new SecurityEntity(
+                null,
+                userSnapshot.security().getPwHash(),
                 userSnapshot.security().getRegistrationDate(),
                 userSnapshot.security().getLastLoginDate());
     }

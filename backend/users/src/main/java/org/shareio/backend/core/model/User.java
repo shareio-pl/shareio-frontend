@@ -8,9 +8,9 @@ import lombok.Setter;
 import org.shareio.backend.core.model.vo.Address;
 import org.shareio.backend.core.model.vo.Security;
 import org.shareio.backend.core.model.vo.UserId;
+import org.shareio.backend.core.usecases.port.dto.GetUserDto;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -24,9 +24,28 @@ public class User {
     private Address address;
     private Security security;
 
-    public User() {
-        // TODO: User(UserDTO userDTO)
-        this(new UserId(new UUID(0L, 0L)), "", "", null, null, null);
+    public static User fromDto(GetUserDto getUserDto) {
+
+        return new User(
+                getUserDto.getUserId(),
+                getUserDto.getEmail(),
+                getUserDto.getName(),
+                getUserDto.getDateOfBirth(),
+                new Address(
+                        getUserDto.getCountry(),
+                        null,
+                        getUserDto.getCity(),
+                        null,
+                        null,
+                        null,
+                        null
+                ),
+                new Security(
+                        null,
+                        null,
+                        getUserDto.getLastLoginDate()
+                )
+        );
     }
 
     public UserSnapshot toSnapshot() {

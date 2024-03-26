@@ -1,14 +1,19 @@
 package org.shareio.backend.infrastructure.dbadapter;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.shareio.backend.core.model.vo.Location;
 
 @Data
+@Entity
+@Table(name = "addresses")
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long addressId;
     private String country;
     private String region;
     private String city;

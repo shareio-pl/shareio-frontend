@@ -10,7 +10,6 @@
     </parent>
 
     <packaging>war</packaging>
-    <groupId>org.shareio</groupId>
     <artifactId>bootstrap</artifactId>
 
     <dependencies>
@@ -34,6 +33,7 @@
             <artifactId>users</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
     </dependencies>
 
     <properties>

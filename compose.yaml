@@ -12,6 +12,7 @@ services:
     build: ./backend
     container_name: app
     environment:
+      - SERVER_PORT=8081
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DATABASE}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
@@ -23,6 +24,6 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - 8080:8080
+      - 8080:80
     depends_on:
       - backend

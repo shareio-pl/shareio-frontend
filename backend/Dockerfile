@@ -19,7 +19,7 @@ COPY offers/src/main offers/src/main
 COPY score/src/main score/src/main
 COPY users/src/main users/src/main
 
-RUN mvn clean package -DskipTests
+RUN mvn package -DskipTests
 
 #RUN jar tf /app/bootstrap/target/bootstrap-0.0.1-SNAPSHOT.war
 

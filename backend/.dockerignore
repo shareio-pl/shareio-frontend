@@ -6,3 +6,4 @@ target
 Dockerfile
 HELP.md
 mvnw.cmd
+bootstrap/src/main/resources/application.properties

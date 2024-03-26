@@ -5,25 +5,23 @@ WORKDIR /app
 
 COPY pom.xml .
 
-COPY lib/src lib/src
 COPY lib/pom.xml lib/
-
-COPY bootstrap/src bootstrap/src
 COPY bootstrap/pom.xml bootstrap/
-
-COPY offers/src offers/src
 COPY offers/pom.xml offers/
-
-COPY score/src score/src
 COPY score/pom.xml score/
-
-COPY users/src users/src
 COPY users/pom.xml users/
 
 RUN mvn dependency:resolve-plugins
+
+COPY lib/src/main lib/src/main
+COPY bootstrap/src/main bootstrap/src/main
+COPY offers/src/main offers/src/main
+COPY score/src/main score/src/main
+COPY users/src/main users/src/main
+
 RUN mvn clean package -DskipTests
 
-RUN jar tf /app/bootstrap/target/bootstrap-0.0.1-SNAPSHOT.war
+#RUN jar tf /app/bootstrap/target/bootstrap-0.0.1-SNAPSHOT.war
 
 FROM eclipse-temurin:21-jre-alpine
 

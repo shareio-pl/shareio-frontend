@@ -1,11 +1,5 @@
-FROM node:lts-alpine
-
-# update container
-# TODO: uncomment for production
-# RUN apk update && apk upgrade
-
-# install simple http server for serving static content
-RUN npm install -g http-server
+# build stage
+FROM node:lts-alpine AS build
 
 # make the 'app' folder the current working directory
 WORKDIR /app
@@ -22,5 +16,8 @@ COPY . .
 # build app for production with minification
 RUN npm run build
 
+# production stage
+FROM nginx:stable-alpine
+COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 8080
-CMD [ "http-server", "dist" ]
+CMD ["nginx", "-g", "daemon off;"]

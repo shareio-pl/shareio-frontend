@@ -8,3 +8,8 @@ export const COLORS = {
 export const FONTS = {
     PRIMARY: 'Abhaya Libre'
 }
+
+export const FONT_SIZES = {
+    PRIMARY: '20px',
+    SECONDARY: '14px',
+}

@@ -1,39 +1,36 @@
 <template>
   <div id="header" :style="{ background: COLORS.PRIMARY }">
-    <img src="../../src/assets/logo.png" alt="logo" />
+    <img src="../../src/assets/logo.png" alt="logo"/>
     <button
-      :style="{ background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY }"
-    >
+        :style="{ background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY, fontSize: FONT_SIZES.PRIMARY}">
       Ogłoszenia
     </button>
     <button
-      :style="{ background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY }"
-    >
+        :style="{ background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY, fontSize: FONT_SIZES.PRIMARY }">
       Mapa
     </button>
     <button
-      :style="{ background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY }"
-    >
+        :style="{ background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY, fontSize: FONT_SIZES.SECONDARY }">
       Wystaw Przedmiot
     </button>
     <button
-      :style="{ background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY }"
-    >
+        :style="{ background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY, fontSize: FONT_SIZES.PRIMARY }">
       Jak to działa?
     </button>
-    <div id="user" :style="{ color: COLORS.TEXT_PRIMARY }">
-      <img src="../../src/assets/logo.png" alt="logo" />
+    <div id="user" :style="{ color: COLORS.TEXT_PRIMARY, fontSize: FONT_SIZES.PRIMARY }">
+      <img src="../../src/assets/logo.png" alt="logo"/>
       <div>
         <p>IMIĘ</p>
         <p>NAZWISKO</p>
       </div>
-      <img src="../../src/assets/logo.png" alt="logo" />
+      <img src="../../src/assets/logo.png" alt="logo"/>
     </div>
   </div>
 </template>
 
 <script>
-import { COLORS } from "../../public/Consts";
+import {COLORS} from "../../public/Consts";
+import {FONT_SIZES} from "../../public/Consts";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -41,6 +38,7 @@ export default {
   data() {
     return {
       COLORS: COLORS,
+      FONT_SIZES: FONT_SIZES,
     };
   },
 };
@@ -70,6 +68,5 @@ button {
   height: 45px;
   margin-left: 2%;
   border-radius: 20px;
-  font-size: 93%;
 }
 </style>

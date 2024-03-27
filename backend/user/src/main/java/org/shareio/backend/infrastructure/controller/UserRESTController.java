@@ -3,7 +3,7 @@ package org.shareio.backend.infrastructure.controller;
 import lombok.AllArgsConstructor;
 import org.shareio.backend.core.model.UserSnapshot;
 import org.shareio.backend.core.usecases.port.in.GetUserProfileUseCaseInterface;
-import org.shareio.backend.infrastructure.dbadapter.AddressEntity;
+import org.shareio.backend.infrastructure.dbadapter.entities.AddressEntity;
 import org.shareio.backend.infrastructure.dbadapter.entities.SecurityEntity;
 import org.shareio.backend.infrastructure.dbadapter.entities.UserEntity;
 import org.shareio.backend.infrastructure.dbadapter.repositories.UserRepository;
@@ -39,7 +39,7 @@ public class UserRESTController {
         UserEntity userEntity;
         try {
             userEntity = new UserEntity(null, id, "A", "B", LocalDateTime.now(),
-                    new AddressEntity(null, "A", "B", "C", "12", "21", "99999", 10.1, 22.1),
+                    new AddressEntity(null, null, "A", "B", "C", "12", "21", "99999", 10.1, 22.1),
                     new SecurityEntity(null, "aa", LocalDateTime.now(), LocalDateTime.now()));
 
         } catch (Exception e) {

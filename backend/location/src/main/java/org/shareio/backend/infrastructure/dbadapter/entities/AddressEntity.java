@@ -1,9 +1,11 @@
-package org.shareio.backend.infrastructure.dbadapter;
+package org.shareio.backend.infrastructure.dbadapter.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @Entity
@@ -13,7 +15,8 @@ import lombok.NoArgsConstructor;
 public class AddressEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long addressId;
+    private Long dbId;
+    private UUID addressId;
     private String country;
     private String region;
     private String city;

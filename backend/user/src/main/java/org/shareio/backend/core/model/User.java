@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.shareio.backend.core.model.vo.Address;
 import org.shareio.backend.core.model.vo.Security;
 import org.shareio.backend.core.model.vo.UserId;
 import org.shareio.backend.core.usecases.port.dto.UserProfileGetDto;
@@ -31,7 +30,7 @@ public class User {
                 userProfileGetDto.email(),
                 userProfileGetDto.name(),
                 userProfileGetDto.dateOfBirth(),
-                new Address(
+                new Address(null,
                         userProfileGetDto.country(),
                         null,
                         userProfileGetDto.city(),

@@ -2,28 +2,25 @@ package org.shareio.backend.infrastructure.dbadapter.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "reviews")
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEntity {
+public class ReviewEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long dbId;
-    private UUID userId;
-    private String email;
-    private String name;
-    private LocalDateTime dateOfBirth;
+    private UUID reviewId;
     @OneToOne(cascade = CascadeType.ALL)
-    private AddressEntity address;
-    @OneToOne(cascade = CascadeType.ALL)
-    private SecurityEntity security;
+    private OfferEntity offer;
+    private Integer value;
+    private LocalDateTime date;
 }

@@ -1,11 +1,13 @@
-package org.shareio.backend.infrastructure.dbadapter;
+package org.shareio.backend.infrastructure.dbadapter.mappers;
 
-import org.shareio.backend.core.model.vo.Address;
+import org.shareio.backend.core.model.Address;
+import org.shareio.backend.infrastructure.dbadapter.entities.AddressEntity;
 
-public class AddressDatabaseMapper {
+public class AddressMapper {
     public static AddressEntity map(final Address address) {
         return new AddressEntity(
                 null,
+                address.getAddressId().getId(),
                 address.getCountry(),
                 address.getRegion(),
                 address.getCity(),

@@ -1,6 +1,5 @@
 package org.shareio.backend.core.model;
 
-import org.shareio.backend.core.model.vo.Address;
 import org.shareio.backend.core.model.vo.Security;
 import org.shareio.backend.core.model.vo.UserId;
 

@@ -21,6 +21,7 @@
         <module>bootstrap</module>
         <module>offers</module>
         <module>score</module>
+        <module>location</module>
     </modules>
 
     <properties>

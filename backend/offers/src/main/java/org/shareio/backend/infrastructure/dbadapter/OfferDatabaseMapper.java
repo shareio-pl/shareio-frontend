@@ -6,7 +6,7 @@ public class OfferDatabaseMapper {
     public static OfferEntity map(OfferSnapshot offerSnapshot) {
         return new OfferEntity(offerSnapshot.offerId().getId(),
                 UserDatabaseMapper.map(offerSnapshot.owner()),
-                UserDatabaseMapper.mapAddress(offerSnapshot.address()),
+                AddressDatabaseMapper.map(offerSnapshot.address()),
                 offerSnapshot.creationDate(),
                 UserDatabaseMapper.map(offerSnapshot.receiver()),
                 offerSnapshot.reservationDate(),

@@ -2,7 +2,7 @@ package org.shareio.backend.infrastructure.controller;
 
 import lombok.AllArgsConstructor;
 import org.shareio.backend.core.model.UserSnapshot;
-import org.shareio.backend.core.usecases.port.in.GetUserUseCaseInterface;
+import org.shareio.backend.core.usecases.port.in.GetUserProfileUseCaseInterface;
 import org.shareio.backend.infrastructure.dbadapter.AddressEntity;
 import org.shareio.backend.infrastructure.dbadapter.SecurityEntity;
 import org.shareio.backend.infrastructure.dbadapter.UserEntity;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserController {
 
-    GetUserUseCaseInterface getUserUseCaseInterface;
+    GetUserProfileUseCaseInterface getUserProfileUseCaseInterface;
     UserRepository userRepository;
 
     @RequestMapping(value = "/employees", method = RequestMethod.GET, produces = "application/json")
@@ -40,7 +40,7 @@ public class UserController {
                 new AddressEntity(null, "A", "B", "C", "12", "21", "99999", 10.1, 22.1),
                 new SecurityEntity(null, "aa", LocalDateTime.now(), LocalDateTime.now()));
         userRepository.save(userEntity);
-        return new ResponseEntity<>(getUserUseCaseInterface.getUserSnapshot(id), HttpStatusCode.valueOf(200));
+        return new ResponseEntity<>(getUserProfileUseCaseInterface.getUserSnapshot(id), HttpStatusCode.valueOf(200));
     }
 
 }

@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.shareio.backend.core.model.vo.Address;
 import org.shareio.backend.core.model.vo.Security;
 import org.shareio.backend.core.model.vo.UserId;
-import org.shareio.backend.core.usecases.port.dto.GetUserDto;
+import org.shareio.backend.core.usecases.port.dto.UserProfileGetDto;
 
 import java.time.LocalDateTime;
 
@@ -24,17 +24,17 @@ public class User {
     private Address address;
     private Security security;
 
-    public static User fromDto(GetUserDto getUserDto) {
+    public static User fromDto(UserProfileGetDto userProfileGetDto) {
 
         return new User(
-                getUserDto.getUserId(),
-                getUserDto.getEmail(),
-                getUserDto.getName(),
-                getUserDto.getDateOfBirth(),
+                userProfileGetDto.userId(),
+                userProfileGetDto.email(),
+                userProfileGetDto.name(),
+                userProfileGetDto.dateOfBirth(),
                 new Address(
-                        getUserDto.getCountry(),
+                        userProfileGetDto.country(),
                         null,
-                        getUserDto.getCity(),
+                        userProfileGetDto.city(),
                         null,
                         null,
                         null,
@@ -43,7 +43,7 @@ public class User {
                 new Security(
                         null,
                         null,
-                        getUserDto.getLastLoginDate()
+                        userProfileGetDto.lastLoginDate()
                 )
         );
     }

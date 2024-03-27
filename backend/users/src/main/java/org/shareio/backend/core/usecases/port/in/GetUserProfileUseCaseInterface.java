@@ -4,6 +4,6 @@ import org.shareio.backend.core.model.UserSnapshot;
 
 import java.util.UUID;
 
-public interface GetUserUseCaseInterface {
+public interface GetUserProfileUseCaseInterface {
     UserSnapshot getUserSnapshot(UUID id);
 }

@@ -5,8 +5,7 @@ import org.shareio.backend.core.model.vo.UserId;
 
 import java.time.LocalDateTime;
 
-@Getter
-public record GetUserDto(
+public record UserProfileGetDto(
         UserId userId,
         String email,
         String name,

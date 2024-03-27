@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="offers" />
         <module name="score" />
+        <module name="location" />
         <module name="bootstrap" />
         <module name="lib" />
         <module name="users" />
@@ -19,6 +20,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="bootstrap" options="-parameters" />
       <module name="lib" options="-parameters" />
+      <module name="location" options="-parameters" />
       <module name="offers" options="-parameters" />
       <module name="score" options="-parameters" />
       <module name="users" options="-parameters" />

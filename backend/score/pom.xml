@@ -24,7 +24,6 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-    <groupId>org.shareio</groupId>
     <artifactId>score</artifactId>
 
     <properties>

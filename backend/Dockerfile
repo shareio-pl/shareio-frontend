@@ -4,16 +4,18 @@ WORKDIR /app
 
 COPY pom.xml .
 
-COPY lib/pom.xml lib/
 COPY bootstrap/pom.xml bootstrap/
+COPY lib/pom.xml lib/
+COPY locations/pom.xml locations/
 COPY offers/pom.xml offers/
 COPY score/pom.xml score/
 COPY users/pom.xml users/
 
 RUN mvn dependency:resolve-plugins
 
-COPY lib/src/main lib/src/main
 COPY bootstrap/src/main bootstrap/src/main
+COPY lib/src/main lib/src/main
+COPY locations/src/main locations/src/main
 COPY offers/src/main offers/src/main
 COPY score/src/main score/src/main
 COPY users/src/main users/src/main

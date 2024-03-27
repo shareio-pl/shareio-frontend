@@ -34,14 +34,28 @@ public class UserController {
         return strings;
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<UserSnapshot> getUserById(@RequestParam UUID id) {
-        UserEntity userEntity = new UserEntity(null, id, "A", "B", LocalDateTime.now(),
-                new AddressEntity(null, "A", "B", "C", "12", "21", "99999", 10.1, 22.1),
-                new SecurityEntity(null, "aa", LocalDateTime.now(), LocalDateTime.now()));
-        userRepository.save(userEntity);
-        return new ResponseEntity<>(getUserProfileUseCaseInterface.getUserSnapshot(id), HttpStatusCode.valueOf(200));
+    @RequestMapping(value = "/debug/createUser", method = RequestMethod.GET, produces = "text/plain")
+    public ResponseEntity<String> debugCreateTestUser(@RequestParam UUID id) {
+        UserEntity userEntity;
+        try {
+            userEntity = new UserEntity(null, id, "A", "B", LocalDateTime.now(),
+                    new AddressEntity(null, "A", "B", "C", "12", "21", "99999", 10.1, 22.1),
+                    new SecurityEntity(null, "aa", LocalDateTime.now(), LocalDateTime.now()));
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Could not create debug user: " + e, HttpStatusCode.valueOf(500));
+        }
+        try {
+            userRepository.save(userEntity);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Could not save debug user: " + e, HttpStatusCode.valueOf(500));
+        }
+        return new ResponseEntity<>("Created debug user with id: " + id, HttpStatusCode.valueOf(200));
     }
 
+    @RequestMapping(value = "/user", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<UserSnapshot> getUserById(@RequestParam UUID id) {
+        return new ResponseEntity<>(getUserProfileUseCaseInterface.getUserSnapshot(id), HttpStatusCode.valueOf(200));
+    }
 }
 

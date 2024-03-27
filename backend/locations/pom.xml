@@ -9,8 +9,8 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.shareio.backend</groupId>
-    <artifactId>location</artifactId>
+    <packaging>jar</packaging>
+    <artifactId>locations</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

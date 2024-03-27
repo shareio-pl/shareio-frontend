@@ -19,8 +19,8 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.shareio.backend</groupId>
-            <artifactId>location</artifactId>
+            <groupId>org.shareio</groupId>
+            <artifactId>locations</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

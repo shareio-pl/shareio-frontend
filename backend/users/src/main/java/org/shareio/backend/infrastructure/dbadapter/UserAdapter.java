@@ -11,7 +11,7 @@ import java.util.UUID;
 @Service
 public class UserAdapter implements GetUserProfileQueryInterface {
 
-    UserRepository userRepository;
+    final UserRepository userRepository;
 
     public UserAdapter(
             UserRepository userRepository

@@ -1,7 +1,6 @@
 package org.shareio.backend.infrastructure.dbadapter;
 
 import org.shareio.backend.core.model.UserSnapshot;
-import org.shareio.backend.core.model.vo.Address;
 
 
 public class UserDatabaseMapper {
@@ -10,7 +9,6 @@ public class UserDatabaseMapper {
                 userSnapshot.name(), userSnapshot.dateOfBirth(),
                 AddressDatabaseMapper.map(userSnapshot.address()), UserDatabaseMapper.mapSecurity(userSnapshot));
     }
-
 
     private static SecurityEntity mapSecurity(UserSnapshot userSnapshot) {
         return new SecurityEntity(

@@ -6,19 +6,19 @@ COPY pom.xml .
 
 COPY bootstrap/pom.xml bootstrap/
 COPY lib/pom.xml lib/
-COPY locations/pom.xml locations/
-COPY offers/pom.xml offers/
+COPY location/pom.xml location/
+COPY offer/pom.xml offer/
 COPY score/pom.xml score/
-COPY users/pom.xml users/
+COPY user/pom.xml user/
 
 RUN mvn dependency:resolve-plugins
 
 COPY bootstrap/src/main bootstrap/src/main
 COPY lib/src/main lib/src/main
-COPY locations/src/main locations/src/main
-COPY offers/src/main offers/src/main
+COPY location/src/main location/src/main
+COPY offer/src/main offer/src/main
 COPY score/src/main score/src/main
-COPY users/src/main users/src/main
+COPY user/src/main user/src/main
 
 RUN mvn package -DskipTests
 

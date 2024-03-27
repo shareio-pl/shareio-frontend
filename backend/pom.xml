@@ -16,12 +16,12 @@
     <description>Shareio backend</description>
 
     <modules>
-        <module>users</module>
+        <module>user</module>
         <module>lib</module>
         <module>bootstrap</module>
-        <module>offers</module>
+        <module>offer</module>
         <module>score</module>
-        <module>locations</module>
+        <module>location</module>
     </modules>
 
     <properties>

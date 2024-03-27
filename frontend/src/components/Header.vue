@@ -1,33 +1,49 @@
 <template>
-  <div id="header" :style="{background: COLORS.PRIMARY}">
-    <img src="../../src/assets/logo.png" alt="logo">
-    <button :style="{background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY}">Ogłoszenia</button>
-    <button :style="{background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY}">Mapa</button>
-    <button :style="{background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY}">Wystaw Przedmiot</button>
-    <button :style="{background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY}">Jak to działa?</button>
-    <div id="user" :style="{color: COLORS.TEXT_PRIMARY}">
-      <img src="../../src/assets/logo.png" alt="logo">
+  <div id="header" :style="{ background: COLORS.PRIMARY }">
+    <img src="../../src/assets/logo.png" alt="logo" />
+    <button
+      :style="{ background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY }"
+    >
+      Ogłoszenia
+    </button>
+    <button
+      :style="{ background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY }"
+    >
+      Mapa
+    </button>
+    <button
+      :style="{ background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY }"
+    >
+      Wystaw Przedmiot
+    </button>
+    <button
+      :style="{ background: COLORS.SECONDARY, color: COLORS.TEXT_SECONDARY }"
+    >
+      Jak to działa?
+    </button>
+    <div id="user" :style="{ color: COLORS.TEXT_PRIMARY }">
+      <img src="../../src/assets/logo.png" alt="logo" />
       <div>
         <p>IMIĘ</p>
         <p>NAZWISKO</p>
       </div>
-      <img src="../../src/assets/logo.png" alt="logo">
+      <img src="../../src/assets/logo.png" alt="logo" />
     </div>
   </div>
 </template>
 
 <script>
-import {COLORS} from "../../public/Consts";
+import { COLORS } from "../../public/Consts";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Header',
+  name: "Header",
   data() {
     return {
       COLORS: COLORS,
-    }
-  }
-}
+    };
+  },
+};
 </script>
 
 <style scoped>

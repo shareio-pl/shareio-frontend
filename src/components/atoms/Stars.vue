@@ -1,6 +1,6 @@
 <template>
   <div class="star-rating">
-    <font-awesome-icon v-for="i in 5" :key="i" :icon="getStarIcon(i)" />
+    <font-awesome-icon v-for="star in 5" :key="star" :icon="getStarIcon(star)" />
   </div>
 </template>
 
@@ -10,7 +10,8 @@ import { faStar as filledStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 export default {
-  name: "AtomStars",
+  // eslint-disable-next-line vue/multi-word-component-names
+  name: "Stars",
   props: {
     filledStars: {
       type: Number,

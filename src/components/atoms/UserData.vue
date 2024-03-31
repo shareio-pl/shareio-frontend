@@ -51,10 +51,13 @@ export default {
 }
 
 .user-info {
-  margin-left: 10px;
+  margin-left: 0.8em; 
+  /* Percentage here wouldn't be the best choice, I think. 
+  Because then the margin varies too much on the width of component this atom would be in; 
+  in my testing the difference was noticeable. */
 }
 
 .user-name {
-  margin-bottom: -8px;
+  margin-bottom: -25%;
 }
 </style>

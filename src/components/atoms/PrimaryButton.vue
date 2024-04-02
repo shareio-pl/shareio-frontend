@@ -1,5 +1,5 @@
 <template>
-  <button class="primary-button" @click="handleClick">
+  <button class="button-primary">
     {{ buttonText }}
   </button>
 </template>
@@ -7,16 +7,11 @@
 <script>
 import { COLORS } from '../../../public/Consts';
 export default {
-  name: 'PrimaryButton',
+  name: 'ButtonPrimary',
   props: {
     buttonText: {
       type: String,
       required: true
-    }
-  },
-  methods: {
-    handleClick() {
-      this.$emit('click');
     }
   },
   data() {
@@ -28,7 +23,7 @@ export default {
 </script>
 
 <style scoped>
-.primary-button {
+.button-primary {
   width: 9%;
   height: 45px;
   margin-left: 2%;
@@ -37,7 +32,7 @@ export default {
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
 
-.primary-button:hover {
+.button-primary:hover {
   background-color: v-bind('COLORS.BUTTON_SECONDARY');
   counter-reset: v-bind('COLORS.TEXT_SECONDARY');
 }

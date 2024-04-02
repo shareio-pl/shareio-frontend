@@ -13,3 +13,5 @@ export const FONT_SIZES = {
     PRIMARY: '20px',
     SECONDARY: '14px',
 }
+
+export const DEFAULT_USER_PROFILE_IMAGE = require('@/assets/userImagePlaceholder.png');

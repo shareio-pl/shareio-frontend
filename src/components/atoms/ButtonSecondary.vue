@@ -29,8 +29,8 @@ export default {
   height: 45px;
   margin-left: 2%;
   background-color: v-bind('COLORS.BUTTON_SECONDARY_NORMAL');
-  color: v-bind('COLORS.TEXT_SECONDARY');
-  font-size: v-bind('FONT_SIZES.SECONDARY');
+  color: v-bind('COLORS.TEXT_PRIMARY');
+  font-size: v-bind('FONT_SIZES.PRIMARY');
 }
 
 .button-secondary:hover {

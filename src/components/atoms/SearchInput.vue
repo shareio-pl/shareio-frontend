@@ -1,7 +1,7 @@
 <template>
   <div class="search-input">
     <font-awesome-icon :icon="dropdownIcon" class="search-icon" />
-    <input type="text" :placeholder="placeholder" v-model="searchTerm" @input="updateSearch" class="search-field" />
+    <input type="text" :placeholder="placeholder" class="search-field" />
   </div>
 </template>
 

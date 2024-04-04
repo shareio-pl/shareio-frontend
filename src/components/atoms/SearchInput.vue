@@ -1,6 +1,6 @@
 <template>
   <div class="search-input">
-    <font-awesome-icon :icon="dropdownIcon" class="search-icon" />
+    <font-awesome-icon :icon="SearchIcon" class="search-icon" />
     <input type="text" :placeholder="placeholder" class="search-field" />
   </div>
 </template>
@@ -14,15 +14,16 @@ export default {
   components: {
     FontAwesomeIcon,
   },
+  data() {
+    return {
+      SearchIcon: SearchIcon,
+    };
+  },
   props: {
     placeholder: {
       type: String,
       required: true,
     },
-    dropdownIcon: {
-      type: Object,
-      default: SearchIcon,
-    }
   },
 };
 </script>

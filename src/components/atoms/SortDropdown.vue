@@ -2,7 +2,7 @@
   <div class="select-wrapper">
     <select>
       <option v-for="(option, index) in options" :key="index">
-        {{ option }}
+        Sortuj: {{ option }}
       </option>
     </select>
     <font-awesome-icon :icon="iconChevronDown" class="arrow-icon" />

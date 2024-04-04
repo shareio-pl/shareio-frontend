@@ -5,7 +5,7 @@
         {{ option }}
       </option>
     </select>
-    <font-awesome-icon :icon="dropdownIcon" class="arrow-icon" />
+    <font-awesome-icon :icon="iconChevronDown" class="arrow-icon" />
   </div>
 </template>
 
@@ -19,19 +19,11 @@ export default {
   components: {
     FontAwesomeIcon
   },
-  props: {
-    options: {
-      type: Array,
-      required: true,
-    },
-    dropdownIcon: {
-      type: Object,
-      default: faChevronDown
-    },
-  },
   data() {
     return {
       COLORS: COLORS,
+      options: ["Najbliższe", "Najdalsze", "Najnowsze", "Najstarsze", "Najwyżej oceniane"],
+      iconChevronDown: faChevronDown
     };
   },
 }

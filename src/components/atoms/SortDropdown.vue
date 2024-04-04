@@ -46,7 +46,7 @@ export default {
 
 .arrow-icon {
   position: absolute;
-  right: 0.5%;
+  right: 1%;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;

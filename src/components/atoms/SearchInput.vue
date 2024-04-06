@@ -1,13 +1,13 @@
 <template>
   <div class="search-input">
-    <font-awesome-icon :icon="SearchIcon" class="search-icon" />
-    <input type="text" :placeholder="placeholder" class="search-field" />
+    <font-awesome-icon :icon="SearchIcon" class="search-icon"/>
+    <input type="text" :placeholder="placeholder" class="search-field" v-model="input" @keyup.enter="search"/>
   </div>
 </template>
 
 <script>
-import { faSearch as SearchIcon } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import {faSearch as SearchIcon} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 
 export default {
   name: "SearchInput",
@@ -17,6 +17,7 @@ export default {
   data() {
     return {
       SearchIcon: SearchIcon,
+      input: '',
     };
   },
   props: {
@@ -24,6 +25,12 @@ export default {
       type: String,
       required: true,
     },
+  },
+  methods: {
+    search() {
+      console.log('User input: ', this.input);
+      this.emitter.emit('search', {input: this.input});
+    }
   },
 };
 </script>

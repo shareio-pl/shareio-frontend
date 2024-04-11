@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { COLORS } from '../../../public/Consts';
+import { COLORS, FONT_SIZES } from '../../../public/Consts';
 export default {
   name: 'ButtonPrimary',
   props: {
@@ -17,6 +17,7 @@ export default {
   data() {
     return {
       COLORS: COLORS,
+      FONT_SIZES: FONT_SIZES,
     };
   },
 }
@@ -24,7 +25,7 @@ export default {
 
 <style scoped>
 .button-primary {
-  width: 9%;
+  width: 10%;
   height: 45px;
   margin-left: 2%;
   border-radius: 20px;

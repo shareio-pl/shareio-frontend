@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
-import OffersList from "@/components/OffersList.vue";
+import Header from "@/components/organisms/Header.vue";
+import OffersList from "@/components/organisms/OffersList.vue";
 import {FONTS} from "../public/Consts";
 
 export default {

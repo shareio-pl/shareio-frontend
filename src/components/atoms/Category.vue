@@ -6,9 +6,17 @@
 </template>
 
 <script>
+import { FONT_SIZES } from "../../../public/Consts";
+import { COLORS } from "../../../public/Consts";
 export default {
 // eslint-disable-next-line vue/multi-word-component-names
   name: "Category",
+  data() {
+    return {
+      FONT_SIZES: FONT_SIZES,
+      COLORS: COLORS,
+    };
+  },
   props: {
     category: {
       type: String,
@@ -27,6 +35,13 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-left: min(5%, 10px);
+  font-size: v-bind('FONT_SIZES.PRIMARY');
+  color: v-bind('COLORS.TEXT_SECONDARY');
+}
+
+.category:hover {
+  cursor: pointer;
+  color: v-bind('COLORS.TEXT_HOVER');
 }
 
 .category span {

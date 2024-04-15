@@ -3,6 +3,7 @@ export const COLORS = {
     SECONDARY: '#000000',
     TEXT_PRIMARY: '#000000',
     TEXT_SECONDARY: '#FFFFFF',
+    TEXT_HOVER: '#FF0000',
 }
 
 export const FONTS = {

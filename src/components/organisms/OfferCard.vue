@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import RatingDisplay from "./RatingDisplay.vue";
+import RatingDisplay from "../RatingDisplay.vue";
 
 export default {
   name: "OfferCard",

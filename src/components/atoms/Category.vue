@@ -1,6 +1,7 @@
 <template>
   <div class="category">
-    <span>&bull; {{ category }}</span>
+    <span class="dot"> &bull;</span>
+    <span class="category-display"> {{ category }}</span>
     <span class="number">({{ numberOfOffers }})</span>
   </div>
 </template>
@@ -32,9 +33,9 @@ export default {
 
 <style scoped>
 .category {
-  display: flex;
-  justify-content: space-between;
+  display: block;
   margin-left: min(5%, 10px);
+  width: 100%;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
@@ -44,7 +45,17 @@ export default {
   color: v-bind('COLORS.TEXT_HOVER');
 }
 
-.category span {
-  margin-right: min(5%, 10px);
+.dot {
+  margin-right: 10px;
+  float: left;
+}
+
+.category-display {
+  float: left;
+}
+
+.number {
+  float: right;
+  margin-right: min(10%, 20px);
 }
 </style>

@@ -19,7 +19,6 @@
 import Stars from '../atoms/Stars.vue';
 import UserData from '../atoms/UserData.vue';
 import { COLORS, FONT_SIZES } from "../../../public/Consts";
-import { DEFAULT_PREVIEW_OFFER_IMAGE } from "../../../public/Consts";
 
 export default {
   name: "OfferPreview",

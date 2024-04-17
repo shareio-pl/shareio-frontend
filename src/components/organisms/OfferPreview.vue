@@ -39,11 +39,6 @@ export default {
       offerPreviewImage: '',
     };
   },
-  methods: {
-    onClick() {
-      // TODO
-    },
-  },
   props: {
     buttonName: {
       type: String,

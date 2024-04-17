@@ -5,13 +5,12 @@
     </div>
     <div class="offer-preview-content">
       <h2 class="offer-preview-title">{{ title }}</h2>
-      <ButtonPrimary class="offer-preview-button" :buttonText="buttonName" :style="{ marginLeft: '0px' }"
-        @click="onClick"></ButtonPrimary>
+      <p class="offer-preview-is-new" v-if="isNew"> Nowa oferta! </p>
       <p class="offer-preview-location">{{ location }}</p>
     </div>
     <div class="offer-preview-action">
       <UserData class="offer-preview-user" :userFirstName="userFirstName" :userSurname="userLastName" />
-      <Stars class="offer-preview-stars" :filledStars="starsAmount" />
+      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount" />
     </div>
   </div>
 </template>
@@ -19,7 +18,6 @@
 <script>
 import Stars from '../atoms/Stars.vue';
 import UserData from '../atoms/UserData.vue';
-import ButtonPrimary from '../atoms/ButtonPrimary.vue';
 import { COLORS, FONT_SIZES } from "../../../public/Consts";
 import { DEFAULT_PREVIEW_OFFER_IMAGE } from "../../../public/Consts";
 
@@ -28,18 +26,18 @@ export default {
   components: {
     Stars,
     UserData,
-    ButtonPrimary,
   },
   data() {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      userFirstName: 'Janusz',
-      userLastName: 'Kowalski',
-      starsAmount: '2',
-      location: 'Test',
-      title: 'Test',
-      offerPreviewImage: DEFAULT_PREVIEW_OFFER_IMAGE,
+      userFirstName: '',
+      userLastName: '',
+      starsAmount: '',
+      ratingsAmount: '',
+      location: '',
+      title: '',
+      offerPreviewImage: '',
     };
   },
   methods: {
@@ -51,7 +49,11 @@ export default {
     buttonName: {
       type: String,
       required: true
-    }
+    },
+    isNew: {
+      type: Boolean,
+      required: true
+    },
   }
 }
 </script>
@@ -63,9 +65,18 @@ export default {
   width: 90%;
   height: 150px;
   margin: 0 auto;
-  border: 10px solid v-bind('COLORS.OFFER_BACKGROUND');
+  border: 10px solid v-bind('COLORS.PRIMARY');
   border-radius: 25px;
   background-color: v-bind('COLORS.OFFER_FOREGROUND');
+}
+
+.offer-preview-is-new {
+  background-color: v-bind('COLORS.NOTIFICATION_PRIMARY');
+  font-size: v-bind('FONT_SIZES.PRIMARY');
+  color: v-bind('COLORS.TEXT_PRIMARY');
+  margin-bottom: 0.5%;
+  border-radius: 25px;
+  padding: 10px;
 }
 
 .offer-preview-image {
@@ -98,7 +109,7 @@ export default {
 }
 
 .offer-preview-location {
-  margin-top: 1.5%;
+  margin-top: 0%;
   font-size: v-bind('FONT_SIZES.SECONDARY');
 }
 
@@ -106,10 +117,15 @@ export default {
   padding: 1%;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+}
+
+.offer-preview-user {
+  margin-bottom: 8%;
 }
 
 .offer-preview-stars {
+  flex-direction: row;
+  align-self: center;
   font-size: v-bind('FONT_SIZES.STARS');
 }
 </style>

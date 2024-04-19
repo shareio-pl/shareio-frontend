@@ -33,11 +33,11 @@ export default {
       FONT_SIZES: FONT_SIZES,
       userFirstName: '',
       userLastName: '',
-      starsAmount: '',
-      ratingsAmount: '',
+      starsAmount: 0,
+      ratingsAmount: 0,
       location: '',
       title: '',
-      offerPreviewImage: '',
+      offerPreviewImage: null,
     };
   },
   props: {
@@ -47,7 +47,7 @@ export default {
     },
     isNew: {
       type: Boolean,
-      required: true
+      required: false
     },
   }
 }

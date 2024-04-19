@@ -5,7 +5,8 @@
     </div>
     <div class="offer-preview-content">
       <h2 class="offer-preview-title">{{ title }}</h2>
-      <p class="offer-preview-is-new" v-if="isNew"> Nowa oferta! </p>
+      <p class="offer-preview-is-new" v-if="isNew"> Nowe! </p>
+      <p class="offer-preview-is-not-new" v-else></p> <!-- An hack to keep the location in the same place; -->
       <p class="offer-preview-location">{{ location }}</p>
     </div>
     <div class="offer-preview-action">
@@ -40,8 +41,8 @@ export default {
     };
   },
   props: {
-    buttonName: {
-      type: String,
+    id: {
+      type: Number,
       required: true
     },
     isNew: {
@@ -52,7 +53,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .offer-preview-card {
   display: flex;
   justify-content: space-between;
@@ -68,8 +69,15 @@ export default {
   background-color: v-bind('COLORS.NOTIFICATION_PRIMARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_PRIMARY');
+  width: 8%;
   margin-bottom: 0.5%;
   border-radius: 25px;
+  padding: 10px;
+}
+
+.offer-preview-is-not-new {
+  background-color: v-bind('COLORS.OFFER_FOREGROUND');
+  margin-bottom: 2%;
   padding: 10px;
 }
 
@@ -96,14 +104,13 @@ export default {
 }
 
 .offer-preview-title {
-  margin-top: 1.2%;
+  margin-top: 0.8%;
   margin-bottom: 0.5%;
   display: flex;
   font-size: v-bind('FONT_SIZES.PRIMARY');
 }
 
 .offer-preview-location {
-  margin-top: 0%;
   font-size: v-bind('FONT_SIZES.SECONDARY');
 }
 

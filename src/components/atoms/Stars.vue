@@ -58,7 +58,8 @@ export default {
 }
 
 .star-ratings {
-  margin-right: 10%;
+  margin-top: 4%;
+  margin-right: 3.5%;
   font-size: v-bind('FONT_SIZES.SECONDARY');
 }
 

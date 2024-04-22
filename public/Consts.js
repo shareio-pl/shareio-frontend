@@ -19,10 +19,14 @@ export const FONTS = {
 }
 
 export const FONT_SIZES = {
+  TITLE: '100px',
+  IMPORTANT: '26px',
   PRIMARY: '20px',
   STARS: '18px',
   SECONDARY: '14px',
 }
 
 export const DEFAULT_USER_PROFILE_IMAGE = require('@/assets/userImagePlaceholder.png');
+export const DEFAULT_OFFER_IMAGE = require('@/assets/offerImagePlaceholder.png');
+export const DEFAULT_OFFER_MAP_IMAGE = require('@/assets/offerMapImagePlaceholder.png');
 export const DEFAULT_PREVIEW_OFFER_IMAGE = require('@/assets/offerPreviewImagePlaceholder.png');

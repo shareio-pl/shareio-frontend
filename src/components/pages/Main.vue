@@ -42,7 +42,7 @@ export default {
 }
 
 #closest-offer {
-  margin-top: 3%;
+  margin-top: 2%;
 }
 
 p {

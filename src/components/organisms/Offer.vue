@@ -4,8 +4,8 @@
       <div class="offer-left-image">
         <img class="offer-left-image" :src="offerImage" alt="Offer image" />
       </div>
+      <p class="offer-left-giver"> Oddająca osoba: </p>
       <div class="offer-left-data">
-        <p class="offer-left-giver"> Oddająca osoba: </p>
         <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" />
         <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings" />
       </div>
@@ -13,9 +13,9 @@
     <div class="offer-content">
       <h2 class="offer-content-title">{{ offerTitle }}</h2>
       <div class="offer-content-metadata">
-        <p> Wystawiono: {{ submittedOn }}</p>
-        <p> Lokalizacja: {{ location }}</p>
-        <p> Stan: {{ condition }}</p>
+        <p style="font-weight: bold"> Wystawiono: {{ submittedOn }}</p>
+        <p style="font-weight: bold"> Lokalizacja: {{ location }}</p>
+        <p style="font-weight: bold"> Stan: {{ condition }}</p>
         <p class="offer-content-metadata-desc">{{ offerDescription }}</p>
       </div>
     </div>
@@ -117,6 +117,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 3%;
+  margin-right: 8%;
 }
 
 .offer-left-giver {
@@ -157,7 +158,7 @@ export default {
 
 .offer-content-metadata-desc {
   margin-top: 10%;
-  font-size: v-bind('FONT_SIZES.SECONDARY');
+  font-size: v-bind('FONT_SIZES.PRIMARY');
 }
 
 .offer-right {
@@ -170,13 +171,14 @@ export default {
 }
 
 .offer-right-image {
-  margin-top: 40%;
+  margin-top: 15%;
   border-radius: 30px;
   width: 100%;
+  height: 50%;
 }
 
 .offer-right-button {
-  margin-top: 74%;
+  margin-top: 55%;
   width: 100%;
   height: 15%;
 }

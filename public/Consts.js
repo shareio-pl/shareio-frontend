@@ -1,3 +1,5 @@
+export const GATEWAY_ADDRESS = 'http://localhost:8082';
+
 export const COLORS = {
   PRIMARY: '#AAAAAA',
   SECONDARY: '#000000',

@@ -1,7 +1,9 @@
 <template>
   <div class="star-card">
     <span class="star-ratings"> ({{ ratingsAmount }}) </span>
-    <font-awesome-icon class="star-items" v-for="star in 5" :key="star" :icon="getStarIcon(star)" />
+    <div class="stars">
+      <font-awesome-icon class="star-items" v-for="star in 5" :key="star" :icon="getStarIcon(star)" />
+    </div>
   </div>
 </template>
 
@@ -55,12 +57,16 @@ export default {
 .star-card {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .star-ratings {
-  margin-top: 4%;
-  margin-right: 3.5%;
   font-size: v-bind('FONT_SIZES.SECONDARY');
+  margin-right: 14%;
+}
+
+.stars{
+  display: flex;
 }
 
 .star-items {

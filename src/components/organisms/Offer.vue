@@ -33,6 +33,8 @@ import Stars from "@/components/atoms/Stars.vue";
 
 import { COLORS } from "../../../public/Consts";
 import { FONT_SIZES } from "../../../public/Consts";
+import { DEFAULT_OFFER_IMAGE } from "../../../public/Consts";
+import { DEFAULT_OFFER_MAP_IMAGE } from "../../../public/Consts";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -41,17 +43,17 @@ export default {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      offerTitle: '',
-      offerDescription: '',
-      submittedOn: '',
-      location: '',
-      condition: '',
-      amountOfStars: 0,
-      amountOfRatings: 0,
-      userFirstName: '',
-      userSurname: '',
-      offerImage: null,
-      offerMapImage: null,
+      offerTitle: 'Szop',
+      offerDescription: 'The raccoon, also spelled racoon and sometimes called the common raccoon to distinguish it from the other species, is a mammal native to North America. It is the largest of the procyonid family, having a body length of 40 to 70 cm, and a body weight of 5 to 26 kg.',
+      submittedOn: '01/01/2001',
+      location: 'Uć, 15 km stąd',
+      condition: 'nowy',
+      amountOfStars: 4,
+      amountOfRatings: 37,
+      userFirstName: 'Janusz',
+      userSurname: 'Kowalski',
+      offerImage: DEFAULT_OFFER_IMAGE,
+      offerMapImage: DEFAULT_OFFER_MAP_IMAGE,
     }
   },
   props: {
@@ -82,9 +84,10 @@ export default {
 .offer-card {
   display: flex;
   width: 90%;
-  height: 50%;
+  height: 55%;
   margin: 0 auto;
   background-color: v-bind('COLORS.OFFER_FOREGROUND');
+  border-radius: 20% 25px 25px 25px;
 }
 
 .offer-left {
@@ -113,6 +116,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 3%;
 }
 
 .offer-left-giver {
@@ -121,7 +125,7 @@ export default {
 }
 
 .offer-stars {
-  margin-left: 10%;
+  margin-left: 3%;
 }
 
 .offer-content {
@@ -172,8 +176,8 @@ export default {
 }
 
 .offer-right-button {
-  margin-top: 40%;
-  width: 90%;
-  height: 10%;
+  margin-top: 74%;
+  width: 100%;
+  height: 15%;
 }
 </style>

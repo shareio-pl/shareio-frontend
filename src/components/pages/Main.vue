@@ -3,7 +3,7 @@
     <Header/>
     <div id="closest-offer">
       <p>OFERTA NAJBLIŻEJ CIEBIE</p>
-      <Offer id=0 />
+      <Offer id="a85fa0a7-0640-4871-a1cf-131e420bea50" />
     </div>
     <h1>Najnowsze w twojej okolicy</h1>
     <div id="newest-offers">

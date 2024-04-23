@@ -1,4 +1,4 @@
-export const GATEWAY_ADDRESS = 'http://localhost:8082';
+export const GATEWAY_ADDRESS = 'http://localhost:8080';
 
 export const COLORS = {
   PRIMARY: '#AAAAAA',

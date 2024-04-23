@@ -1,41 +1,21 @@
 <template>
   <div :style="{ fontFamily: FONTS.PRIMARY }">
-    <Header/>
-    <OffersList :offers="offer"/>
+    <Main />
   </div>
 </template>
 
 <script>
-import Header from "@/components/organisms/Header.vue";
-import OffersList from "@/components/organisms/OffersList.vue";
 import {FONTS} from "../public/Consts";
+import Main from "@/components/pages/Main.vue";
 
 export default {
   name: "App",
   components: {
-    Header,
-    OffersList,
+    Main,
   },
   data() {
     return {
-      offer: [
-        {
-          name: "Offer Name",
-          address: "Offer Address",
-          image:
-              "https://i.gremicdn.pl/image/free/e16abd8fea3f4a1eba325b6a4262283e/?t=crop:1200:744:nowe:0:28,resize:fill:408:255,enlarge:1",
-          numRatings: 12,
-          rating: 5,
-        },
-        {
-          name: "Offer Second",
-          address: "Offer Address",
-          image:
-              "https://i.gremicdn.pl/image/free/e16abd8fea3f4a1eba325b6a4262283e/?t=crop:1200:744:nowe:0:28,resize:fill:408:255,enlarge:1",
-          numRatings: 4,
-          rating: 2.5,
-        },
-      ],
+      
     };
   },
   computed: {

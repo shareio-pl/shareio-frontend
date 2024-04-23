@@ -21,6 +21,8 @@ import Stars from '../atoms/Stars.vue';
 import UserData from '../atoms/UserData.vue';
 import { COLORS, FONT_SIZES } from "../../../public/Consts";
 
+import { DEFAULT_PREVIEW_OFFER_IMAGE } from "../../../public/Consts";
+
 export default {
   name: "OfferPreview",
   components: {
@@ -31,13 +33,13 @@ export default {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      userFirstName: '',
-      userLastName: '',
-      starsAmount: 0,
-      ratingsAmount: 0,
-      location: '',
-      title: '',
-      offerPreviewImage: null,
+      userFirstName: 'Rafał',
+      userLastName: 'Cybula',
+      starsAmount: 3,
+      ratingsAmount: 12,
+      location: 'Remiszewiece',
+      title: 'Oferta',
+      offerPreviewImage: DEFAULT_PREVIEW_OFFER_IMAGE,
     };
   },
   props: {
@@ -59,7 +61,7 @@ export default {
   justify-content: space-between;
   width: 90%;
   height: 150px;
-  margin: 0 auto;
+  margin: 7px auto;
   border: 10px solid v-bind('COLORS.PRIMARY');
   border-radius: 25px;
   background-color: v-bind('COLORS.OFFER_FOREGROUND');

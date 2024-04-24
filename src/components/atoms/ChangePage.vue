@@ -1,11 +1,11 @@
 <template>
   <div class="change-page">
-    <font-awesome-icon :icon="iconChevronLeft" class="leftArrow" @click="onRightArrowClick" role="button"/>
+    <font-awesome-icon v-if="leftArrow" :icon="iconChevronLeft" class="leftArrow" @click="onLeftArrowClick" role="button"/>
     <div class="page-info">
       <span class="page">{{ page }}</span>
       <span class="totalpages">({{ totalPages }})</span>
     </div>
-    <font-awesome-icon :icon="iconChevronRight" class="rightArrow" @click="onRightArrowClick" role="button"/>
+    <font-awesome-icon v-if="rightArrow" :icon="iconChevronRight" class="rightArrow" @click="onRightArrowClick" role="button"/>
   </div>
 </template>
 <script>

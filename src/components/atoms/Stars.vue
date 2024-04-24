@@ -62,7 +62,7 @@ export default {
 
 .star-ratings {
   font-size: v-bind('FONT_SIZES.SECONDARY');
-  margin-right: 14%;
+  margin-right: 10%;
 }
 
 .stars{

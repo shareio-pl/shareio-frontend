@@ -13,9 +13,9 @@
     <div class="offer-content">
       <h2 class="offer-content-title">{{ offerTitle }}</h2>
       <div class="offer-content-metadata">
-        <p style="font-weight: bold"> Wystawiono: {{ submittedOn }}</p>
-        <p style="font-weight: bold"> Lokalizacja: {{ location }}</p>
-        <p style="font-weight: bold"> Stan: {{ condition }}</p>
+        <p> Wystawiono: <span style="font-weight: bold">{{ submittedOn }}</span></p>
+        <p> Lokalizacja: <span style="font-weight: bold">{{ location}}</span></p>
+        <p> Stan: <span style="font-weight: bold">{{ condition }}</span></p>
         <p class="offer-content-metadata-desc">{{ offerDescription }}</p>
       </div>
     </div>
@@ -45,7 +45,7 @@ export default {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      offerTitle: 'Szop',
+      offerTitle: 'SzopSzop Szop',
       offerDescription: 'The raccoon, also spelled racoon and sometimes called the common raccoon to distinguish it from the other species, is a mammal native to North America. It is the largest of the procyonid family, having a body length of 40 to 70 cm, and a body weight of 5 to 26 kg.',
       submittedOn: '01/01/2001',
       location: 'Uć, 15 km stąd',
@@ -86,10 +86,10 @@ export default {
       this.offerTitle = response.data.title;
       this.offerDescription = response.data.description;
       this.submittedOn = response.data.creationDate;
-      this.location = response.data.city;
+      this.location = response.data.city + ' (' + response.data.distance + ' od ciebie)'; // TODO: fix distance
       this.condition = response.data.condition;
-      this.amountOfStars = response.data.ownerRating;
-      this.amountOfRatings = response.data.ownerReviewCount;
+      // this.amountOfStars = response.data.ownerRating;
+      // this.amountOfRatings = response.data.ownerReviewCount;
       this.userFirstName = response.data.ownerName;
       this.userSurname = response.data.ownerSurname;
     }).catch(error => {
@@ -145,7 +145,7 @@ export default {
 }
 
 .offer-stars {
-  margin-left: 3%;
+  margin-left: 4%;
 }
 
 .offer-content {
@@ -153,11 +153,12 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   padding-left: 2%;
-  flex: 0 0 50%;
+  flex: 0 0 45%;
 }
 
 .offer-content-title {
-  padding-top: 5%;
+  padding-top: 3%;
+  text-align: start;
   font-size: v-bind('FONT_SIZES.TITLE');
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
@@ -168,6 +169,7 @@ export default {
   align-items: flex-start;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
+  margin-top: 7%;
 }
 
 .offer-content-metadata p {
@@ -181,24 +183,24 @@ export default {
 }
 
 .offer-right {
-  padding: 1%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 0 0 20%;
+  flex: 0 0 25%;
   box-sizing: border-box;
+  justify-content: space-between;
 }
 
 .offer-right-image {
-  margin-top: 15%;
-  border-radius: 30px;
+  border-radius: 0px 25px ;
   width: 100%;
   height: 50%;
+  object-fit: cover;
 }
 
 .offer-right-button {
-  margin-top: 55%;
-  width: 100%;
+  width: 75%;
   height: 15%;
+  margin-bottom: 15%;
 }
 </style>

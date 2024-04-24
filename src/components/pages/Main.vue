@@ -1,9 +1,9 @@
 <template>
   <div id="main-page">
     <Header/>
-    <div id="closest-offer">
+    <div id="closest-offer" v-if="closestOffer">
       <p>OFERTA NAJBLIŻEJ CIEBIE</p>
-      <Offer :id=closestOffer />
+      <Offer :id="closestOffer"/>
     </div>
     <h1>Najnowsze w twojej okolicy</h1>
     <div id="newest-offers">
@@ -37,9 +37,16 @@ export default {
 
       this.offersIds = response.data.offerIds;
       this.closestOffer = this.offersIds[1];
+    }).then(async () => {
+      await console.log('Closest offer: ', this.offersIds[1]);
+
+      if (this.closestOffer !== this.offersIds[1]) {
+        console.log('Inside if');
+        this.closestOffer = this.offersIds[1];
+      }
     }).catch(error => {
-      console.log('Error: ', error);
-    })
+      console.error('ERROR: ', error);
+    });
   }
 }
 </script>

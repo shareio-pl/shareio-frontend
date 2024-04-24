@@ -21,7 +21,7 @@ export const FONTS = {
 }
 
 export const FONT_SIZES = {
-  TITLE: '85px',
+  TITLE: '38px',
   IMPORTANT: '26px',
   PRIMARY: '20px',
   STARS: '18px',

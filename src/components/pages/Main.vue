@@ -3,11 +3,11 @@
     <Header/>
     <div id="closest-offer">
       <p>OFERTA NAJBLIŻEJ CIEBIE</p>
-      <Offer id="a85fa0a7-0640-4871-a1cf-131e420bea50" />
+      <Offer :id=closestOffer />
     </div>
     <h1>Najnowsze w twojej okolicy</h1>
     <div id="newest-offers">
-      <OfferPreview v-for="offer in numberOfOffers" :key="offer.id" :id=offer.id :is-new="true"/>
+      <OfferPreview v-for="id in offersIds" :key="id" :id=id :is-new="true"/>
     </div>
   </div>
 </template>
@@ -16,7 +16,8 @@
 import Header from "@/components/organisms/Header.vue";
 import Offer from "@/components/organisms/Offer.vue";
 import OfferPreview from "@/components/organisms/OfferPreview.vue";
-import {COLORS, FONT_SIZES} from "../../../public/Consts";
+import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
+import axios from "axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -24,18 +25,30 @@ export default {
   components: {OfferPreview, Offer, Header},
   data() {
     return {
-      numberOfOffers: 3, // change to offers: [],
+      offersIds: [],
+      closestOffer: '',
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
     }
+  },
+  mounted() {
+    axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds').then((response) => {
+      console.log('Offers: ', response.data.offerIds);
+
+      this.offersIds = response.data.offerIds;
+      this.closestOffer = this.offersIds[1];
+    }).catch(error => {
+      console.log('Error: ', error);
+    })
   }
 }
 </script>
 
 <style scoped>
 #main-page {
-  background: linear-gradient(to bottom, #F0FBFF, #0A2635); /* light-blue to COLORS.BUTTON_PRIMARY_NORMAL
-  /*background-color: v-bind('COLORS.SECONDARY');*/
+  background: linear-gradient(to bottom, #F0FBFF, #0A2635);
+  /* light-blue to COLORS.BUTTON_PRIMARY_NORMAL
+   /*background-color: v-bind('COLORS.SECONDARY');*/
   display: flex;
   flex-direction: column;
   height: 100%;

@@ -1,7 +1,7 @@
 <template>
   <div class="offer-preview-card">
     <div class="offer-preview-image">
-      <img :src="offerPreviewImage" alt="Offer image" />
+      <img :src="offerPreviewImage" alt="Offer image"/>
     </div>
     <div class="offer-preview-content">
       <h2 class="offer-preview-title">{{ title }}</h2>
@@ -10,8 +10,8 @@
       <p class="offer-preview-location">{{ location }}</p>
     </div>
     <div class="offer-preview-action">
-      <UserData class="offer-preview-user" :userFirstName="userFirstName" :userSurname="userLastName" />
-      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount" />
+      <UserData class="offer-preview-user" :userFirstName="userFirstName" :userSurname="userLastName"/>
+      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount"/>
     </div>
   </div>
 </template>
@@ -19,9 +19,11 @@
 <script>
 import Stars from '../atoms/Stars.vue';
 import UserData from '../atoms/UserData.vue';
-import { COLORS, FONT_SIZES } from "../../../public/Consts";
+import {COLORS, FONT_SIZES} from "../../../public/Consts";
 
-import { DEFAULT_PREVIEW_OFFER_IMAGE } from "../../../public/Consts";
+import {DEFAULT_PREVIEW_OFFER_IMAGE} from "../../../public/Consts";
+import {GATEWAY_ADDRESS} from "../../../public/Consts";
+import axios from "axios";
 
 export default {
   name: "OfferPreview",
@@ -51,6 +53,18 @@ export default {
       type: Boolean,
       required: false
     },
+  },
+  mounted() {
+    axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`).then((response) => {
+      this.userFirstName = response.data.ownerName;
+      this.userLastName = response.data.ownerSurname;
+      this.starsAmount = response.data.ownerRating;
+      this.ratingsAmount = response.data.ownerReviewCount;
+      this.location = response.data.city;
+      this.title = response.data.title;
+    }).catch(error => {
+      console.error('ERROR: ', error);
+    });
   }
 }
 </script>
@@ -114,7 +128,7 @@ export default {
 }
 
 .offer-preview-location {
-  margin-top: 0.5% ;
+  margin-top: 0.5%;
   font-size: v-bind('FONT_SIZES.STARS');
 }
 

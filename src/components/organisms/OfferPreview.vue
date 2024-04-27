@@ -64,6 +64,8 @@ export default {
       this.title = response.data.title;
     }).catch(error => {
       console.error('ERROR: ', error);
+
+      this.emitter.emit('axiosError', {error: error.response.status});
     });
   }
 }

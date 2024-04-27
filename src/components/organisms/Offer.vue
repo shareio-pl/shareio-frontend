@@ -80,20 +80,22 @@ export default {
     },
   },
   mounted() {
-    axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`).then((response) => {
+    axios.get(GATEWAY_ADDRESS + `/offer/get/qwe}`).then((response) => { // TODO: qwe for testing purposes
       console.log('Offer ', this.id, ': ', response.data);
 
       this.offerTitle = response.data.title;
       this.offerDescription = response.data.description;
       this.submittedOn = response.data.creationDate;
-      this.location = response.data.city + ' (' + response.data.distance + ' od ciebie)'; // TODO: fix distance
+      this.location = response.data.city + ' (' + response.data.distance + ' od ciebie)';
       this.condition = response.data.condition;
-      // this.amountOfStars = response.data.ownerRating;
-      // this.amountOfRatings = response.data.ownerReviewCount;
+      this.amountOfStars = response.data.ownerRating;
+      this.amountOfRatings = response.data.ownerReviewCount;
       this.userFirstName = response.data.ownerName;
       this.userSurname = response.data.ownerSurname;
     }).catch(error => {
       console.error('ERROR: ', error);
+
+      this.emitter.emit('axiosError', {error: error.response.status});
     });
   },
 }

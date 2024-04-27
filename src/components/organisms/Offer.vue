@@ -80,7 +80,7 @@ export default {
     },
   },
   mounted() {
-    axios.get(GATEWAY_ADDRESS + `/offer/get/qwe}`).then((response) => { // TODO: qwe for testing purposes
+    axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`).then((response) => {
       console.log('Offer ', this.id, ': ', response.data);
 
       this.offerTitle = response.data.title;

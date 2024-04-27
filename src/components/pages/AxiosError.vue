@@ -1,17 +1,15 @@
 <template>
   <div v-if="isShown" class="background">
-    <img :src="cat" v-on:click="closeError" alt="Imagine a cat here">
+    <img :src="url" v-on:click="closeError" alt="Imagine a cat here">
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "AxiosError",
   data() {
     return {
-      cat: null,
+      url: 'https://http.cat/',
       isShown: false,
     }
   },
@@ -19,18 +17,16 @@ export default {
       {
         closeError() {
           this.isShown = false;
+          this.url = 'https://http.cat/';
         }
       },
   mounted() {
     this.emitter.on('axiosError', (data) => {
       console.log('Error code: ', data.error);
-      axios.get(`https://http.cat/${data.error}`).then((response) => {
-        this.error = response;
-      }).catch(() => {
-        console.log('Cat did not want to come');
-      });
 
+      this.url = this.url + data.error;
       this.isShown = true;
+
       setTimeout(this.closeError, 5000);
     });
   },
@@ -41,8 +37,8 @@ export default {
 img {
   position: fixed;
   width: 50%;
-  height: 50%;
-  top: 25%;
+  height: 75%;
+  top: 10%;
   left: 25%;
   object-fit: cover;
 }

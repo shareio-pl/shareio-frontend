@@ -1,7 +1,7 @@
 <template>
   <div class="select-wrapper">
-    <select>
-      <option v-for="(option, index) in options" :key="index">
+    <select  v-model="selectedOption" @change="onSortChange(selectedOption)">
+      <option v-for="(option, index) in options" :key="index" :value="option">
         Sortuj: {{ option }}
       </option>
     </select>
@@ -23,9 +23,17 @@ export default {
     return {
       COLORS: COLORS,
       options: ["Najbliższe", "Najdalsze", "Najnowsze", "Najstarsze", "Najwyżej oceniane"],
-      iconChevronDown: faChevronDown
+      iconChevronDown: faChevronDown,
+      selectedOption: "Najbliższe",
     };
   },
+  methods:{
+    onSortChange(option)
+    {
+      console.log('Sorting changed to: ', option);
+      this.emitter.emit('sortChange', option);
+    }
+  }
 }
 </script>
 
@@ -33,7 +41,7 @@ export default {
 .select-wrapper {
   position: relative;
   display: inline-block;
-  width: 90%;
+  width: 45%;
 }
 
 .select-wrapper select {
@@ -42,6 +50,7 @@ export default {
   -moz-appearance: none;
   background-color: v-bind('COLORS.MENU_WHITE');
   width: 100%;
+  height: 45px;
 }
 
 .arrow-icon {

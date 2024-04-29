@@ -85,8 +85,8 @@ export default {
 
       this.offerTitle = response.data.title;
       this.offerDescription = response.data.description;
-      this.submittedOn = response.data.creationDate;
-      this.location = response.data.city + ' (' + response.data.distance + ' od ciebie)';
+      this.submittedOn = response.data.creationDate.substring(0, 10);
+      this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' od ciebie)';
       this.condition = response.data.condition;
       this.amountOfStars = response.data.ownerRating;
       this.amountOfRatings = response.data.ownerReviewCount;

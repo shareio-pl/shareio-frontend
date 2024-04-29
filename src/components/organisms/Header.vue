@@ -69,6 +69,7 @@ export default {
 
 img {
   margin-left: 2%;
+  cursor: pointer;
 }
 
 #buttons {
@@ -82,6 +83,7 @@ img {
   display: flex;
   align-items: center;
   width: 18%;
+  cursor: pointer;
 }
 
 #arrow-icon {

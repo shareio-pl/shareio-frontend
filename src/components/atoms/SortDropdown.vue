@@ -31,7 +31,7 @@ export default {
     onSortChange(option)
     {
       console.log('Sorting changed to: ', option);
-      this.emitter.emit('sortChange', option);
+      this.emitter.emit('sortChange', {option: option});
     }
   }
 }

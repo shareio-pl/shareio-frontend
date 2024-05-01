@@ -25,9 +25,8 @@ export default {
 
 <style scoped>
 .button-secondary {
-  width: 9%;
+  width: 20%;
   height: 45px;
-  margin-left: 2%;
   background-color: v-bind('COLORS.BUTTON_SECONDARY_NORMAL');
   color: v-bind('COLORS.TEXT_PRIMARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');

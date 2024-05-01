@@ -1,7 +1,7 @@
 <template>
   <div class="offer-preview-card">
     <div class="offer-preview-image">
-      <img :src="offerPreviewImage" alt="Offer image" />
+      <img :src="offerPreviewImage" alt="Offer image"/>
     </div>
     <div class="offer-preview-content">
       <h2 class="offer-preview-title">{{ title }}</h2>
@@ -10,8 +10,8 @@
       <p class="offer-preview-location">{{ location }}</p>
     </div>
     <div class="offer-preview-action">
-      <UserData class="offer-preview-user" :userFirstName="userFirstName" :userSurname="userLastName" />
-      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount" />
+      <UserData class="offer-preview-user" :userFirstName="userFirstName" :userSurname="userLastName"/>
+      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount"/>
     </div>
   </div>
 </template>
@@ -19,9 +19,11 @@
 <script>
 import Stars from '../atoms/Stars.vue';
 import UserData from '../atoms/UserData.vue';
-import { COLORS, FONT_SIZES } from "../../../public/Consts";
+import {COLORS, FONT_SIZES} from "../../../public/Consts";
 
-import { DEFAULT_PREVIEW_OFFER_IMAGE } from "../../../public/Consts";
+import {DEFAULT_PREVIEW_OFFER_IMAGE} from "../../../public/Consts";
+import {GATEWAY_ADDRESS} from "../../../public/Consts";
+import axios from "axios";
 
 export default {
   name: "OfferPreview",
@@ -51,6 +53,20 @@ export default {
       type: Boolean,
       required: false
     },
+  },
+  mounted() {
+    axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`).then((response) => {
+      this.userFirstName = response.data.ownerName;
+      this.userLastName = response.data.ownerSurname;
+      this.starsAmount = response.data.ownerRating;
+      this.ratingsAmount = response.data.ownerReviewCount;
+      this.location = response.data.city;
+      this.title = response.data.title;
+    }).catch(error => {
+      console.error('ERROR: ', error);
+
+      this.emitter.emit('axiosError', {error: error.response.status});
+    });
   }
 }
 </script>
@@ -73,6 +89,7 @@ export default {
   color: v-bind('COLORS.TEXT_PRIMARY');
   width: 8%;
   margin-bottom: 0.5%;
+  margin-top: 0.5%;
   border-radius: 25px;
   padding: 10px;
 }
@@ -95,7 +112,7 @@ export default {
   height: 100%;
   width: 100%;
   object-fit: cover;
-  border-radius: 15px;
+  border-radius: 15px 10px 10px 15px;
 }
 
 .offer-preview-content {
@@ -113,11 +130,12 @@ export default {
 }
 
 .offer-preview-location {
-  font-size: v-bind('FONT_SIZES.SECONDARY');
+  margin-top: 0.5%;
+  font-size: v-bind('FONT_SIZES.STARS');
 }
 
 .offer-preview-action {
-  padding: 1%;
+  padding: 2%;
   display: flex;
   flex-direction: column;
 }
@@ -127,6 +145,7 @@ export default {
 }
 
 .offer-preview-stars {
+  margin-left: 10%;
   flex-direction: row;
   align-self: center;
   font-size: v-bind('FONT_SIZES.STARS');

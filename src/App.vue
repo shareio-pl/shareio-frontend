@@ -1,12 +1,12 @@
 <template>
   <div :style="{ fontFamily: FONTS.PRIMARY }">
-    <AxiosError />
-    <RouterView />
+    <AxiosError/>
+    <RouterView/>
   </div>
 </template>
 
 <script>
-import { FONTS } from "../public/Consts";
+import {FONTS} from "../public/Consts";
 import AxiosError from "@/components/pages/AxiosError.vue";
 
 export default {

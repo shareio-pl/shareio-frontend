@@ -46,6 +46,8 @@ export default {
       }
     }).catch(error => {
       console.error('ERROR: ', error);
+
+      this.emitter.emit('axiosError', {error: error.response.status});
     });
   }
 }

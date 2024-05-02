@@ -5,7 +5,7 @@
       <p>OFERTA NAJBLIŻEJ CIEBIE</p>
       <Offer :id="closestOffer"/>
     </div>
-    <h1>Najnowsze w twojej okolicy</h1>
+    <h1>Najnowsze w Twojej okolicy</h1>
     <div id="newest-offers">
       <OfferPreview v-for="id in offersIds" :key="id" :id=id :is-new="true"/>
     </div>

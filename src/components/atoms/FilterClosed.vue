@@ -20,7 +20,6 @@ export default {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
       iconChevronDown: faChevronDown,
-      input: '',
     }
   },
   props:
@@ -30,18 +29,10 @@ export default {
               type: String,
               required: true,
             },
-        placeholder:
-            {
-              type: String,
-              required: true,
-            },
       },
   components: {FontAwesomeIcon},
   methods:
       {
-        onArrowClick() {
-
-        },
         filter() {
           console.log('User input: ', this.input);
           this.emitter.emit('filter', {input: this.input});
@@ -71,7 +62,7 @@ export default {
 #arrow-icon {
   scale: 250%;
   margin-top: 4%;
-  margin-left: 150px;
+  margin-left: 10%;
   cursor: pointer;
 }
 

@@ -1,21 +1,21 @@
 <template>
   <div :style="{ fontFamily: FONTS.PRIMARY }">
-    <Main />
+    <Map/>
   </div>
 </template>
 
 <script>
 import {FONTS} from "../public/Consts";
-import Main from "@/components/pages/Main.vue";
+import Map from "@/components/pages/Map.vue";
 
 export default {
   name: "App",
   components: {
-    Main,
+    Map,
   },
   data() {
     return {
-      
+
     };
   },
   computed: {

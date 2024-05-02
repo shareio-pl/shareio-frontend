@@ -56,6 +56,7 @@ export default {
   height: 70px;
   z-index: 2;
   font-size: 250%;
+  margin-right: 2%;
 }
 
 #header {
@@ -92,6 +93,7 @@ p{
   color: v-bind('COLORS.TEXT_SECONDARY');
   width: 30%;
   margin-top: 5%;
+  border-radius: 15px;
 }
 
 #arrow-icon{

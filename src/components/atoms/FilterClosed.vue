@@ -62,7 +62,7 @@ export default {
 #arrow-icon {
   scale: 250%;
   margin-top: 4%;
-  margin-left: 10%;
+  margin-left: 150px;
   cursor: pointer;
 }
 

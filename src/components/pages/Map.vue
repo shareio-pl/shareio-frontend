@@ -1,7 +1,7 @@
 <template>
   <div id="map-page">
     <Header id="header"/>
-    <ButtonPrimary button-text="Znajdź przedmioty blisko Ciebie!" id="button" @click="centerMap"/>
+    <ButtonPrimary button-text="Znajdź przedmioty blisko Ciebie!" id="button" @click="centerMap(userId)"/>
     <div id="map-initial" v-if="isFirstTime">
       <font-awesome-icon :icon="iconArrowUp" id="arrow-icon"/>
       <p>Kliknij, aby wycentrować mapę na Twojej lokalizacji </p>
@@ -18,7 +18,7 @@
               :url="url"
               :attribution="attribution"
           ></l-tile-layer>
-          <l-marker :lat-lng="markerLatLng"></l-marker>
+<!--          <l-marker :lat-lng="markerLatLng"></l-marker>-->
         </l-map>
       </div>
     </div>
@@ -27,17 +27,19 @@
 
 <script>
 import Header from "@/components/organisms/Header.vue";
-import {DEFAULT_OFFER_MAP_IMAGE, COLORS, FONT_SIZES} from "../../../public/Consts";
+import {DEFAULT_OFFER_MAP_IMAGE, COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faArrowUp} from "@fortawesome/free-solid-svg-icons";
 import "leaflet/dist/leaflet.css"
 import {LMap, LMarker, LTileLayer} from "@vue-leaflet/vue-leaflet";
+import axios from "axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Map",
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     LMarker,
     LTileLayer,
     LMap,
@@ -55,24 +57,32 @@ export default {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
           '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
-      zoom: 5,
-      center: [51.7467613, 19.4530878],
-      markerLatLng: [51.7467613, 19.4530878],
+      zoom: 2,
+      center: [1, 1],
+      markerLatLng: [],
     }
   },
   methods:
       {
-        centerMap() {
+        centerMap(id) {
           console.log('Map has been centred');
           this.isFirstTime = false;
-          //TODO: add implementation
+          axios.get(GATEWAY_ADDRESS + `/user/get/${id}`).then((response) => {
+            console.log('User data', response.data);
+            axios.get(GATEWAY_ADDRESS + `/address/get/${response.data.address.id}`)
+                .then((response) =>
+                {
+                  this.zoom = 8;
+                  this.center = [response.data.latitude, response.data.longitude];
+                });
+          });
         },
       },
   mounted() {
-    // axios.get(GATEWAY_ADDRESS + '/debug/createUser').then((response) => {
-    //   console.log(response.data.id);
-    //   this.userId = response.data.id;
-    // });
+    axios.get(GATEWAY_ADDRESS + '/debug/createUser').then((response) => {
+      console.log(response.data.id);
+      this.userId = response.data.id;
+    });
   },
 }
 </script>
@@ -127,7 +137,7 @@ p {
 
 #arrow-icon {
   scale: 500%;
-  margin-top: -15%;
+  margin-top: -5%;
   z-index: 2;
 }
 

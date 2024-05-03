@@ -102,7 +102,6 @@ export default {
   align-items: center;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
-  border: 1px solid black;
 }
 
 #owner-header {
@@ -164,11 +163,11 @@ export default {
 
 }
 
-.custom-star-card >>> .star-items {
+.custom-star-card>>>.star-items {
   font-size: v-bind('FONT_SIZES.TITLE');
 }
 
-.custom-star-card >>> .star-ratings {
+.custom-star-card>>>.star-ratings {
   font-size: v-bind('FONT_SIZES.PRIMARY');
   margin-right: 0;
 }

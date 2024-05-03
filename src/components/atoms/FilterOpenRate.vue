@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     handleClick(event) {
-      var clickedStar = this.detectClickedStar(event);
+      let clickedStar = this.detectClickedStar(event);
       this.setStars(clickedStar);
       this.emitter.emit('filter', { starsAmount: this.localFilledStars });
     },

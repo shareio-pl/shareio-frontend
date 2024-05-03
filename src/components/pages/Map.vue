@@ -18,7 +18,7 @@
               :url="url"
               :attribution="attribution"
           ></l-tile-layer>
-<!--          <l-marker :lat-lng="markerLatLng"></l-marker>-->
+          <!--          <l-marker :lat-lng="markerLatLng"></l-marker>-->
         </l-map>
       </div>
     </div>
@@ -27,7 +27,7 @@
 
 <script>
 import Header from "@/components/organisms/Header.vue";
-import {DEFAULT_OFFER_MAP_IMAGE, COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
+import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faArrowUp} from "@fortawesome/free-solid-svg-icons";
@@ -49,11 +49,9 @@ export default {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      mapImage: DEFAULT_OFFER_MAP_IMAGE,
-      isFirstTime: true,
       iconArrowUp: faArrowUp,
+      isFirstTime: true,
       userId: '',
-      isMapReady: false,
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
           '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -67,12 +65,13 @@ export default {
         centerMap(id) {
           console.log('Map has been centred');
           this.isFirstTime = false;
+
           axios.get(GATEWAY_ADDRESS + `/user/get/${id}`).then((response) => {
             console.log('User data', response.data);
-            axios.get(GATEWAY_ADDRESS + `/address/get/${response.data.address.id}`)
-                .then((response) =>
-                {
-                  this.zoom = 8;
+            axios.get(GATEWAY_ADDRESS + `/address/location/get/${response.data.address.id}`)
+                .then((response) => {
+                  console.log('Address data: ', response.data);
+                  this.zoom = 14;
                   this.center = [response.data.latitude, response.data.longitude];
                 });
           });

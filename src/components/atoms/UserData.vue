@@ -12,6 +12,8 @@
 
 <script>
 import {DEFAULT_USER_PROFILE_IMAGE} from "../../../public/Consts";
+import {FONT_SIZES, COLORS} from "../../../public/Consts";
+
 export default {
   name: 'UserData',
   props: {
@@ -22,10 +24,17 @@ export default {
     userSurname: {
       type: String,
       required: true
-    },    
+    },
     userImage: {
       type: String,
       default: DEFAULT_USER_PROFILE_IMAGE
+    }
+  },
+  data()
+  {
+    return{
+      FONT_SIZES: FONT_SIZES,
+      COLORS: COLORS,
     }
   }
 }
@@ -35,29 +44,31 @@ export default {
 .user-image {
   width: 50px;
   height: 50px;
-  border-radius: 50%; 
+  border-radius: 50%;
   overflow: hidden;
 }
 
 .user-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover; 
+  object-fit: cover;
 }
 
 .user-data {
   display: flex;
   align-items: center;
+  font-size: v-bind('FONT_SIZES.PRIMARY');
+  color: v-bind('COLORS.TEXT_SECONDARY');
 }
 
 .user-info {
-  margin-left: 0.8em; 
-  /* Percentage here wouldn't be the best choice, I think. 
-  Because then the margin varies too much on the width of component this atom would be in; 
+  margin-left: 0.8em;
+  /* Percentage here wouldn't be the best choice, I think.
+  Because then the margin varies too much on the width of component this atom would be in;
   in my testing the difference was noticeable. */
 }
 
 .user-name {
-  margin-bottom: -25%;
+  margin-bottom: -5%;
 }
 </style>

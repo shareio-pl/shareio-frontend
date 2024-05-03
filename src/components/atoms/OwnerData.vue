@@ -37,7 +37,6 @@ export default {
     Stars
   },
   props: {
-    /*
     ownerFirstName: {
       type: String,
       required: true
@@ -58,21 +57,15 @@ export default {
       type: Number,
       required: true
     },
-    } */
     ownerImage: {
       type: String,
       default: DEFAULT_USER_PROFILE_IMAGE
-    }
+    },
   },
   data() {
     return {
       FONT_SIZES: FONT_SIZES,
       COLORS: COLORS,
-      ownerFirstName: "Jan",
-      ownerSurname: "Kowalski",
-      ownerEmail: "jankowalski@gmail.com",
-      ownerStars: 4,
-      ownerRating: 40
     }
   },
   methods: {

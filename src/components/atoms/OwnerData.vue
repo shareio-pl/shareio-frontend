@@ -155,6 +155,7 @@ export default {
   justify-content: center;
   align-items: center;
   margin-right: 1em;
+  margin-top: 0.5em;
 }
 
 #owner-name,

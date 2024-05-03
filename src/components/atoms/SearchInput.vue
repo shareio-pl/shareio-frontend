@@ -52,5 +52,6 @@ export default {
 .search-field {
   padding-left: min(10%, 40px);
   width: 100%;
+  height: 45px;
 }
 </style>

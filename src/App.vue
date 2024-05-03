@@ -1,17 +1,18 @@
 <template>
   <div :style="{ fontFamily: FONTS.PRIMARY }">
-    <Map/>
+    <AxiosError/>
+    <RouterView/>
   </div>
 </template>
 
 <script>
 import {FONTS} from "../public/Consts";
-import Map from "@/components/pages/Map.vue";
+import AxiosError from "@/components/pages/AxiosError.vue";
 
 export default {
   name: "App",
   components: {
-    Map,
+    AxiosError,
   },
   data() {
     return {

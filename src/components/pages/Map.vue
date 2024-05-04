@@ -1,23 +1,15 @@
 <template>
   <div id="map-page">
-    <Header id="header"/>
-    <ButtonPrimary button-text="Znajdź przedmioty blisko Ciebie!" id="button" @click="centerMap(userId)"/>
+    <Header id="header" />
+    <ButtonPrimary button-text="Znajdź przedmioty blisko Ciebie!" id="button" @click="centerMap(userId)" />
     <div id="map-initial" v-if="isFirstTime">
-      <font-awesome-icon :icon="iconArrowUp" id="arrow-icon"/>
+      <font-awesome-icon :icon="iconArrowUp" id="arrow-icon" />
       <p>Kliknij, aby wycentrować mapę na Twojej lokalizacji </p>
     </div>
     <div id="map-container">
-      <div
-          class="map"
-      >
-        <l-map
-            :zoom="zoom"
-            :center="center"
-        >
-          <l-tile-layer
-              :url="url"
-              :attribution="attribution"
-          ></l-tile-layer>
+      <div class="map">
+        <l-map :zoom="zoom" :center="center" ref="mapRef">
+          <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
           <!--          <l-marker :lat-lng="markerLatLng"></l-marker>-->
         </l-map>
       </div>
@@ -27,12 +19,12 @@
 
 <script>
 import Header from "@/components/organisms/Header.vue";
-import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
+import { COLORS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faArrowUp} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import "leaflet/dist/leaflet.css"
-import {LMap, LMarker, LTileLayer} from "@vue-leaflet/vue-leaflet";
+import { LMap, LMarker, LTileLayer } from "@vue-leaflet/vue-leaflet";
 import axios from "axios";
 
 export default {
@@ -54,29 +46,33 @@ export default {
       userId: '',
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
-          '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+        '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       zoom: 2,
       center: [1, 1],
       markerLatLng: [],
     }
   },
   methods:
-      {
-        centerMap(id) {
-          console.log('Map has been centred');
-          this.isFirstTime = false;
+  {
+    centerMap(id) {
+      console.log('Map has been centred');
+      this.isFirstTime = false;
 
-          axios.get(GATEWAY_ADDRESS + `/user/get/${id}`).then((response) => {
-            console.log('User data', response.data);
-            axios.get(GATEWAY_ADDRESS + `/address/location/get/${response.data.address.id}`)
-                .then((response) => {
-                  console.log('Address data: ', response.data);
-                  this.zoom = 14;
-                  this.center = [response.data.latitude, response.data.longitude];
-                });
+      axios.get(GATEWAY_ADDRESS + `/user/get/${id}`).then((response) => {
+        console.log('User data', response.data);
+        axios.get(GATEWAY_ADDRESS + `/address/location/get/${response.data.address.id}`)
+          .then((response) => {
+            console.log('Address data: ', response.data);
+            this.zoom = 14;
+            this.center = [response.data.latitude, response.data.longitude];
+            // Honestly, I don't understand why before you could set up the values directly via this.center/this.zoom
+            // But it'd work only once.
+            // According to some SO, this is the solution.
+            this.$refs.mapRef.leafletObject.setView(this.center, this.zoom);
           });
-        },
-      },
+      });
+    },
+  },
   mounted() {
     axios.get(GATEWAY_ADDRESS + '/debug/createUser').then((response) => {
       console.log(response.data.id);

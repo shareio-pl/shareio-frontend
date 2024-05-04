@@ -55,9 +55,8 @@ export default {
 
 <style scoped>
 #main-page {
-  background: linear-gradient(to bottom, #F0FBFF, #0A2635);
-  /* light-blue to COLORS.BUTTON_PRIMARY_NORMAL
-   /*background-color: v-bind('COLORS.SECONDARY');*/
+  background: linear-gradient(to bottom, #F0FBFF, #0D2149);
+  /*light-blue to COLORS.BUTTON_PRIMARY_NORMAL*/
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -68,7 +67,7 @@ export default {
 }
 
 p {
-  background-color: v-bind('COLORS.BUTTON_PRIMARY_NORMAL');
+  background-color: v-bind('COLORS.NOTIFICATION_PRIMARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_PRIMARY');
   width: 18%;

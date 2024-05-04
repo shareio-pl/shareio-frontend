@@ -99,5 +99,6 @@ p{
 #arrow-icon{
   scale: 500%;
   margin-top: -15%;
+  color: v-bind('COLORS.SECONDARY');
 }
 </style>

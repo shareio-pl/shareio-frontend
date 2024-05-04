@@ -31,14 +31,11 @@ export default {
             },
       },
   components: {FontAwesomeIcon},
-  methods:
-      {
-        filter() {
-          console.log('User input: ', this.input);
-          this.emitter.emit('filter', {input: this.input});
-          this.input = '';
-        },
+  methods: {
+      onArrowClick() {
+        this.$emit('openFilter');
       },
+  },
 }
 </script>
 

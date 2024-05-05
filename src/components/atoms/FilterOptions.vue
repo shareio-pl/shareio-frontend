@@ -36,11 +36,12 @@ export default {
       showOptions: true,
       FONT_SIZES: FONT_SIZES,
       COLORS: COLORS,
-      options: [
+      options: '',
+      /*options: [
         { name: 'Test1' },
         { name: 'Test2' },
         { name: 'Test3' }
-      ],
+      ], */
       selectedOption: null,
     }
   },

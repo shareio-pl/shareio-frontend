@@ -1,7 +1,7 @@
 <template>
   <div class="offer-preview-card">
     <div class="offer-preview-image">
-      <img :src="offerPreviewImage" alt="Offer image"/>
+      <img :src="offerPreviewImage" alt="Offer image" />
     </div>
     <div class="offer-preview-content">
       <h2 class="offer-preview-title">{{ title }}</h2>
@@ -10,8 +10,8 @@
       <p class="offer-preview-location">{{ location }}</p>
     </div>
     <div class="offer-preview-action">
-      <UserData class="offer-preview-user" :userFirstName="userFirstName" :userSurname="userLastName"/>
-      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount"/>
+      <UserData class="offer-preview-user" :userFirstName="userFirstName" :userSurname="userLastName" />
+      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount" />
     </div>
   </div>
 </template>
@@ -19,10 +19,10 @@
 <script>
 import Stars from '../atoms/Stars.vue';
 import UserData from '../atoms/UserData.vue';
-import {COLORS, FONT_SIZES} from "../../../public/Consts";
+import { COLORS, FONT_SIZES } from "../../../public/Consts";
 
-import {DEFAULT_PREVIEW_OFFER_IMAGE} from "../../../public/Consts";
-import {GATEWAY_ADDRESS} from "../../../public/Consts";
+import { DEFAULT_PREVIEW_OFFER_IMAGE } from "../../../public/Consts";
+import { GATEWAY_ADDRESS } from "../../../public/Consts";
 import axios from "axios";
 
 export default {
@@ -65,7 +65,7 @@ export default {
     }).catch(error => {
       console.error('ERROR: ', error);
 
-      this.emitter.emit('axiosError', {error: error.response.status});
+      this.emitter.emit('axiosError', { error: error.response.status });
     });
   }
 }
@@ -87,7 +87,7 @@ export default {
   background-color: v-bind('COLORS.NOTIFICATION_PRIMARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_PRIMARY');
-  width: 8%;
+  width: 10%;
   margin-bottom: 0.5%;
   margin-top: 0.5%;
   border-radius: 25px;

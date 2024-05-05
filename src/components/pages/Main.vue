@@ -1,13 +1,13 @@
 <template>
   <div id="main-page">
-    <Header/>
+    <Header />
     <div id="closest-offer" v-if="closestOffer">
       <p>OFERTA NAJBLIŻEJ CIEBIE</p>
-      <Offer :id="closestOffer"/>
+      <Offer :id="closestOffer" />
     </div>
     <h1>Najnowsze w Twojej okolicy</h1>
     <div id="newest-offers">
-      <OfferPreview v-for="id in offersIds" :key="id" :id=id :is-new="true"/>
+      <OfferPreview v-for="id in offersIds" :key="id" :id=id :is-new="true" style="width:60%; margin-bottom:1.5%;" />
     </div>
   </div>
 </template>
@@ -16,13 +16,13 @@
 import Header from "@/components/organisms/Header.vue";
 import Offer from "@/components/organisms/Offer.vue";
 import OfferPreview from "@/components/organisms/OfferPreview.vue";
-import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
+import { COLORS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
 import axios from "axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Main",
-  components: {OfferPreview, Offer, Header},
+  components: { OfferPreview, Offer, Header },
   data() {
     return {
       offersIds: [],
@@ -47,7 +47,7 @@ export default {
     }).catch(error => {
       console.error('ERROR: ', error);
 
-      this.emitter.emit('axiosError', {error: error.response.status});
+      this.emitter.emit('axiosError', { error: error.response.status });
     });
   }
 }

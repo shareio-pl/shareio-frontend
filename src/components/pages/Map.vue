@@ -1,12 +1,17 @@
 <template>
   <div id="map-page">
-    <Header id="header"/>
-    <ButtonPrimary button-text="Znajdź przedmioty blisko Ciebie!" id="button" @click="centerMap"/>
+    <Header id="header" />
+    <ButtonPrimary button-text="Znajdź przedmioty blisko Ciebie!" id="button" @click="centerMap(userId)" />
+    <div id="map-initial" v-if="isFirstTime">
+      <font-awesome-icon :icon="iconArrowUp" id="arrow-icon" />
+      <p>Kliknij, aby wycentrować mapę na Twojej lokalizacji </p>
+    </div>
     <div id="map-container">
-      <img :src="mapImage" alt="map">
-      <div id="map-initial" v-if="isFirstTime">
-        <font-awesome-icon :icon="iconArrowUp" id="arrow-icon"/>
-        <p>Kliknij, aby wycentrować mapę na Twojej lokalizacji </p>
+      <div class="map">
+        <l-map :zoom="zoom" :center="center" ref="mapRef">
+          <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+          <!--          <l-marker :lat-lng="markerLatLng"></l-marker>-->
+        </l-map>
       </div>
     </div>
   </div>
@@ -14,33 +19,64 @@
 
 <script>
 import Header from "@/components/organisms/Header.vue";
-import {DEFAULT_OFFER_MAP_IMAGE, COLORS, FONT_SIZES} from "../../../public/Consts";
+import { COLORS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faArrowUp} from "@fortawesome/free-solid-svg-icons";
-
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import "leaflet/dist/leaflet.css"
+import { LMap, LMarker, LTileLayer } from "@vue-leaflet/vue-leaflet";
+import axios from "axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Map",
-  components: {FontAwesomeIcon, ButtonPrimary, Header},
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    LMarker,
+    LTileLayer,
+    LMap,
+    FontAwesomeIcon, ButtonPrimary, Header
+  },
   data() {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      mapImage: DEFAULT_OFFER_MAP_IMAGE,
-      isFirstTime: true,
       iconArrowUp: faArrowUp,
+      isFirstTime: true,
+      userId: '',
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution:
+        '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+      zoom: 3,
+      center: [35, 1],
+      markerLatLng: [],
     }
   },
   methods:
-      {
-        centerMap() {
-          console.log('Map has been centred');
-          this.isFirstTime = false;
-          //TODO: add implementation
-        }
-      },
+  {
+    centerMap(id) {
+      console.log('Map has been centred');
+      this.isFirstTime = false;
+
+      axios.get(GATEWAY_ADDRESS + `/user/get/${id}`).then((response) => {
+        console.log('User data', response.data);
+        axios.get(GATEWAY_ADDRESS + `/address/location/get/${response.data.address.id}`)
+          .then((response) => {
+            console.log('Address data: ', response.data);
+
+            this.zoom = 15;
+            this.center = [response.data.latitude, response.data.longitude];
+            this.$refs.mapRef.leafletObject.setView(this.center, this.zoom);
+          });
+      });
+    },
+  },
+  mounted() {
+    axios.get(GATEWAY_ADDRESS + '/debug/createUser').then((response) => {
+      console.log(response.data.id);
+      this.userId = response.data.id;
+    });
+  },
 }
 </script>
 
@@ -54,26 +90,21 @@ export default {
 #button {
   width: 40%;
   height: 70px;
-  z-index: 2;
+  z-index: 3;
   font-size: 250%;
   margin-right: 2%;
 }
 
 #header {
-  z-index: 2;
+  z-index: 3;
 }
 
 #map-container {
   position: fixed;
   width: 100%;
-  z-index: 1;
 }
 
-img {
-  width: 100%;
-}
-
-#map-initial{
+#map-initial {
   position: absolute;
   top: 0;
   left: 0;
@@ -84,21 +115,27 @@ img {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 2;
 }
 
-p{
+p {
   font-size: v-bind('FONT_SIZES.TITLE');
   background-color: v-bind('COLORS.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
   width: 30%;
   margin-top: 5%;
   border-radius: 15px;
+  z-index: 2;
 }
 
-#arrow-icon{
+#arrow-icon {
   scale: 500%;
-  margin-top: -15%;
-  color: v-bind('COLORS.SECONDARY');
+  margin-top: -5%;
+  z-index: 2;
+}
+
+.map {
+  height: 100vh;
+  z-index: 1;
 }
 </style>

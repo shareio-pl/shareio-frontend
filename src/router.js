@@ -8,6 +8,10 @@ const routes = [
     component: Main,
   },
   {
+    path: "/map",
+    component: () => import("./components/pages/Map.vue"),
+  },
+  {
     path: "/:catchAll(.*)",
     redirect: "/",
   },

@@ -89,5 +89,6 @@ img {
 #arrow-icon {
   scale: 175%;
   margin-left: 8%;
+  color: v-bind('COLORS.TEXT_SECONDARY');
 }
 </style>

@@ -47,8 +47,8 @@ export default {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
         '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
-      zoom: 2,
-      center: [1, 1],
+      zoom: 3,
+      center: [35, 1],
       markerLatLng: [],
     }
   },
@@ -63,11 +63,9 @@ export default {
         axios.get(GATEWAY_ADDRESS + `/address/location/get/${response.data.address.id}`)
           .then((response) => {
             console.log('Address data: ', response.data);
-            this.zoom = 14;
+
+            this.zoom = 15;
             this.center = [response.data.latitude, response.data.longitude];
-            // Honestly, I don't understand why before you could set up the values directly via this.center/this.zoom
-            // But it'd work only once.
-            // According to some SO, this is the solution.
             this.$refs.mapRef.leafletObject.setView(this.center, this.zoom);
           });
       });

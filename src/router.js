@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 
 import Main from "./components/pages/Main.vue";
+import Map from "@/components/pages/Map.vue";
 
 const routes = [
   {
@@ -9,7 +10,7 @@ const routes = [
   },
   {
     path: "/map",
-    component: () => import("./components/pages/Map.vue"),
+    component: Map,
   },
   {
     path: "/:catchAll(.*)",

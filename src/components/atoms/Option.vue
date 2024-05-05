@@ -2,37 +2,40 @@
   <div id="option">
     <div class="checkbox-and-label" @click="toggleCheck">
       <div class="checkbox-circle">
-        <div v-if="checked" class="checked"></div>
+        <div v-if="name === selectedOption" class="checked"></div>
       </div>
-      <span>{{ name }}</span>
+      <span class="checkbox-name">{{ name }}</span>
     </div>
   </div>
 </template>
 
 
 <script>
-import {COLORS, FONT_SIZES} from "../../../public/Consts";
+import { COLORS, FONT_SIZES } from "../../../public/Consts";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Option",
   data() {
     return {
-      checked: false,
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
+      isSelected: false,
     }
   },
-  props:
-      {
-        name:
-            {
-              type: String,
-              required: true,
-            },
-      },
+  props: {
+    name: {
+      type: String,
+      required: true,
+    },
+    selectedOption: {
+      type: String,
+      default: null,
+    },
+  },
   methods: {
     toggleCheck() {
-      this.checked = !this.checked;
+      console.log('Option clicked: ', this.name);
+      this.$emit('selected', this.name);
     }
   },
 }
@@ -45,7 +48,7 @@ export default {
   width: 15%;
   background-color: v-bind('COLORS.MENU_WHITE');
   height: 50%;
-  margin-left: 1%;
+  margin-left: 2%;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
@@ -77,4 +80,7 @@ export default {
   transform: translate(-50%, -50%);
 }
 
+.checkbox-name {
+  margin-left: 5%;
+}
 </style>

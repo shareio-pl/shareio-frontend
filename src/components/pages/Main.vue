@@ -7,7 +7,10 @@
     </div>
     <h1>Najnowsze w Twojej okolicy</h1>
     <div id="newest-offers">
-      <OfferPreview v-for="id in offersIds" :key="id" :id=id :is-new="true"/>
+      <span v-for="pair in offerPairs" :key="pair">
+        <OfferPreview :is-new="true" :id="pair[0]"/>
+        <OfferPreview :is-new="true" :id="pair[1]"/>
+      </span>
     </div>
   </div>
 </template>
@@ -25,6 +28,7 @@ export default {
   components: {OfferPreview, Offer, Header},
   data() {
     return {
+      offerPairs: [],
       offersIds: [],
       closestOffer: '',
       COLORS: COLORS,
@@ -36,14 +40,11 @@ export default {
       console.log('Offers: ', response.data.offerIds);
 
       this.offersIds = response.data.offerIds;
-      this.closestOffer = this.offersIds[1];
-    }).then(async () => {
-      await console.log('Closest offer: ', this.offersIds[1]);
-
-      if (this.closestOffer !== this.offersIds[1]) {
-        console.log('Inside if');
-        this.closestOffer = this.offersIds[1];
+      for (let offerId = 0; offerId < this.offersIds.length; offerId += 2) {
+        this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
       }
+
+      this.closestOffer = this.offersIds[1];
     }).catch(error => {
       console.error('ERROR: ', error);
 
@@ -91,5 +92,15 @@ h1 {
 OfferPreview {
   position: absolute;
   margin-top: 100px;
+}
+
+#newest-offers {
+  display: flex;
+  flex-direction: column;
+}
+
+span{
+  display: flex;
+  justify-content: center;
 }
 </style>

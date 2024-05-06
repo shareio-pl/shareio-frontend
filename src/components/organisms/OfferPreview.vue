@@ -81,7 +81,7 @@ export default {
 .offer-preview-card {
   display: flex;
   justify-content: space-between;
-  width: 40%;
+  width: 44%;
   height: 150px;
   margin: 7px;
   border: 10px solid v-bind('COLORS.PRIMARY');
@@ -158,5 +158,6 @@ export default {
   flex-direction: row;
   align-self: center;
   font-size: v-bind('FONT_SIZES.STARS');
+  margin-left: 4%;
 }
 </style>

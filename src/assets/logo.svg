@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="300"
+   height="75"
+   viewBox="0 0 79.374998 19.84375"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     width="300px"
+     inkscape:zoom="3.008679"
+     inkscape:cx="162.36361"
+     inkscape:cy="96.22163"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <rect
+       x="38.148201"
+       y="47.640507"
+       width="242.44859"
+       height="37.647888"
+       id="rect33286" />
+    <rect
+       x="55.354935"
+       y="4.0377979"
+       width="235.11433"
+       height="74.60022"
+       id="rect4214" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-6.1349276,-1.7011207)"
+       id="text4212"
+       style="font-style:normal;font-weight:normal;font-size:50px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect4214);fill:#01678a;fill-opacity:1;stroke:none"
+       x="102.5498"
+       y="0"><tspan
+         x="67.487324"
+         y="49.530869"
+         id="tspan44643"><tspan
+           style="font-family:'Libre Caslon Display';-inkscape-font-specification:'Libre Caslon Display';text-align:center;text-anchor:middle"
+           id="tspan44641">SHAREIO</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-2.6021932,-1.6400369)"
+       id="text33284"
+       style="font-style:normal;font-weight:normal;font-size:28px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect33286);fill:#0d2149;fill-opacity:1;stroke:none"
+       x="118.59367"
+       y="0"><tspan
+         x="40.121399"
+         y="73.11713"
+         id="tspan44647"><tspan
+           style="font-family:'Libre Caslon Display';-inkscape-font-specification:'Libre Caslon Display';text-align:center;text-anchor:middle"
+           id="tspan44645">Darmo to uczciwa cena</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="44.658344"
+       y="29.670588"
+       id="text43886"><tspan
+         sodipodi:role="line"
+         id="tspan43884"
+         style="stroke-width:0.264583"
+         x="44.658344"
+         y="29.670588" /></text>
+  </g>
+</svg>

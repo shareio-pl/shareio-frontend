@@ -1,5 +1,5 @@
 <template>
-  <div class="offer-preview-card">
+  <div class="offer-preview-card" @click="navigateToOfferPage">
     <div class="offer-preview-image">
       <img :src="offerPreviewImage" alt="Offer image"/>
     </div>
@@ -67,7 +67,13 @@ export default {
 
       this.emitter.emit('axiosError', {error: error.response.status});
     });
-  }
+  },
+  methods:{
+    navigateToOfferPage()
+    {
+      window.location.href = `/offer/get/${this.id}`;
+    },
+  },
 }
 </script>
 
@@ -75,19 +81,20 @@ export default {
 .offer-preview-card {
   display: flex;
   justify-content: space-between;
-  width: 90%;
+  width: 44%;
   height: 150px;
-  margin: 7px auto;
+  margin: 7px;
   border: 10px solid v-bind('COLORS.PRIMARY');
   border-radius: 25px;
   background-color: v-bind('COLORS.OFFER_FOREGROUND');
+  cursor: pointer;
 }
 
 .offer-preview-is-new {
   background-color: v-bind('COLORS.NOTIFICATION_PRIMARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_PRIMARY');
-  width: 8%;
+  width: 25%;
   margin-bottom: 0.5%;
   margin-top: 0.5%;
   border-radius: 25px;
@@ -124,14 +131,14 @@ export default {
 
 .offer-preview-title {
   margin-top: 0.8%;
-  margin-bottom: 0.5%;
+  margin-bottom: 3%;
   display: flex;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
 
 .offer-preview-location {
-  margin-top: 0.5%;
+  margin-top: 4%;
   font-size: v-bind('FONT_SIZES.STARS');
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
@@ -144,12 +151,13 @@ export default {
 
 .offer-preview-user {
   margin-bottom: 8%;
+  margin-right: 5%;
 }
 
 .offer-preview-stars {
-  margin-left: 10%;
   flex-direction: row;
   align-self: center;
   font-size: v-bind('FONT_SIZES.STARS');
+  margin-left: 4%;
 }
 </style>

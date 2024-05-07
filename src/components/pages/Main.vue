@@ -38,13 +38,22 @@ export default {
   mounted() {
     axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds').then((response) => {
       console.log('Offers: ', response.data.offerIds);
-
       this.offersIds = response.data.offerIds;
-      for (let offerId = 0; offerId < this.offersIds.length; offerId += 2) {
+
+      let numberOfOffers;
+      if(this.offersIds.length % 2 === 0)
+      {
+        numberOfOffers = this.offersIds.length;
+      }
+      else {
+        numberOfOffers = this.offersIds.length - 1;
+      }
+
+      for (let offerId = 0; offerId < numberOfOffers; offerId += 2) {
         this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
       }
 
-      this.closestOffer = this.offersIds[1];
+      this.closestOffer = this.offersIds[1]; // TODO: change to endpoint call
     }).catch(error => {
       console.error('ERROR: ', error);
 

@@ -34,8 +34,7 @@ export default {
   },
   methods: {
     toggleCheck() {
-      console.log('Option clicked: ', this.name);
-      this.$emit('selected', this.name);
+      this.emitter.emit('selected-option', { optionName: this.name });
     }
   },
 }
@@ -45,7 +44,6 @@ export default {
 #option {
   display: flex;
   flex-direction: column;
-  width: 15%;
   background-color: v-bind('COLORS.MENU_WHITE');
   height: 50%;
   margin-left: 2%;
@@ -65,7 +63,7 @@ export default {
   border: 1px solid v-bind('COLORS.BORDER_BLACK');
   position: relative;
   cursor: pointer;
-  margin-right: 4%;
+  margin-right: 3%;
   margin-left: 1%;
 }
 
@@ -78,9 +76,5 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-
-.checkbox-name {
-  margin-left: 5%;
 }
 </style>

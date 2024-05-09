@@ -5,8 +5,7 @@
       <FontAwesomeIcon :icon="showOptions ? iconChevronUp : iconChevronDown" id="arrow-icon" @click="onArrowClick" />
     </div>
     <div class="filter-options-list" v-show="showOptions">
-      <Option v-for="option in options" :key="option.name" :name="option.name" :selectedOption="selectedOption"
-        @selected="updateSelection" />
+      <Option v-for="option in options" :key="option.name" :name="option.name" :selected-option="selectedOption" />
     </div>
   </div>
 </template>
@@ -36,12 +35,16 @@ export default {
       showOptions: true,
       FONT_SIZES: FONT_SIZES,
       COLORS: COLORS,
-      options: '',
-      /*options: [
+      //options: '',
+      options: [
         { name: 'Test1' },
         { name: 'Test2' },
-        { name: 'Test3' }
-      ], */
+        { name: 'Test3' },
+        { name: 'Test4' },
+        { name: 'Test5' },
+        { name: 'Longer test name'},
+        { name: "Długość"}
+      ],
       selectedOption: null,
     }
   },
@@ -49,12 +52,21 @@ export default {
     onArrowClick() {
       this.showOptions = !this.showOptions;
     },
-    updateSelection(optionName) {
-      this.selectedOption = optionName;
-      console.log('Selected option: ', optionName);
-      this.$emit('selected', optionName);
+    setSelectEmittor() {
+      this.emitter.on('selected-option', (data) => {
+      console.log('Received selected option in FilterOptions: ', data.optionName);
+      this.selectedOption = data.optionName;
+      this.emitter.emit('filter-selected', { optionName: data.optionName });
+    });
+    },
+    getConditions() {
+      // TODO
     }
   },
+  mounted() {
+    this.setSelectEmittor();
+    this.getConditions();
+  }
 }
 </script>
 
@@ -80,4 +92,12 @@ export default {
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
+
+.filter-options-list {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1%;
+  margin-bottom: 2%;
+}
+
 </style>

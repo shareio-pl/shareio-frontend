@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { COLORS, FONT_SIZES } from "../../public/Consts";
+import { COLORS, FONT_SIZES } from "../../../public/Consts";
 import { faStar as unfilledStar, faStarHalfAlt as halfFilledStar } from '@fortawesome/free-regular-svg-icons';
 import { faStar as filledStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -49,6 +49,7 @@ export default {
     handleClick(event) {
       let clickedStar = this.detectClickedStar(event);
       this.setStars(clickedStar);
+      console.log('Emitter in FilterIoenRate: ', this.emitter);
       this.emitter.emit('filter', { starsAmount: this.localFilledStars });
     },
     detectClickedStar(event) {

@@ -10,7 +10,7 @@
 import { FONT_SIZES } from "../../../public/Consts";
 import { COLORS } from "../../../public/Consts";
 export default {
-// eslint-disable-next-line vue/multi-word-component-names
+  // eslint-disable-next-line vue/multi-word-component-names
   name: "Category",
   data() {
     return {
@@ -33,7 +33,7 @@ export default {
 
 <style scoped>
 .category {
-  display: block;
+  height: 30px;
   margin-left: min(5%, 10px);
   width: 100%;
   font-size: v-bind('FONT_SIZES.PRIMARY');

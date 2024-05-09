@@ -4,7 +4,7 @@
       <div class="filter-name">{{ filterName }}</div>
       <FontAwesomeIcon :icon="showStars ? iconChevronUp : iconChevronDown" id="arrow-icon" @click="onArrowClick" />
     </div>
-    <div class="filter-open-rate" @click="handleClick">
+    <div class="filter-open-rate-stars" @click="handleClick">
       <div class="filter-stars" v-show="showStars" ref="stars">
         <FontAwesomeIcon v-for="index in 5" :key="index" :icon="getStarIcon(index)" class="star" />
       </div>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { COLORS, FONT_SIZES } from "../../public/Consts";
+import { COLORS, FONT_SIZES } from "../../../public/Consts";
 import { faStar as unfilledStar, faStarHalfAlt as halfFilledStar } from '@fortawesome/free-regular-svg-icons';
 import { faStar as filledStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -86,22 +86,23 @@ export default {
   flex-direction: column;
   width: 25%;
   background-color: v-bind('COLORS.MENU_WHITE');
+  border: solid v-bind('COLORS.BORDER_BLACK');
 }
 
 .filter-header {
   display: flex;
   justify-content: space-between;
   margin-left: 2%;
-  font-size: v-bind('FONT_SIZES.IMPORTANT');
+  font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
 
 .filter-stars {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  margin-top: 6%;
-  margin-left: 20%;
+  margin-left: 2%;
+  margin-bottom: 2%;
   font-size: v-bind('FONT_SIZES.IMPORTANT');
 }
 

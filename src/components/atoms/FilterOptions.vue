@@ -35,8 +35,8 @@ export default {
       showOptions: true,
       FONT_SIZES: FONT_SIZES,
       COLORS: COLORS,
-      //options: '',
-      options: [
+      options: '',
+      /*options: [
         { name: 'Test1' },
         { name: 'Test2' },
         { name: 'Test3' },
@@ -44,7 +44,7 @@ export default {
         { name: 'Test5' },
         { name: 'Longer test name'},
         { name: "Długość"}
-      ],
+      ],*/
       selectedOption: null,
     }
   },

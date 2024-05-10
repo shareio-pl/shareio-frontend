@@ -5,7 +5,9 @@
       <FontAwesomeIcon :icon="showOptions ? iconChevronUp : iconChevronDown" id="arrow-icon" @click="onArrowClick" />
     </div>
     <div class="filter-options-list" v-show="showOptions">
-      <Option v-for="option in options" :key="option.name" :name="option.name" :selected-option="selectedOption" />
+      <div class="option" v-for="option in options" :key="option.name">
+        <Option :name="option.name" :selected-option="selectedOption" />
+      </div>
     </div>
   </div>
 </template>
@@ -13,9 +15,11 @@
 <script>
 import Option from "./Option.vue";
 import { COLORS, FONT_SIZES } from "../../../public/Consts";
+import { GATEWAY_ADDRESS } from "../../../public/Consts";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 export default {
   name: "FilterOptions",
@@ -35,16 +39,7 @@ export default {
       showOptions: true,
       FONT_SIZES: FONT_SIZES,
       COLORS: COLORS,
-      options: '',
-      /*options: [
-        { name: 'Test1' },
-        { name: 'Test2' },
-        { name: 'Test3' },
-        { name: 'Test4' },
-        { name: 'Test5' },
-        { name: 'Longer test name'},
-        { name: "Długość"}
-      ],*/
+      options: [],
       selectedOption: null,
     }
   },
@@ -54,13 +49,15 @@ export default {
     },
     setSelectEmitter() {
       this.emitter.on('selected-option', (data) => {
-        console.log('Received selected option in FilterOptions: ', data.optionName);
         this.selectedOption = data.optionName;
-        this.emitter.emit('filter-selected', { optionName: data.optionName });
+        this.emitter.emit('filter-options', { optionName: data.optionName });
       });
     },
     getConditions() {
-      // TODO
+      axios.get(GATEWAY_ADDRESS + `/offer/getConditions`).then((response) => {
+        console.log('Received conditions: ', response.data);
+        this.options = response.data.conditions.map(condition => ({ name: condition.displayName }));
+      });
     }
   },
   mounted() {
@@ -70,13 +67,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .filter-options {
   display: flex;
   flex-direction: column;
   width: 25%;
-  background-color: v-bind('COLORS.MENU_WHITE');
-  border: solid v-bind('COLORS.BORDER_BLACK');
+  background-color: v-bind('COLORS.PRIMARY');
+  border-radius: 0.5em;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 #arrow-icon {
@@ -89,6 +87,7 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-left: 2%;
+  padding: 3%;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
@@ -96,7 +95,17 @@ export default {
 .filter-options-list {
   display: flex;
   flex-direction: column;
-  margin-left: 1%;
+  margin-left: 3%;
   margin-bottom: 2%;
+}
+
+.option {
+  width: 96%;
+  border-radius: 0.3em;
+}
+
+.option:hover {
+  background-color: v-bind('COLORS.SECONDARY');
+  cursor: pointer;
 }
 </style>

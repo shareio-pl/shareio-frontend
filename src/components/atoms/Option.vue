@@ -44,7 +44,6 @@ export default {
 #option {
   display: flex;
   flex-direction: column;
-  background-color: v-bind('COLORS.MENU_WHITE');
   height: 50%;
   margin-left: 2%;
   font-size: v-bind('FONT_SIZES.PRIMARY');
@@ -61,6 +60,7 @@ export default {
   height: 20px;
   border-radius: 50%;
   border: 1px solid v-bind('COLORS.BORDER_BLACK');
+  background: v-bind('COLORS.OFFER_FOREGROUND');
   position: relative;
   cursor: pointer;
   margin-right: 3%;

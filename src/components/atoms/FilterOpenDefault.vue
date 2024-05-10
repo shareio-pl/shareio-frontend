@@ -1,9 +1,7 @@
 <template>
   <div id="filter">
     <div id="header">
-      <h1>
-        {{ name }}
-      </h1>
+      {{ name }}
       <font-awesome-icon :icon="showInput ? iconChevronUp : iconChevronDown" id="arrow-icon" @click="onArrowClick" />
     </div>
     <input id="input" v-show="showInput" type="text" :placeholder="placeholder" @keyup.enter="filter" v-model="input">
@@ -49,7 +47,7 @@ export default {
     },
     filter() {
       console.log('User input: ', this.input);
-      this.emitter.emit('filter', { input: this.input });
+      this.emitter.emit('filter-open-default', { input: this.input });
       this.input = '';
     },
   },
@@ -61,8 +59,9 @@ export default {
   display: flex;
   flex-direction: column;
   width: 25%;
-  background-color: v-bind('COLORS.MENU_WHITE');
-  border: solid v-bind('COLORS.BORDER_BLACK');
+  background-color: v-bind('COLORS.PRIMARY');
+  border-radius: 0.5em;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 #header {
@@ -72,6 +71,7 @@ export default {
   margin-left: 1%;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
+  padding: 3%;
 }
 
 #arrow-icon {
@@ -81,13 +81,13 @@ export default {
 }
 
 input {
-  margin-left: 2%;
+  margin-left: 5%;
   margin-bottom: 5%;
-  width: 88%;
+  width: 90%;
   height: 35%;
-  color: v-bind('COLORS.TEXT_PRIMARY');
+  color: v-bind('COLORS.TEXT_SECONDARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');
-  background-color: v-bind('COLORS.PRIMARY');
+  background-color: v-bind('COLORS.OFFER_FOREGROUND');
 }
 
 ::placeholder {

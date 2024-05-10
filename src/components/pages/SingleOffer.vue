@@ -6,7 +6,7 @@
     </div>
     <h1>Inne oferty oddającego</h1>
     <div id="other-offers">
-      <OfferPreview v-for="id in ownerOffers" :key="id" :id=id />
+      <OfferPreview v-for="id in ownerOffers" :key="id" :id=id :is-new="true"/>
     </div>
   </div>
 </template>
@@ -23,14 +23,13 @@ export default {
   components: {OfferPreview, Offer, Header},
   data() {
     return {
-      COLORS: COLORS,
-      FONT_SIZES: FONT_SIZES,
       ownerOffers: [],
       offersIds: [],
       singleOffer: '',
+      COLORS: COLORS,
+      FONT_SIZES: FONT_SIZES,
     }
   },
-  // TODO change to getOffersByUserId endpoint
   mounted() {
     axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds').then((response) => {
       console.log('Offers: ', response.data.offerIds);

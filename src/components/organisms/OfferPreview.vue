@@ -71,7 +71,7 @@ export default {
   methods:{
     navigateToOfferPage()
     {
-      window.location.href = `/offer/${this.id}`;
+      window.location.href = `/offer/get/${this.id}`;
     },
   },
 }

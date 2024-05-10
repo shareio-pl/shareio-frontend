@@ -1,7 +1,7 @@
 <template>
   <div class="offer-preview-card" @click="navigateToOfferPage">
     <div class="offer-preview-image">
-      <img :src="offerPreviewImage" alt="Offer image" />
+      <img :src="offerPreviewImage" alt="Offer image"/>
     </div>
     <div class="offer-preview-content">
       <h2 class="offer-preview-title">{{ title }}</h2>
@@ -11,8 +11,8 @@
     </div>
     <div class="offer-preview-action">
       <UserData class="offer-preview-user" :userFirstName="userFirstName" :userSurname="userLastName"
-        :userImage="userImage" />
-      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount" />
+        :userImage="userImage"/>
+      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount"/>
     </div>
   </div>
 </template>
@@ -20,11 +20,11 @@
 <script>
 import Stars from '../atoms/Stars.vue';
 import UserData from '../atoms/UserData.vue';
-import { COLORS, FONT_SIZES } from "../../../public/Consts";
+import {COLORS, FONT_SIZES } from "../../../public/Consts";
 
-import { DEFAULT_PREVIEW_OFFER_IMAGE } from "../../../public/Consts";
-import { DEFAULT_USER_PROFILE_IMAGE } from '../../../public/Consts';
-import { GATEWAY_ADDRESS } from "../../../public/Consts";
+import {DEFAULT_PREVIEW_OFFER_IMAGE} from "../../../public/Consts";
+import {DEFAULT_USER_PROFILE_IMAGE} from '../../../public/Consts';
+import {GATEWAY_ADDRESS} from "../../../public/Consts";
 import axios from "axios";
 
 export default {
@@ -73,7 +73,7 @@ export default {
     }).catch(error => {
       console.error('ERROR: ', error);
 
-      this.emitter.emit('axiosError', { error: error.response.status });
+      this.emitter.emit('axiosError', {error: error.response.status});
     });
   },
   methods: {

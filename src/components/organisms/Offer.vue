@@ -2,12 +2,12 @@
   <div class="offer-card">
     <div class="offer-left">
       <div class="offer-left-image">
-        <img class="offer-left-image" :src="offerImage" alt="Offer image" />
+        <img class="offer-left-image" :src="offerImage" alt="Offer image"/>
       </div>
       <p class="offer-left-giver"> Oddająca osoba: </p>
       <div class="offer-left-data">
-        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" :userImage="userImage" />
-        <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings" />
+        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" :userImage="userImage"/>
+        <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings"/>
       </div>
     </div>
     <div class="offer-content">
@@ -20,8 +20,8 @@
       </div>
     </div>
     <div class="offer-right">
-      <img class="offer-right-image" :src="offerMapImage" alt="Offer map image" />
-      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer" />
+      <img class="offer-right-image" :src="offerMapImage" alt="Offer map image"/>
+      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer"/>
     </div>
   </div>
 </template>
@@ -32,12 +32,12 @@ import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import Stars from "@/components/atoms/Stars.vue";
 import axios from 'axios'
 
-import { COLORS } from "../../../public/Consts";
-import { FONT_SIZES } from "../../../public/Consts";
-import { DEFAULT_OFFER_IMAGE } from "../../../public/Consts";
-import { DEFAULT_OFFER_MAP_IMAGE } from "../../../public/Consts";
-import { DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
-import { GATEWAY_ADDRESS } from "../../../public/Consts";
+import {COLORS} from "../../../public/Consts";
+import {FONT_SIZES} from "../../../public/Consts";
+import {DEFAULT_OFFER_IMAGE} from "../../../public/Consts";
+import {DEFAULT_OFFER_MAP_IMAGE} from "../../../public/Consts";
+import {DEFAULT_USER_PROFILE_IMAGE} from "../../../public/Consts";
+import {GATEWAY_ADDRESS} from "../../../public/Consts";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names

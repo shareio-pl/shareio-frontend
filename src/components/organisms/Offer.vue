@@ -2,26 +2,26 @@
   <div class="offer-card">
     <div class="offer-left">
       <div class="offer-left-image">
-        <img class="offer-left-image" :src="offerImage" alt="Offer image"/>
+        <img class="offer-left-image" :src="offerImage" alt="Offer image" />
       </div>
       <p class="offer-left-giver"> Oddająca osoba: </p>
       <div class="offer-left-data">
-        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname"/>
-        <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings"/>
+        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" :userImage="userImage" />
+        <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings" />
       </div>
     </div>
     <div class="offer-content">
       <h2 class="offer-content-title">{{ offerTitle }}</h2>
       <div class="offer-content-metadata">
         <p> Wystawiono: <span style="font-weight: bold">{{ submittedOn }}</span></p>
-        <p> Lokalizacja: <span style="font-weight: bold">{{ location}}</span></p>
+        <p> Lokalizacja: <span style="font-weight: bold">{{ location }}</span></p>
         <p> Stan: <span style="font-weight: bold">{{ condition }}</span></p>
         <p class="offer-content-metadata-desc">{{ offerDescription }}</p>
       </div>
     </div>
     <div class="offer-right">
-      <img class="offer-right-image" :src="offerMapImage" alt="Offer map image"/>
-      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer"/>
+      <img class="offer-right-image" :src="offerMapImage" alt="Offer map image" />
+      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer" />
     </div>
   </div>
 </template>
@@ -32,11 +32,12 @@ import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import Stars from "@/components/atoms/Stars.vue";
 import axios from 'axios'
 
-import {COLORS} from "../../../public/Consts";
-import {FONT_SIZES} from "../../../public/Consts";
-import {DEFAULT_OFFER_IMAGE} from "../../../public/Consts";
-import {DEFAULT_OFFER_MAP_IMAGE} from "../../../public/Consts";
-import {GATEWAY_ADDRESS} from "../../../public/Consts";
+import { COLORS } from "../../../public/Consts";
+import { FONT_SIZES } from "../../../public/Consts";
+import { DEFAULT_OFFER_IMAGE } from "../../../public/Consts";
+import { DEFAULT_OFFER_MAP_IMAGE } from "../../../public/Consts";
+import { DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
+import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -54,6 +55,7 @@ export default {
       amountOfRatings: 37,
       userFirstName: 'Janusz',
       userSurname: 'Kowalski',
+      userImage: DEFAULT_USER_PROFILE_IMAGE,
       offerImage: DEFAULT_OFFER_IMAGE,
       offerMapImage: DEFAULT_OFFER_MAP_IMAGE,
     }
@@ -78,25 +80,57 @@ export default {
       //TODO
       console.log('Button on Offer was clicked.');
     },
+    arrayBufferToBase64(buffer) {
+      return btoa(
+        new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+      );
+    },
+    getOfferData() {
+      axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`).then((response) => {
+        console.log('Offer ', this.id, ': ', response.data);
+
+        this.offerTitle = response.data.title;
+        this.offerDescription = response.data.description;
+        this.submittedOn = response.data.creationDate.substring(0, 10);
+        this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' od ciebie)';
+        this.condition = response.data.condition;
+        this.amountOfStars = response.data.ownerRating;
+        this.amountOfRatings = response.data.ownerReviewCount;
+        this.userFirstName = response.data.ownerName;
+        this.userSurname = response.data.ownerSurname;
+        this.getOfferPictureData(response.data.photoId);
+        this.getUserPictureData(response.data.ownerPhotoId);
+      }).catch(error => {
+        console.error('ERROR: ', error);
+
+        this.emitter.emit('axiosError', { error: error.response.status });
+      });
+    },
+    getOfferPictureData(photoId) {
+      axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' }).then((response) => {
+
+        let image = this.arrayBufferToBase64(response.data);
+        this.offerImage = `data:image/jpeg;base64,${image}`;
+      }).catch(error => {
+        console.error('ERROR: ', error);
+
+        this.emitter.emit('axiosError', { error: error.response.status });
+      });
+    },
+    getUserPictureData(photoId) {
+      axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' }).then((response) => {
+
+        let image = this.arrayBufferToBase64(response.data);
+        this.userImage = `data:image/jpeg;base64,${image}`;
+      }).catch(error => {
+        console.error('ERROR: ', error);
+
+        this.emitter.emit('axiosError', { error: error.response.status });
+      });
+    }
   },
   mounted() {
-    axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`).then((response) => {
-      console.log('Offer ', this.id, ': ', response.data);
-
-      this.offerTitle = response.data.title;
-      this.offerDescription = response.data.description;
-      this.submittedOn = response.data.creationDate.substring(0, 10);
-      this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' od ciebie)';
-      this.condition = response.data.condition;
-      this.amountOfStars = response.data.ownerRating;
-      this.amountOfRatings = response.data.ownerReviewCount;
-      this.userFirstName = response.data.ownerName;
-      this.userSurname = response.data.ownerSurname;
-    }).catch(error => {
-      console.error('ERROR: ', error);
-
-      this.emitter.emit('axiosError', {error: error.response.status});
-    });
+    this.getOfferData();
   },
 }
 </script>
@@ -194,7 +228,7 @@ export default {
 }
 
 .offer-right-image {
-  border-radius: 0px 25px ;
+  border-radius: 0px 25px;
   width: 100%;
   height: 50%;
   object-fit: cover;

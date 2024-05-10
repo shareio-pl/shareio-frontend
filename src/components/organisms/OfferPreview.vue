@@ -20,7 +20,7 @@
 <script>
 import Stars from '../atoms/Stars.vue';
 import UserData from '../atoms/UserData.vue';
-import {COLORS, FONT_SIZES } from "../../../public/Consts";
+import {COLORS, FONT_SIZES} from "../../../public/Consts";
 
 import {DEFAULT_PREVIEW_OFFER_IMAGE} from "../../../public/Consts";
 import {DEFAULT_USER_PROFILE_IMAGE} from '../../../public/Consts';

@@ -14,7 +14,7 @@ const routes = [
     component: Map,
   },
   {
-    path: "/offer/get/:id",
+    path: "/offer/:id",
     component: SingleOffer,
   },
   {

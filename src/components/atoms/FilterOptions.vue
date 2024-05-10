@@ -52,19 +52,19 @@ export default {
     onArrowClick() {
       this.showOptions = !this.showOptions;
     },
-    setSelectEmittor() {
+    setSelectEmitter() {
       this.emitter.on('selected-option', (data) => {
-      console.log('Received selected option in FilterOptions: ', data.optionName);
-      this.selectedOption = data.optionName;
-      this.emitter.emit('filter-selected', { optionName: data.optionName });
-    });
+        console.log('Received selected option in FilterOptions: ', data.optionName);
+        this.selectedOption = data.optionName;
+        this.emitter.emit('filter-selected', { optionName: data.optionName });
+      });
     },
     getConditions() {
       // TODO
     }
   },
   mounted() {
-    this.setSelectEmittor();
+    this.setSelectEmitter();
     this.getConditions();
   }
 }
@@ -99,5 +99,4 @@ export default {
   margin-left: 1%;
   margin-bottom: 2%;
 }
-
 </style>

@@ -80,7 +80,7 @@ export default {
     },
     fetchOwnerData() {
       axios.get(GATEWAY_ADDRESS + `/user/get/${this.id}`).then((response) => {
-        console.log('Offer ', this.id, ': ', response.data);
+        console.log('Owner ', this.id, ': ', response.data);
 
         this.ownerFirstName = response.data.name;
         this.ownerSurname = response.data.surname;

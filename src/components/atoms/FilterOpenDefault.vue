@@ -4,16 +4,17 @@
       <h1>
         {{ name }}
       </h1>
-      <font-awesome-icon :icon="iconChevronUp" id="arrow-icon" @click="onArrowClick"/>
+      <font-awesome-icon :icon="showInput ? iconChevronUp : iconChevronDown" id="arrow-icon" @click="onArrowClick" />
     </div>
-    <input type="text" :placeholder="placeholder" @keyup.enter="filter" v-model="input">
+    <input id="input" v-show="showInput" type="text" :placeholder="placeholder" @keyup.enter="filter" v-model="input">
   </div>
 </template>
 
 <script>
-import {COLORS, FONT_SIZES} from "../../../public/Consts";
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import { COLORS, FONT_SIZES } from "../../../public/Consts";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   name: "FilterOpenDefault",
@@ -22,34 +23,36 @@ export default {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
       iconChevronUp: faChevronUp,
+      iconChevronDown: faChevronDown,
+      showInput: true,
       input: '',
     }
   },
   props:
-      {
-        name:
-            {
-              type: String,
-              required: true,
-            },
-        placeholder:
-            {
-              type: String,
-              required: true,
-            },
-      },
-  components: {FontAwesomeIcon},
+  {
+    name:
+    {
+      type: String,
+      required: true,
+    },
+    placeholder:
+    {
+      type: String,
+      required: true,
+    },
+  },
+  components: { FontAwesomeIcon },
   methods:
-      {
-        onArrowClick() {
-          //TODO: implementation
-        },
-        filter() {
-          console.log('User input: ', this.input);
-          this.emitter.emit('filter', {input: this.input});
-          this.input = '';
-        },
-      },
+  {
+    onArrowClick() {
+      this.showInput = !this.showInput;
+    },
+    filter() {
+      console.log('User input: ', this.input);
+      this.emitter.emit('filter', { input: this.input });
+      this.input = '';
+    },
+  },
 }
 </script>
 
@@ -57,13 +60,13 @@ export default {
 #filter {
   display: flex;
   flex-direction: column;
-  height: 150px;
   width: 25%;
   background-color: v-bind('COLORS.MENU_WHITE');
   border: solid v-bind('COLORS.BORDER_BLACK');
 }
 
 #header {
+  justify-content: space-between;
   display: flex;
   height: 50%;
   margin-left: 1%;
@@ -72,14 +75,14 @@ export default {
 }
 
 #arrow-icon {
-  scale: 250%;
-  margin-top: 4%;
-  margin-left: 65%;
   cursor: pointer;
+  margin-right: 1%;
+  margin-top: 1%;
 }
 
 input {
   margin-left: 2%;
+  margin-bottom: 5%;
   width: 88%;
   height: 35%;
   color: v-bind('COLORS.TEXT_PRIMARY');

@@ -49,6 +49,7 @@ export default {
     handleClick(event) {
       let clickedStar = this.detectClickedStar(event);
       this.setStars(clickedStar);
+      console.log('Emitter in FilterIoenRate: ', this.emitter);
       this.emitter.emit('filter', { starsAmount: this.localFilledStars });
     },
     detectClickedStar(event) {

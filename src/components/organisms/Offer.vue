@@ -2,7 +2,7 @@
   <div class="offer-card">
     <div class="offer-left">
       <div class="offer-left-image">
-        <img class="offer-left-image" :src="offerImage" alt="Offer image"/>
+        <img class="offer-left-image" :src="offerImage" alt="Offer image" >
       </div>
       <p class="offer-left-giver"> Oddająca osoba: </p>
       <div class="offer-left-data">
@@ -14,13 +14,15 @@
       <h2 class="offer-content-title">{{ offerTitle }}</h2>
       <div class="offer-content-metadata">
         <p> Wystawiono: <span style="font-weight: bold">{{ submittedOn }}</span></p>
-        <p> Lokalizacja: <span style="font-weight: bold">{{ location}}</span></p>
+        <p> Lokalizacja: <span style="font-weight: bold">{{ location }}</span></p>
         <p> Stan: <span style="font-weight: bold">{{ condition }}</span></p>
         <p class="offer-content-metadata-desc">{{ offerDescription }}</p>
       </div>
     </div>
     <div class="offer-right">
-      <img class="offer-right-image" :src="offerMapImage" alt="Offer map image"/>
+      <div class="offer-right-map">
+        <MapPreview :zoom="zoom" :center="center" :url="url" :attribution="attribution"/>
+      </div>
       <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer"/>
     </div>
   </div>
@@ -30,13 +32,15 @@
 import UserData from "@/components/atoms/UserData.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import Stars from "@/components/atoms/Stars.vue";
+import MapPreview from "@/components/atoms/MapPreview.vue";
 import axios from 'axios'
+import "leaflet/dist/leaflet.css"
 
-import {COLORS} from "../../../public/Consts";
-import {FONT_SIZES} from "../../../public/Consts";
-import {DEFAULT_OFFER_IMAGE} from "../../../public/Consts";
-import {DEFAULT_OFFER_MAP_IMAGE} from "../../../public/Consts";
-import {GATEWAY_ADDRESS} from "../../../public/Consts";
+import { COLORS } from "../../../public/Consts";
+import { FONT_SIZES } from "../../../public/Consts";
+import { DEFAULT_OFFER_IMAGE } from "../../../public/Consts";
+import { DEFAULT_OFFER_MAP_IMAGE } from "../../../public/Consts";
+import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -54,6 +58,11 @@ export default {
       amountOfRatings: 37,
       userFirstName: 'Janusz',
       userSurname: 'Kowalski',
+      zoom: 15,
+      center: [11, 15],
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution:
+        '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       offerImage: DEFAULT_OFFER_IMAGE,
       offerMapImage: DEFAULT_OFFER_MAP_IMAGE,
     }
@@ -71,7 +80,8 @@ export default {
   components: {
     UserData,
     ButtonPrimary,
-    Stars
+    Stars,
+    MapPreview,
   },
   methods: {
     submitOffer() {
@@ -92,6 +102,7 @@ export default {
       this.amountOfRatings = response.data.ownerReviewCount;
       this.userFirstName = response.data.ownerName;
       this.userSurname = response.data.ownerSurname;
+      this.center = [response.data.latitude, response.data.longitude];
     }).catch(error => {
       console.error('ERROR: ', error);
 
@@ -182,6 +193,7 @@ export default {
 .offer-content-metadata-desc {
   margin-top: 10%;
   font-size: v-bind('FONT_SIZES.PRIMARY');
+  width: 90%;
 }
 
 .offer-right {
@@ -193,12 +205,16 @@ export default {
   justify-content: space-between;
 }
 
-.offer-right-image {
-  border-radius: 0px 25px ;
+.offer-right-map {
   width: 100%;
   height: 50%;
   object-fit: cover;
+  margin-left: auto;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  overflow: hidden;
 }
+
 
 .offer-right-button {
   width: 75%;

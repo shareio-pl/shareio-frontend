@@ -36,21 +36,45 @@ export default {
   name: "Filters",
   components: { FilterOpenDefault, FilterOpenRate, FilterOptions, Category, FilterClosed },
   mounted() {
-    this.emitter.on('filter-closed', this.handleFilter);
-    this.emitter.on('filter-open-default', this.handleFilter);
-    this.emitter.on('filter-stars', this.handleFilter);
-    this.emitter.on('filter-options', this.handleFilter);
+    this.emitter.on('filter-closed', this.handleFilterClosed);
+    this.emitter.on('filter-open-default', this.handleFilterOpenDefault);
+    this.emitter.on('filter-stars', this.handleFilterStars);
+    this.emitter.on('filter-options', this.handleFilterOptions);
   },
   methods: {
-    handleFilter(payload) {
-      // TODO TOMORROW
-      console.log('Received filter event with payload: ', payload);
+    handleFilterClosed(payload) {
+      this.time_from_youngest = payload.direction;
+      this.sendFilters();
+    },
+    handleFilterOpenDefault(payload) {
+      this.distance_chosen = payload.input;
+      this.sendFilters();
+    },
+    handleFilterStars(payload) {
+      this.stars_chosen = payload.starsAmount;
+      this.sendFilters();
+    },
+    handleFilterOptions(payload) {
+      this.option_chosen = payload.optionName;
+      this.sendFilters();
+    },
+    sendFilters() {
+      this.emitter.emit('filter', {
+        time_from_youngest: this.time_from_youngest,
+        option_chosen: this.option_chosen,
+        stars_chosen: this.stars_chosen,
+        distance_chosen: this.distance_chosen
+      });
     }
   },
   data() {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
+      time_from_youngest: '',
+      option_chosen: '',
+      stars_chosen: '',
+      distance_chosen: ''
     }
   }
 }

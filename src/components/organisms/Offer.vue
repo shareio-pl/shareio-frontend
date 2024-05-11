@@ -2,12 +2,12 @@
   <div class="offer-card">
     <div class="offer-left">
       <div class="offer-left-image">
-        <img class="offer-left-image" :src="offerImage" alt="Offer image"/>
+        <img class="offer-left-image" :src="offerImage" alt="Offer image" />
       </div>
       <p class="offer-left-giver"> Oddająca osoba: </p>
       <div class="offer-left-data">
-        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" :userImage="userImage"/>
-        <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings"/>
+        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" :userImage="userImage" />
+        <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings" />
       </div>
     </div>
     <div class="offer-content">
@@ -20,8 +20,8 @@
       </div>
     </div>
     <div class="offer-right">
-      <img class="offer-right-image" :src="offerMapImage" alt="Offer map image"/>
-      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer"/>
+      <img class="offer-right-image" :src="offerMapImage" alt="Offer map image" />
+      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer" />
     </div>
   </div>
 </template>
@@ -32,12 +32,12 @@ import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import Stars from "@/components/atoms/Stars.vue";
 import axios from 'axios'
 
-import {COLORS} from "../../../public/Consts";
-import {FONT_SIZES} from "../../../public/Consts";
-import {DEFAULT_OFFER_IMAGE} from "../../../public/Consts";
-import {DEFAULT_OFFER_MAP_IMAGE} from "../../../public/Consts";
-import {DEFAULT_USER_PROFILE_IMAGE} from "../../../public/Consts";
-import {GATEWAY_ADDRESS} from "../../../public/Consts";
+import { COLORS } from "../../../public/Consts";
+import { FONT_SIZES } from "../../../public/Consts";
+import { DEFAULT_OFFER_IMAGE } from "../../../public/Consts";
+import { DEFAULT_OFFER_MAP_IMAGE } from "../../../public/Consts";
+import { DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
+import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -85,49 +85,40 @@ export default {
         new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
       );
     },
-    getOfferData() {
-      axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`).then((response) => {
+    // These methods are async, because otherwise they'd return undefined in getImageData. 
+    // Alternatively another option would be to pass the variable for image data in here
+    // as a parameter
+    async getOfferData() {
+      try {
+        const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
         console.log('Offer ', this.id, ': ', response.data);
 
         this.offerTitle = response.data.title;
         this.offerDescription = response.data.description;
         this.submittedOn = response.data.creationDate.substring(0, 10);
-        this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' od ciebie)';
+        this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' od Ciebie)';
         this.condition = response.data.condition;
         this.amountOfStars = response.data.ownerRating;
         this.amountOfRatings = response.data.ownerReviewCount;
         this.userFirstName = response.data.ownerName;
         this.userSurname = response.data.ownerSurname;
-        this.getOfferPictureData(response.data.photoId);
-        this.getUserPictureData(response.data.ownerPhotoId);
-      }).catch(error => {
+        this.offerImage = await this.getImageData(response.data.photoId);
+        this.userImage = await this.getImageData(response.data.ownerPhotoId);
+      } catch (error) {
         console.error('ERROR: ', error);
-
         this.emitter.emit('axiosError', { error: error.response.status });
-      });
+      }
     },
-    getOfferPictureData(photoId) {
-      axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' }).then((response) => {
-
+    async getImageData(photoId) {
+      try {
+        const response = await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' });
         let image = this.arrayBufferToBase64(response.data);
-        this.offerImage = `data:image/jpeg;base64,${image}`;
-      }).catch(error => {
+        return `data:image/jpeg;base64,${image}`;
+      } catch (error) {
         console.error('ERROR: ', error);
-
         this.emitter.emit('axiosError', { error: error.response.status });
-      });
+      }
     },
-    getUserPictureData(photoId) {
-      axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' }).then((response) => {
-
-        let image = this.arrayBufferToBase64(response.data);
-        this.userImage = `data:image/jpeg;base64,${image}`;
-      }).catch(error => {
-        console.error('ERROR: ', error);
-
-        this.emitter.emit('axiosError', { error: error.response.status });
-      });
-    }
   },
   mounted() {
     this.getOfferData();

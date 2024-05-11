@@ -118,7 +118,8 @@ export default {
   width: 100%;
   height: 25%;
   margin-bottom: 0px;
-  background-color: v-bind('COLORS.PRIMARY');
+  color: v-bind('COLORS.TEXT_PRIMARY');
+  background-color: v-bind('COLORS.SECONDARY');
 }
 
 .flex-container {

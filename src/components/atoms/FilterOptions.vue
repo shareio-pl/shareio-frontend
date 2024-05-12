@@ -90,6 +90,7 @@ export default {
   padding: 3%;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
+  cursor: pointer;
 }
 
 .filter-options-list {
@@ -102,10 +103,5 @@ export default {
 .option {
   width: 96%;
   border-radius: 0.3em;
-}
-
-.option:hover {
-  background-color: v-bind('COLORS.SECONDARY');
-  cursor: pointer;
 }
 </style>

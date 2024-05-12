@@ -4,19 +4,17 @@
       <p> Kategorie </p>
     </div>
     <div id="categories">
-      <!-- TODO: change to endpoint call -->
-      <Category category="Szopy" numberOfOffers="100" style="width: 90%;" />
-      <Category category="Elektronika" numberOfOffers="5" style="width: 90%;" />
-      <Category category="Kamienice" numberOfOffers="5" style="width: 90%;" />
-      <Category category="Książki" numberOfOffers="4" style="width: 90%;" />
-      <Category category="Mosty" numberOfOffers="5" style="width: 90%;" />
+      <Category v-for="category in categories" :key="category.category" :category="category.category"
+        :number-of-offers="category.numberOfOffers" style="width: 90%;" />
     </div>
     <div id="filterName">
       <p> Filtry </p>
     </div>
     <div id="filters">
-      <FilterClosed class="filter" name="Czas" style="width: 90%;" />
-      <FilterOpenDefault class=" filter" name="Odległość (km)" placeholder="Do..." style="width: 90%;" />
+      <FilterOpenDefault class="filter" name="Czas (dni)" placeholder="Do..." style="width: 90%;" identifier="time"
+        numericInputOnly="true" />
+      <FilterOpenDefault class="filter" name="Odległość (km)" placeholder="Do..." style="width: 90%;"
+        identifier="distance" />
       <FilterOptions class="filter" name="Stan" />
       <FilterOpenRate class="filter" filterName="Ocena wystawiającego" />
     </div>
@@ -28,26 +26,30 @@ import FilterOpenDefault from '../atoms/FilterOpenDefault.vue';
 import FilterOptions from '../atoms/FilterOptions.vue';
 import Category from '../atoms/Category.vue';
 import FilterOpenRate from '../atoms/FilterOpenRate.vue';
-import FilterClosed from '../atoms/FilterClosed.vue';
 import { COLORS, FONT_SIZES } from "../../../public/Consts";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Filters",
-  components: { FilterOpenDefault, FilterOpenRate, FilterOptions, Category, FilterClosed },
+  components: { FilterOpenDefault, FilterOpenRate, FilterOptions, Category },
   mounted() {
-    this.emitter.on('filter-closed', this.handleFilterClosed);
     this.emitter.on('filter-open-default', this.handleFilterOpenDefault);
     this.emitter.on('filter-stars', this.handleFilterStars);
     this.emitter.on('filter-options', this.handleFilterOptions);
   },
+  props: {
+    categories: {
+      type: Array,
+      required: true
+    }
+  },
   methods: {
-    handleFilterClosed(payload) {
-      this.time_from_youngest = payload.direction;
-      this.sendFilters();
-    },
     handleFilterOpenDefault(payload) {
-      this.distance_chosen = payload.input;
+      if (payload.identifier === 'time') {
+        this.time_chosen = payload.input;
+      } else if (payload.identifier === 'distance') {
+        this.distance_chosen = payload.input;
+      }
       this.sendFilters();
     },
     handleFilterStars(payload) {
@@ -60,21 +62,21 @@ export default {
     },
     sendFilters() {
       this.emitter.emit('filter', {
-        time_from_youngest: this.time_from_youngest,
+        time_chosen: this.time_chosen,
         option_chosen: this.option_chosen,
         stars_chosen: this.stars_chosen,
         distance_chosen: this.distance_chosen
       });
-    }
+    },
   },
   data() {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      time_from_youngest: '',
+      time_chosen: '',
       option_chosen: '',
       stars_chosen: '',
-      distance_chosen: ''
+      distance_chosen: '',
     }
   }
 }

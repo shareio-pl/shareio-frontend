@@ -61,6 +61,7 @@ export default {
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
   padding: 3%;
+  cursor: pointer;
 }
 
 #arrow-icon {

@@ -4,7 +4,8 @@
       {{ name }}
       <font-awesome-icon :icon="showInput ? iconChevronUp : iconChevronDown" id="arrow-icon" @click="onArrowClick" />
     </div>
-    <input id="input" v-show="showInput" type="text" :placeholder="placeholder" @keyup.enter="filter" v-model="input">
+    <input id="input" v-show="showInput" type="text" onkeypress="return /[0-9]/i.test(event.key)"
+      :placeholder="placeholder" @keyup.enter="filter" v-model="input">
   </div>
 </template>
 
@@ -38,6 +39,11 @@ export default {
       type: String,
       required: true,
     },
+    identifier:
+    {
+      type: String,
+      required: true,
+    },
   },
   components: { FontAwesomeIcon },
   methods:
@@ -47,9 +53,15 @@ export default {
     },
     filter() {
       console.log('User input: ', this.input);
-      this.emitter.emit('filter-open-default', { input: this.input });
+      this.emitter.emit('filter-open-default', { input: this.input, identifier: this.identifier });
       this.input = '';
     },
+    isNumberKey(evt) {
+      var charCode = (evt.which) ? evt.which : evt.keyCode
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+      return true;
+    }
   },
 }
 </script>
@@ -72,6 +84,7 @@ export default {
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
   padding: 3%;
+  cursor: pointer;
 }
 
 #arrow-icon {

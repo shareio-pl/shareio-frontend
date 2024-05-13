@@ -21,7 +21,7 @@
     </div>
     <div class="offer-right">
       <div class="offer-right-map">
-        <MapPreview :zoom="zoom" :center="center" />
+        <MapPreview v-if="dataLoaded" :zoom="zoom" :center="center" />
       </div>
       <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer" />
     </div>
@@ -59,7 +59,8 @@ export default {
       userFirstName: 'Janusz',
       userSurname: 'Kowalski',
       zoom: 16,
-      center: [11, 15],
+      center: [0, 0],
+      dataLoaded: false,
       offerImage: DEFAULT_OFFER_IMAGE,
       offerMapImage: DEFAULT_OFFER_MAP_IMAGE,
     }
@@ -100,6 +101,7 @@ export default {
       this.userFirstName = response.data.ownerName;
       this.userSurname = response.data.ownerSurname;
       this.center = [response.data.latitude, response.data.longitude];
+      this.dataLoaded = true;
     }).catch(error => {
       console.error('ERROR: ', error);
 

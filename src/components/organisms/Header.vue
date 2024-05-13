@@ -3,10 +3,10 @@
     <div id="header_wrapper">
       <img src="../../assets/logo.png" @click="onLogoClick">
       <div id="buttons">
-        <ButtonPrimary button-text="Ogłoszenia" @click="onOffersClick" />
-        <ButtonPrimary button-text="Mapa" @click="onMapClick" />
-        <ButtonPrimary button-text="Nowa oferta" @click="onNewOfferClick" />
-        <ButtonPrimary button-text="O nas" @click="onAboutUsClick" />
+        <ButtonPrimary class="button" button-text="Ogłoszenia" @click="onOffersClick" />
+        <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick" />
+        <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick" />
+        <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick" />
       </div>
       <div id="user-data" @click="onUserDataClick">
         <UserData :user-surname="this.surname" :user-first-name="this.name" />
@@ -90,6 +90,10 @@ img {
   display: flex;
   align-items: center;
   margin-left: 3%;
+}
+
+.button {
+  min-width: 150px;
 }
 
 #user-data {

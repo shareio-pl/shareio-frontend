@@ -20,7 +20,9 @@
       </div>
     </div>
     <div class="offer-right">
-      <img class="offer-right-image" :src="offerMapImage" alt="Offer map image" />
+      <div class="offer-right-map">
+        <MapPreview v-if="dataLoaded" :zoom="zoom" :center="center" />
+      </div>
       <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer" />
     </div>
   </div>
@@ -30,7 +32,9 @@
 import UserData from "@/components/atoms/UserData.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import Stars from "@/components/atoms/Stars.vue";
+import MapPreview from "@/components/atoms/MapPreview.vue";
 import axios from 'axios'
+import "leaflet/dist/leaflet.css"
 
 import { COLORS } from "../../../public/Consts";
 import { FONT_SIZES } from "../../../public/Consts";
@@ -55,6 +59,9 @@ export default {
       amountOfRatings: 37,
       userFirstName: 'Janusz',
       userSurname: 'Kowalski',
+      zoom: 16,
+      center: [0, 0],
+      dataLoaded: false,
       userImage: DEFAULT_USER_PROFILE_IMAGE,
       offerImage: DEFAULT_OFFER_IMAGE,
       offerMapImage: DEFAULT_OFFER_MAP_IMAGE,
@@ -73,7 +80,8 @@ export default {
   components: {
     UserData,
     ButtonPrimary,
-    Stars
+    Stars,
+    MapPreview,
   },
   methods: {
     submitOffer() {
@@ -207,6 +215,7 @@ export default {
 .offer-content-metadata-desc {
   margin-top: 10%;
   font-size: v-bind('FONT_SIZES.PRIMARY');
+  width: 90%;
 }
 
 .offer-right {
@@ -218,11 +227,14 @@ export default {
   justify-content: space-between;
 }
 
-.offer-right-image {
-  border-radius: 0px 25px;
+.offer-right-map {
   width: 100%;
   height: 50%;
   object-fit: cover;
+  margin-left: auto;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  overflow: hidden;
 }
 
 .offer-right-button {

@@ -104,7 +104,7 @@ input {
 }
 
 ::placeholder {
-  color: v-bind('COLORS.TEXT_PRIMARY');
+  color: v-bind('COLORS.TEXT_SECONDARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');
 }
 </style>

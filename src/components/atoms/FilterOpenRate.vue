@@ -109,6 +109,7 @@ export default {
   font-size: v-bind('FONT_SIZES.IMPORTANT');
   padding: 3%;
   padding-top: 1%;
+  cursor: pointer;
 }
 
 #arrow-icon {

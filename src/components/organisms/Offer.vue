@@ -2,11 +2,11 @@
   <div class="offer-card">
     <div class="offer-left">
       <div class="offer-left-image">
-        <img class="offer-left-image" :src="offerImage" alt="Offer image">
+        <img class="offer-left-image" :src="offerImage" alt="Offer image" />
       </div>
       <p class="offer-left-giver"> Oddająca osoba: </p>
       <div class="offer-left-data">
-        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" />
+        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" :userImage="userImage" />
         <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings" />
       </div>
     </div>
@@ -40,6 +40,7 @@ import { COLORS } from "../../../public/Consts";
 import { FONT_SIZES } from "../../../public/Consts";
 import { DEFAULT_OFFER_IMAGE } from "../../../public/Consts";
 import { DEFAULT_OFFER_MAP_IMAGE } from "../../../public/Consts";
+import { DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
 export default {
@@ -61,6 +62,7 @@ export default {
       zoom: 16,
       center: [0, 0],
       dataLoaded: false,
+      userImage: DEFAULT_USER_PROFILE_IMAGE,
       offerImage: DEFAULT_OFFER_IMAGE,
       offerMapImage: DEFAULT_OFFER_MAP_IMAGE,
     }
@@ -86,27 +88,48 @@ export default {
       //TODO
       console.log('Button on Offer was clicked.');
     },
+    arrayBufferToBase64(buffer) {
+      return btoa(
+        new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+      );
+    },
+    // These methods are async, because otherwise they'd return undefined in getImageData. 
+    // Alternatively another option would be to pass the variable for image data in here
+    // as a parameter
+    async getOfferData() {
+      try {
+        const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
+        console.log('Offer ', this.id, ': ', response.data);
+
+        this.offerTitle = response.data.title;
+        this.offerDescription = response.data.description;
+        this.submittedOn = response.data.creationDate.substring(0, 10);
+        this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' od Ciebie)';
+        this.condition = response.data.condition;
+        this.amountOfStars = response.data.ownerRating;
+        this.amountOfRatings = response.data.ownerReviewCount;
+        this.userFirstName = response.data.ownerName;
+        this.userSurname = response.data.ownerSurname;
+        this.offerImage = await this.getImageData(response.data.photoId);
+        this.userImage = await this.getImageData(response.data.ownerPhotoId);
+      } catch (error) {
+        console.error('ERROR: ', error);
+        this.emitter.emit('axiosError', { error: error.response.status });
+      }
+    },
+    async getImageData(photoId) {
+      try {
+        const response = await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' });
+        let image = this.arrayBufferToBase64(response.data);
+        return `data:image/jpeg;base64,${image}`;
+      } catch (error) {
+        console.error('ERROR: ', error);
+        this.emitter.emit('axiosError', { error: error.response.status });
+      }
+    },
   },
   mounted() {
-    axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`).then((response) => {
-      console.log('Offer ', this.id, ': ', response.data);
-
-      this.offerTitle = response.data.title;
-      this.offerDescription = response.data.description;
-      this.submittedOn = response.data.creationDate.substring(0, 10);
-      this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' od ciebie)';
-      this.condition = response.data.condition;
-      this.amountOfStars = response.data.ownerRating;
-      this.amountOfRatings = response.data.ownerReviewCount;
-      this.userFirstName = response.data.ownerName;
-      this.userSurname = response.data.ownerSurname;
-      this.center = [response.data.latitude, response.data.longitude];
-      this.dataLoaded = true;
-    }).catch(error => {
-      console.error('ERROR: ', error);
-
-      this.emitter.emit('axiosError', { error: error.response.status });
-    });
+    this.getOfferData();
   },
 }
 </script>
@@ -213,7 +236,6 @@ export default {
   border-bottom-left-radius: 25px;
   overflow: hidden;
 }
-
 
 .offer-right-button {
   width: 75%;

@@ -60,9 +60,10 @@ export default {
   mounted() {
     this.getOfferData();
   },
-  methods: {
-    navigateToOfferPage() {
-      // TODO: add implementation
+  methods:{
+    navigateToOfferPage()
+    {
+      window.location.href = `/offer/${this.id}`;
     },
     arrayBufferToBase64(buffer) {
       return btoa(

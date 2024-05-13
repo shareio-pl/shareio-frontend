@@ -1,15 +1,17 @@
 <template>
   <div id="header">
-    <img src="../../assets/logo.png" @click="onLogoClick">
-    <div id="buttons">
-      <ButtonPrimary button-text="Ogłoszenia" @click="onOffersClick" />
-      <ButtonPrimary button-text="Mapa" @click="onMapClick" />
-      <ButtonPrimary button-text="Nowa oferta" @click="onNewOfferClick" />
-      <ButtonPrimary button-text="O nas" @click="onAboutUsClick" />
-    </div>
-    <div id="user-data" @click="onUserDataClick">
-      <UserData :user-surname="this.surname" :user-first-name="this.name" />
-      <font-awesome-icon :icon="iconChevronDown" id="arrow-icon" />
+    <div id="header_wrapper">
+      <img src="../../assets/logo.png" @click="onLogoClick">
+      <div id="buttons">
+        <ButtonPrimary button-text="Ogłoszenia" @click="onOffersClick" />
+        <ButtonPrimary button-text="Mapa" @click="onMapClick" />
+        <ButtonPrimary button-text="Nowa oferta" @click="onNewOfferClick" />
+        <ButtonPrimary button-text="O nas" @click="onAboutUsClick" />
+      </div>
+      <div id="user-data" @click="onUserDataClick">
+        <UserData :user-surname="this.surname" :user-first-name="this.name" />
+        <font-awesome-icon :icon="iconChevronDown" id="arrow-icon" />
+      </div>
     </div>
   </div>
 </template>
@@ -67,28 +69,40 @@ export default {
   background-color: v-bind('COLORS.PRIMARY');
 }
 
+#header_wrapper {
+  display: flex;
+  width: 90%;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+
 img {
-  margin-left: 2%;
   cursor: pointer;
+  aspect-ratio: 3.166;
+  height: 100px;
+  /* 475 px / 150px */
 }
 
 #buttons {
+  flex-grow: 1;
   display: flex;
   align-items: center;
-  width: 100%;
   margin-left: 3%;
 }
 
 #user-data {
   display: flex;
   align-items: center;
-  width: 18%;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 #arrow-icon {
-  scale: 175%;
-  margin-left: 8%;
+  font-size: v-bind('FONT_SIZES.IMPORTANT');
   color: v-bind('COLORS.TEXT_SECONDARY');
+  padding-left: 1em;
+  box-sizing: border-box;
 }
 </style>

@@ -28,14 +28,13 @@ export default {
       type: Array,
       required: true,
     },
-    url: {
-      type: String,
-      required: true,
-    },
-    attribution: {
-      type: String,
-      required: true,
-    },
+  },
+  data() {
+    return {
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution:
+        '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+    };
   },
 };
 </script>

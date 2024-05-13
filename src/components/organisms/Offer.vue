@@ -2,12 +2,12 @@
   <div class="offer-card">
     <div class="offer-left">
       <div class="offer-left-image">
-        <img class="offer-left-image" :src="offerImage" alt="Offer image" >
+        <img class="offer-left-image" :src="offerImage" alt="Offer image">
       </div>
       <p class="offer-left-giver"> Oddająca osoba: </p>
       <div class="offer-left-data">
-        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname"/>
-        <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings"/>
+        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" />
+        <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings" />
       </div>
     </div>
     <div class="offer-content">
@@ -21,9 +21,9 @@
     </div>
     <div class="offer-right">
       <div class="offer-right-map">
-        <MapPreview :zoom="zoom" :center="center" :url="url" :attribution="attribution"/>
+        <MapPreview :zoom="zoom" :center="center" />
       </div>
-      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer"/>
+      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer" />
     </div>
   </div>
 </template>
@@ -58,11 +58,8 @@ export default {
       amountOfRatings: 37,
       userFirstName: 'Janusz',
       userSurname: 'Kowalski',
-      zoom: 15,
+      zoom: 16,
       center: [11, 15],
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      attribution:
-        '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       offerImage: DEFAULT_OFFER_IMAGE,
       offerMapImage: DEFAULT_OFFER_MAP_IMAGE,
     }
@@ -106,7 +103,7 @@ export default {
     }).catch(error => {
       console.error('ERROR: ', error);
 
-      this.emitter.emit('axiosError', {error: error.response.status});
+      this.emitter.emit('axiosError', { error: error.response.status });
     });
   },
 }

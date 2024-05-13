@@ -71,7 +71,8 @@ export default {
 
 #header_wrapper {
   display: flex;
-  width: 90%;
+  width: 96%;
+  margin-right: 1%;
   height: 100%;
   align-items: center;
   justify-content: space-between;
@@ -101,6 +102,7 @@ img {
   align-items: center;
   cursor: pointer;
   box-sizing: border-box;
+  margin-right: 1.1%;
 }
 
 #arrow-icon {

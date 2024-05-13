@@ -1,7 +1,7 @@
 <template>
   <div class="offer-preview-card" @click="navigateToOfferPage">
     <div class="offer-preview-image">
-      <img :src="offerPreviewImage" alt="Offer image"/>
+      <img :src="offerPreviewImage" alt="Offer image" />
     </div>
     <div class="offer-preview-content">
       <h2 class="offer-preview-title">{{ title }}</h2>
@@ -10,8 +10,9 @@
       <p class="offer-preview-location">{{ location }}</p>
     </div>
     <div class="offer-preview-action">
-      <UserData class="offer-preview-user" :userFirstName="userFirstName" :userSurname="userLastName"/>
-      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount"/>
+      <UserData class="offer-preview-user" :userFirstName="userFirstName" :userSurname="userLastName"
+        :userImage="userImage" />
+      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount" />
     </div>
   </div>
 </template>
@@ -19,10 +20,11 @@
 <script>
 import Stars from '../atoms/Stars.vue';
 import UserData from '../atoms/UserData.vue';
-import {COLORS, FONT_SIZES} from "../../../public/Consts";
+import { COLORS, FONT_SIZES } from "../../../public/Consts";
 
-import {DEFAULT_PREVIEW_OFFER_IMAGE} from "../../../public/Consts";
-import {GATEWAY_ADDRESS} from "../../../public/Consts";
+import { DEFAULT_PREVIEW_OFFER_IMAGE } from "../../../public/Consts";
+import { DEFAULT_USER_PROFILE_IMAGE } from '../../../public/Consts';
+import { GATEWAY_ADDRESS } from "../../../public/Consts";
 import axios from "axios";
 
 export default {
@@ -42,6 +44,7 @@ export default {
       location: 'Remiszewiece',
       title: 'Oferta',
       offerPreviewImage: DEFAULT_PREVIEW_OFFER_IMAGE,
+      userImage: DEFAULT_USER_PROFILE_IMAGE,
     };
   },
   props: {
@@ -55,23 +58,43 @@ export default {
     },
   },
   mounted() {
-    axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`).then((response) => {
-      this.userFirstName = response.data.ownerName;
-      this.userLastName = response.data.ownerSurname;
-      this.starsAmount = response.data.ownerRating;
-      this.ratingsAmount = response.data.ownerReviewCount;
-      this.location = response.data.city;
-      this.title = response.data.title;
-    }).catch(error => {
-      console.error('ERROR: ', error);
-
-      this.emitter.emit('axiosError', {error: error.response.status});
-    });
+    this.getOfferData();
   },
-  methods:{
-    navigateToOfferPage()
-    {
+  methods: {
+    navigateToOfferPage() {
       // TODO: add implementation
+    },
+    arrayBufferToBase64(buffer) {
+      return btoa(
+        new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+      );
+    },
+    async getOfferData() {
+      try {
+        let response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
+        console.log(response);
+        this.userFirstName = response.data.ownerName;
+        this.userLastName = response.data.ownerSurname;
+        this.starsAmount = response.data.ownerRating;
+        this.ratingsAmount = response.data.ownerReviewCount;
+        this.location = response.data.city;
+        this.title = response.data.title;
+        this.offerPreviewImage = await this.getImageData(response.data.photoId);
+        this.userImage = await this.getImageData(response.data.ownerPhotoId);
+      } catch (error) {
+        console.error('ERROR: ', error);
+        this.emitter.emit('axiosError', { error: error.response.status });
+      }
+    },
+    async getImageData(photoId) {
+      try {
+        const response = await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' });
+        let image = this.arrayBufferToBase64(response.data);
+        return `data:image/jpeg;base64,${image}`;
+      } catch (error) {
+        console.error('ERROR: ', error);
+        this.emitter.emit('axiosError', { error: error.response.status });
+      }
     },
   },
 }
@@ -138,7 +161,7 @@ export default {
 }
 
 .offer-preview-location {
-  margin-top: 4%;
+  margin-top: 2%;
   font-size: v-bind('FONT_SIZES.STARS');
   color: v-bind('COLORS.TEXT_SECONDARY');
 }

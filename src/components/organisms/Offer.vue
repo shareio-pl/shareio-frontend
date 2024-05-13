@@ -2,7 +2,7 @@
   <div class="offer-card">
     <div class="offer-left">
       <div class="offer-left-image">
-        <img class="offer-left-image" :src="offerImage" alt="Offer image" />
+        <img class="offer-left-image" :src="offerImage" alt="Offer image">
       </div>
       <p class="offer-left-giver"> Oddająca osoba: </p>
       <div class="offer-left-data">
@@ -21,13 +21,12 @@
     </div>
     <div class="offer-right">
       <div class="offer-right-map">
-        <MapPreview v-if="dataLoaded" :zoom="zoom" :center="center" />
+        <MapPreview v-if="dataLoaded" :zoom="zoom" :center="center"/>
       </div>
-      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer" />
+      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer"/>
     </div>
   </div>
 </template>
-
 <script>
 import UserData from "@/components/atoms/UserData.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
@@ -35,13 +34,11 @@ import Stars from "@/components/atoms/Stars.vue";
 import MapPreview from "@/components/atoms/MapPreview.vue";
 import axios from 'axios'
 import "leaflet/dist/leaflet.css"
-
-import { COLORS } from "../../../public/Consts";
-import { FONT_SIZES } from "../../../public/Consts";
-import { DEFAULT_OFFER_IMAGE } from "../../../public/Consts";
-import { DEFAULT_OFFER_MAP_IMAGE } from "../../../public/Consts";
-import { DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
-import { GATEWAY_ADDRESS } from "../../../public/Consts";
+import {COLORS, DEFAULT_USER_PROFILE_IMAGE} from "../../../public/Consts";
+import {FONT_SIZES} from "../../../public/Consts";
+import {DEFAULT_OFFER_IMAGE} from "../../../public/Consts";
+import {DEFAULT_OFFER_MAP_IMAGE} from "../../../public/Consts";
+import {GATEWAY_ADDRESS} from "../../../public/Consts";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -59,10 +56,10 @@ export default {
       amountOfRatings: 37,
       userFirstName: 'Janusz',
       userSurname: 'Kowalski',
+      userImage: DEFAULT_USER_PROFILE_IMAGE,
       zoom: 16,
       center: [0, 0],
       dataLoaded: false,
-      userImage: DEFAULT_USER_PROFILE_IMAGE,
       offerImage: DEFAULT_OFFER_IMAGE,
       offerMapImage: DEFAULT_OFFER_MAP_IMAGE,
     }
@@ -90,17 +87,16 @@ export default {
     },
     arrayBufferToBase64(buffer) {
       return btoa(
-        new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+          new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
       );
     },
-    // These methods are async, because otherwise they'd return undefined in getImageData. 
+    // These methods are async, because otherwise they'd return undefined in getImageData.
     // Alternatively another option would be to pass the variable for image data in here
     // as a parameter
     async getOfferData() {
       try {
         const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
         console.log('Offer ', this.id, ': ', response.data);
-
         this.offerTitle = response.data.title;
         this.offerDescription = response.data.description;
         this.submittedOn = response.data.creationDate.substring(0, 10);
@@ -110,6 +106,8 @@ export default {
         this.amountOfRatings = response.data.ownerReviewCount;
         this.userFirstName = response.data.ownerName;
         this.userSurname = response.data.ownerSurname;
+        this.center = [response.data.latitude, response.data.longitude];
+        this.dataLoaded = true;
         this.offerImage = await this.getImageData(response.data.photoId);
         this.userImage = await this.getImageData(response.data.ownerPhotoId);
       } catch (error) {
@@ -133,7 +131,6 @@ export default {
   },
 }
 </script>
-
 <style scoped>
 .offer-card {
   display: flex;

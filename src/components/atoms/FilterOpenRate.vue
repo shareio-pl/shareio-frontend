@@ -49,8 +49,7 @@ export default {
     handleClick(event) {
       let clickedStar = this.detectClickedStar(event);
       this.setStars(clickedStar);
-      console.log('Emitter in FilterIoenRate: ', this.emitter);
-      this.emitter.emit('filter', { starsAmount: this.localFilledStars });
+      this.emitter.emit('filter-stars', { starsAmount: this.localFilledStars });
     },
     detectClickedStar(event) {
       const starContainer = this.$refs.stars;
@@ -86,8 +85,9 @@ export default {
   display: flex;
   flex-direction: column;
   width: 25%;
-  background-color: v-bind('COLORS.MENU_WHITE');
-  border: solid v-bind('COLORS.BORDER_BLACK');
+  background-color: v-bind('COLORS.PRIMARY');
+  border-radius: 0.5em;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .filter-header {
@@ -96,6 +96,8 @@ export default {
   margin-left: 2%;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
+  padding: 3%;
+  cursor: pointer;
 }
 
 .filter-stars {
@@ -105,6 +107,9 @@ export default {
   margin-left: 2%;
   margin-bottom: 2%;
   font-size: v-bind('FONT_SIZES.IMPORTANT');
+  padding: 3%;
+  padding-top: 1%;
+  cursor: pointer;
 }
 
 #arrow-icon {

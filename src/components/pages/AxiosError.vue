@@ -49,6 +49,6 @@ img {
   background-color: rgba(0, 0, 0, 0.5);
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 1;
 }
 </style>

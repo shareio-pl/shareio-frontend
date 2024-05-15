@@ -8,7 +8,7 @@
     </div>
     <div id="map-container">
       <div class="map">
-        <l-map :zoom="zoom" :center="center" ref="mapRef">
+        <l-map :zoom="zoom" :center="center" :min-zoom="minZoom" ref="mapRef">
           <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
           <!--          <l-marker :lat-lng="markerLatLng"></l-marker>-->
         </l-map>
@@ -47,8 +47,9 @@ export default {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
         '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
-      zoom: 3,
-      center: [35, 1],
+      zoom: 6,
+      minZoom: 6, // 7 zawiera całą Polskę, ale nie na każdej rozdzielczości
+      center: [52.066667, 19.466667], // Środek Polski; wieś Piątek
       markerLatLng: [],
     }
   },

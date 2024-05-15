@@ -23,7 +23,6 @@ export default {
   },
   mounted() {
     this.emitter.on('axiosError', (data) => {
-      console.log('ERRORRRRRRRRRRRRRRRRRRRRRRRRRRR');
       console.log('Error code: ', data.error);
       this.url = this.url_base + data.error;
       console.log('URL: ', this.url);

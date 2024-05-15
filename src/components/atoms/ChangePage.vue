@@ -1,15 +1,24 @@
 <template>
   <div class="change-page">
-    <font-awesome-icon v-if="leftArrow" :icon="iconChevronLeft" class="leftArrow" @click="onLeftArrowClick" role="button"/>
+    <div class="arrow-container">
+      <font-awesome-icon v-if="page > 1" :icon="iconChevronLeft" class="arrow" @click="onLeftArrowClick"
+        role="button" />
+      <div v-else class="arrow-placeholder"></div>
+    </div>
     <div class="page-info">
       <span class="page">{{ page }}</span>
       <span class="totalpages">({{ totalPages }})</span>
     </div>
-    <font-awesome-icon v-if="rightArrow" :icon="iconChevronRight" class="rightArrow" @click="onRightArrowClick" role="button"/>
+    <div class="arrow-container">
+      <font-awesome-icon v-if="page < totalPages" :icon="iconChevronRight" class="arrow" @click="onRightArrowClick"
+        role="button" />
+      <div v-else class="arrow-placeholder"></div>
+    </div>
   </div>
 </template>
+
 <script>
-import {COLORS, FONT_SIZES} from '../../../public/Consts';
+import { COLORS, FONT_SIZES } from '../../../public/Consts';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -17,7 +26,7 @@ export default {
   name: "ChangePage",
   components: {
     FontAwesomeIcon,
-    },
+  },
   props: {
     leftArrow: {
       type: Boolean,
@@ -47,10 +56,10 @@ export default {
   },
   methods: {
     onLeftArrowClick() {
-      this.$emit('left-arrow-clicked');
+      this.emitter.emit('left-arrow-clicked');
     },
     onRightArrowClick() {
-      this.$emit('right-arrow-clicked');
+      this.emitter.emit('right-arrow-clicked');
     }
   }
 }
@@ -67,7 +76,7 @@ export default {
   flex-direction: column;
   align-items: center;
   margin: 0;
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: v-bind('FONT_SIZES.IMPORTANT');
   color: v-bind('COLORS.TEXT_PRIMARY');
 }
 
@@ -76,12 +85,12 @@ export default {
 }
 
 .totalpages {
-  font-size: v-bind('FONT_SIZES.SECONDARY');
-  color: v-bind('COLORS.TEXT_SECONDARY');
+  font-size: v-bind('FONT_SIZES.PRIMARY');
+  color: v-bind('COLORS.TEXT_PRIMARY');
   line-height: 0.8;
 }
 
-.leftArrow{
+.leftArrow {
   margin-top: -11px;
   margin-right: 20px;
 }
@@ -91,4 +100,12 @@ export default {
   margin-left: 20px;
 }
 
+.arrow-container {
+  width: 40px;
+}
+
+.arrow-placeholder {
+  width: 100%;
+  height: 100%;
+}
 </style>

@@ -49,7 +49,7 @@ export default {
         '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       zoom: 6,
       minZoom: 6, // 7 zawiera całą Polskę, ale nie na każdej rozdzielczości
-      center: [52.066667, 19.466667], // Środek Polski, wieś Piątek
+      center: [52.066667, 19.466667], // Środek Polski; wieś Piątek
       markerLatLng: [],
     }
   },

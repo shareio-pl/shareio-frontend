@@ -94,21 +94,6 @@ export default {
       try {
         const response = await axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds');
         this.offersIds = response.data.offerIds;
-
-        const offersPromises = this.offersIds.map(async (offerId) => {
-          const response = await axios.get(GATEWAY_ADDRESS + '/offer/get/' + offerId);
-          let offer = {
-            id: response.data.offerId,
-            creationDate: response.data.creationDate,
-            distance: response.data.distance,
-            condition: response.data.condition,
-            ownerRating: response.data.ownerRating,
-            ownerReviewCount: response.data.ownerReviewCount,
-          };
-          return offer;
-        });
-
-        this.offers = await Promise.all(offersPromises);
       } catch (error) {
         console.error('ERROR: ', error);
       }

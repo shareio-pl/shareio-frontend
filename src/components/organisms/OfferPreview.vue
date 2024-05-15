@@ -1,5 +1,8 @@
 <template>
-  <div class="offer-preview-card" @click="navigateToOfferPage">
+  <div v-if="imageIsLoading" class="offer-preview-card">
+    <ImageLoadingAnimation />
+  </div>
+  <div v-else class="offer-preview-card" @click="navigateToOfferPage">
     <div class="offer-preview-image">
       <img :src="offerPreviewImage" alt="Offer image" />
     </div>
@@ -20,8 +23,9 @@
 <script>
 import Stars from '../atoms/Stars.vue';
 import UserData from '../atoms/UserData.vue';
-import { COLORS, FONT_SIZES } from "../../../public/Consts";
+import ImageLoadingAnimation from '../atoms/ImageLoadingAnimation.vue';
 
+import { COLORS, FONT_SIZES } from "../../../public/Consts";
 import { DEFAULT_PREVIEW_OFFER_IMAGE } from "../../../public/Consts";
 import { DEFAULT_USER_PROFILE_IMAGE } from '../../../public/Consts';
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
@@ -32,6 +36,7 @@ export default {
   components: {
     Stars,
     UserData,
+    ImageLoadingAnimation,
   },
   data() {
     return {
@@ -43,6 +48,7 @@ export default {
       ratingsAmount: 12,
       location: 'Remiszewiece',
       title: 'Oferta',
+      imageIsLoading: true,
       offerPreviewImage: DEFAULT_PREVIEW_OFFER_IMAGE,
       userImage: DEFAULT_USER_PROFILE_IMAGE,
     };
@@ -60,9 +66,8 @@ export default {
   mounted() {
     this.getOfferData();
   },
-  methods:{
-    navigateToOfferPage()
-    {
+  methods: {
+    navigateToOfferPage() {
       window.location.href = `/offer/${this.id}`;
     },
     arrayBufferToBase64(buffer) {
@@ -82,6 +87,7 @@ export default {
         this.title = response.data.title;
         this.offerPreviewImage = await this.getImageData(response.data.photoId);
         this.userImage = await this.getImageData(response.data.ownerPhotoId);
+        this.imageIsLoading = false;
       } catch (error) {
         console.error('ERROR: ', error);
         this.emitter.emit('axiosError', { error: error.response.status });

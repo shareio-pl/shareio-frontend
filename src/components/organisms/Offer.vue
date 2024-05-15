@@ -1,7 +1,10 @@
 <template>
   <div class="offer-card">
     <div class="offer-left">
-      <div class="offer-left-image">
+      <div v-if="imageIsLoading" class="offer-left-image">
+        <ImageLoadingAnimation />
+      </div>
+      <div v-else class="offer-left-image">
         <img class="offer-left-image" :src="offerImage" alt="Offer image">
       </div>
       <p class="offer-left-giver"> Oddająca osoba: </p>
@@ -21,9 +24,9 @@
     </div>
     <div class="offer-right">
       <div class="offer-right-map">
-        <MapPreview v-if="dataLoaded" :zoom="zoom" :center="center"/>
+        <MapPreview v-if="mapDataLoaded" :zoom="zoom" :center="center" />
       </div>
-      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer"/>
+      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer" />
     </div>
   </div>
 </template>
@@ -32,13 +35,15 @@ import UserData from "@/components/atoms/UserData.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import Stars from "@/components/atoms/Stars.vue";
 import MapPreview from "@/components/atoms/MapPreview.vue";
+import ImageLoadingAnimation from "@/components/atoms/ImageLoadingAnimation.vue";
+
 import axios from 'axios'
 import "leaflet/dist/leaflet.css"
-import {COLORS, DEFAULT_USER_PROFILE_IMAGE} from "../../../public/Consts";
-import {FONT_SIZES} from "../../../public/Consts";
-import {DEFAULT_OFFER_IMAGE} from "../../../public/Consts";
-import {DEFAULT_OFFER_MAP_IMAGE} from "../../../public/Consts";
-import {GATEWAY_ADDRESS} from "../../../public/Consts";
+import { COLORS, DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
+import { FONT_SIZES } from "../../../public/Consts";
+import { DEFAULT_OFFER_IMAGE } from "../../../public/Consts";
+import { DEFAULT_OFFER_MAP_IMAGE } from "../../../public/Consts";
+import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -59,7 +64,8 @@ export default {
       userImage: DEFAULT_USER_PROFILE_IMAGE,
       zoom: 16,
       center: [0, 0],
-      dataLoaded: false,
+      mapDataLoaded: false,
+      imageIsLoading: true,
       offerImage: DEFAULT_OFFER_IMAGE,
       offerMapImage: DEFAULT_OFFER_MAP_IMAGE,
     }
@@ -79,6 +85,7 @@ export default {
     ButtonPrimary,
     Stars,
     MapPreview,
+    ImageLoadingAnimation,
   },
   methods: {
     submitOffer() {
@@ -87,7 +94,7 @@ export default {
     },
     arrayBufferToBase64(buffer) {
       return btoa(
-          new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+        new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
       );
     },
     // These methods are async, because otherwise they'd return undefined in getImageData.
@@ -107,9 +114,10 @@ export default {
         this.userFirstName = response.data.ownerName;
         this.userSurname = response.data.ownerSurname;
         this.center = [response.data.latitude, response.data.longitude];
-        this.dataLoaded = true;
+        this.mapDataLoaded = true;
         this.offerImage = await this.getImageData(response.data.photoId);
         this.userImage = await this.getImageData(response.data.ownerPhotoId);
+        this.imageIsLoading = false;
       } catch (error) {
         console.error('ERROR: ', error);
         this.emitter.emit('axiosError', { error: error.response.status });

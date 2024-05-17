@@ -1,7 +1,8 @@
 <template>
   <div class="map">
     <l-map :zoom="zoom" :center="center"
-      :options="{ zoomControl: false, scrollWheelZoom: false, dragging: false, doubleClickZoom: false }" ref="mapRef">
+      :options="{ zoomControl: false, scrollWheelZoom: false, dragging: false, doubleClickZoom: false }"
+      style="z-index: 0;" ref="mapRef">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       <l-marker :lat-lng="center"></l-marker>
     </l-map>
@@ -44,5 +45,6 @@ export default {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  z-index: 1;
 }
 </style>

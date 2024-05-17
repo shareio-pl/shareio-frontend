@@ -1,3 +1,36 @@
+Skip to content
+Navigation Menu
+
+shareio-pl
+/
+shareio-frontend
+
+Code
+Commits
+Issues
+Pull requests 4
+Actions
+Security 3
+
+Insights
+
+Add Image selector #46
+Open
+Piotr-Skrobski wants to merge 1 commit into master from Add_Image_Selector
++89 −0
+Conversation 0
+Commits 1
+Checks 0
+Files changed 1
+Open
+Add Image selector
+#46
+File filter
+0 / 1 files viewed
+89 changes: 89 additions & 0 deletions 89
+src/components/atoms/ImageSelector.vue
+Viewed
+@@ -0,0 +1,89 @@
 <template>
   <div id="image-adder-main">
     <div v-if="!image">
@@ -17,7 +50,6 @@
 <script>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faFileArrowUp as UploadIcon } from '@fortawesome/free-solid-svg-icons';
-
 export default {
   name: 'ImageSelector',
   components: {
@@ -37,11 +69,10 @@ export default {
     handleImageUpload(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
       if (file && (this.file_types.includes(file.type))) {
         reader.onload = () => {
           this.image = reader.result;
-          this.$emit('image-uploaded', this.image);
+          this.emitter.emit('image-uploaded', this.image);
         };
         reader.readAsDataURL(file);
       } else {
@@ -87,3 +118,15 @@ img {
   aspect-ratio: 1/1;
 }
 </style>
+Footer
+© 2024 GitHub, Inc.
+Footer navigation
+
+Terms
+Privacy
+Security
+Status
+Docs
+Contact
+
+Add Image selector by Piotr-Skrobski · Pull Request #46 · shareio-pl/shareio-frontend

@@ -45,6 +45,5 @@ export default {
   height: 100%;
   width: 100%;
   overflow: hidden;
-  z-index: 1;
 }
 </style>

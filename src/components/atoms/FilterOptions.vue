@@ -1,7 +1,10 @@
 <template>
   <div class="filter-options">
     <div class="filter-header">
-      <div class="filter-name">{{ name }}</div>
+      <div class="filter-header-left">
+        <FontAwesomeIcon :icon="propIcon" id="prop-icon" />
+        <div class="filter-name">{{ name }}</div>
+      </div>
       <FontAwesomeIcon :icon="showOptions ? iconChevronUp : iconChevronDown" id="arrow-icon" @click="onArrowClick" />
     </div>
     <div class="filter-options-list" v-show="showOptions">
@@ -31,6 +34,10 @@ export default {
       type: String,
       required: true
     },
+    propIcon: {
+      type: Object,
+      required: false
+    }
   },
   data() {
     return {
@@ -83,6 +90,11 @@ export default {
   margin-top: 1%;
 }
 
+#prop-icon {
+  margin-left: -0.2em;
+  width: 10%;
+}
+
 .filter-header {
   display: flex;
   justify-content: space-between;
@@ -91,6 +103,12 @@ export default {
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
   cursor: pointer;
+}
+
+.filter-header-left {
+  display: flex;
+  align-items: center;
+  width: 90%;
 }
 
 .filter-options-list {

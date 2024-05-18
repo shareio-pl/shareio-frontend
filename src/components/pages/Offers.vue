@@ -47,14 +47,7 @@ export default {
       distance_chosen: '',
       sorting: 'Najbliższe',
       isMounted: false,
-      // TODO: API call.
-      categories: [
-        { category: 'Kategoria 1', numberOfOffers: 5 },
-        { category: 'Kategoria 2', numberOfOffers: 3 },
-        { category: 'Kategoria 3', numberOfOffers: 7 },
-        { category: 'Kategoria 4', numberOfOffers: 2 },
-        { category: 'Kategoria 5', numberOfOffers: 1 },
-      ]
+      categories: []
     }
   },
   methods: {
@@ -90,10 +83,28 @@ export default {
     changePage(page) {
       this.currentPage = page;
     },
+    async getCategories() {
+      try {
+        const response = await axios.get(GATEWAY_ADDRESS + `/offer/getCategories`);
+        this.categories = response.data.categories.map(category => ({
+          name: category.displayName,
+          numberOfOffers: 0
+        }));
+      } catch (error) {
+        console.error('ERROR: ', error);
+      }
+    },
     async getOffersData() {
       try {
         const response = await axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds');
         this.offersIds = response.data.offerIds;
+        for (let i = 0; i < this.offersIds.length; i++) {
+          const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.offersIds[i]}`);
+          const category = this.categories.find(category => category.name === response.data.category);
+          if (category) {
+            category.numberOfOffers++;
+          }
+        }
       } catch (error) {
         console.error('ERROR: ', error);
       }
@@ -112,6 +123,7 @@ export default {
     },
   },
   mounted() {
+    this.getCategories();
     this.getOffersData();
     this.setBrowserEmitter();
     this.setPagesEmitter();

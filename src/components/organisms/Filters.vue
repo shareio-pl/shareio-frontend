@@ -4,7 +4,7 @@
       <p> Kategorie </p>
     </div>
     <div id="categories">
-      <Category v-for="category in categories" :key="category.category" :category="category.category"
+      <Category v-for="category in categories" :key="category.category" :category="category.name"
         :number-of-offers="category.numberOfOffers" style="width: 90%;" />
     </div>
     <div id="filterName">
@@ -52,6 +52,7 @@ export default {
       }
       this.sendFilters();
     },
+
     handleFilterStars(payload) {
       this.stars_chosen = payload.starsAmount;
       this.sendFilters();

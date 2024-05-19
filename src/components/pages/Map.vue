@@ -199,11 +199,9 @@ p {
   font-size: v-bind('FONT_SIZES.PRIMARY');
   font-family: v-bind('FONTS.PRIMARY');
   /* It's necessary to use it here even if it's definied as main font for our webpage. */
-
 }
 
 .map>>>a {
   color: v-bind('COLORS.TEXT_SECONDARY');
-  text-decoration: none;
 }
 </style>

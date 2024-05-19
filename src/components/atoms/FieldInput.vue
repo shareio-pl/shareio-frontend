@@ -40,7 +40,12 @@ export default {
   },
   methods: {
     updateValue(event) {
-      this.emitter.emit("update:modelValue", event.target.value);
+      // I would prefer to stick with this.$emit for this one particular task. 
+      // It's just very convenient to be able to just use v-model on the parent
+      // Compared to having to write in the mounted the logic, also as I have a 
+      // lot of forms I'd have to write a lot of ifs and also include name of the form
+      // in the event
+      this.$emit("update:modelValue", event.target.value);
     },
   },
 };
@@ -67,11 +72,11 @@ export default {
 }
 
 .field-input:focus {
-  border-bottom: 2px solid greenyellow;
+  border-bottom: 2px solid v-bind("COLORS.FORM_FOCUS");
 }
 
 .field-input:not(:placeholder-shown) {
-  border-bottom: 2px solid blue;
+  border-bottom: 2px solid v-bind("COLORS.FORM_CORRECT");
 }
 
 label {
@@ -101,7 +106,7 @@ input:not(:placeholder-shown)+span {
 }
 
 .error-border {
-  border-bottom: 2px solid red !important;
+  border-bottom: 2px solid v-bind("COLORS.FORM_ERROR") !important;
   transition: border-bottom 1s ease-in-out;
 }
 </style>

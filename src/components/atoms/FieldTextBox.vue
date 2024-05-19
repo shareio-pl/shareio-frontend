@@ -1,8 +1,10 @@
 <template>
   <div class="field">
-    <label class="field-label" v-bind:for="modelValue">{{ label }}</label>
-    <textarea class="field-input" :type="type" :value="modelValue" @input="updateValue" placeholder="&nbsp;"
-      :class="{ 'error-border': error.active }" />
+    <label class="field-label" v-bind:for="modelValue">
+      <textarea class="field-input" :type="type" :value="modelValue" @input="updateValue" placeholder="&nbsp;"
+        :class="{ 'error-border': error.active }" />
+      <span>{{ label }}</span>
+    </label>
     <p class="field-input-paragraph" v-if="error.active">{{ error.message }}</p>
   </div>
 </template>
@@ -37,7 +39,8 @@ export default {
   },
   methods: {
     updateValue(event) {
-      this.emitter.on("update:modelValue", event.target.value);
+      // Same reasoning as in the FieldInput
+      this.$emit("update:modelValue", event.target.value);
     },
   },
 };
@@ -48,7 +51,7 @@ export default {
   width: 100%;
   height: 300px;
   appearance: none;
-  padding: 0.75rem;
+  padding: 1.25rem;
   border: none;
   border-bottom: 2px solid transparent;
   outline: none;
@@ -64,11 +67,11 @@ textarea {
 }
 
 .field-input:focus {
-  border-bottom: 2px solid greenyellow;
+  border-bottom: 2px solid v-bind("COLORS.FORM_FOCUS");
 }
 
 .field-input:not(:placeholder-shown) {
-  border-bottom: 2px solid blue;
+  border-bottom: 2px solid v-bind("COLORS.FORM_CORRECT");
 }
 
 label {
@@ -80,7 +83,7 @@ label {
 span {
   position: absolute;
   left: 50%;
-  top: 25%;
+  top: 5%;
   font-size: v-bind("FONT_SIZES.PRIMARY");
   color: gray;
   transform-origin: 0 0;
@@ -89,16 +92,16 @@ span {
   pointer-events: none;
 }
 
-input:focus+span {
+textarea:focus+span {
   transform: translate(-50%, -50%) scale(.75);
 }
 
-input:not(:placeholder-shown)+span {
+textarea:not(:placeholder-shown)+span {
   transform: translate(-50%, -50%) scale(.75)
 }
 
 .error-border {
-  border-bottom: 2px solid red !important;
+  border-bottom: 2px solid v-bind("COLORS.FORM_ERROR") !important;
   transition: border-bottom 1s ease-in-out;
 }
 </style>

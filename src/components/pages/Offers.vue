@@ -25,7 +25,7 @@ import Header from "@/components/organisms/Header.vue";
 import Filters from "@/components/organisms/Filters.vue";
 import OfferPreview from "@/components/organisms/OfferPreview.vue";
 import ChangePage from "@/components/atoms/ChangePage.vue";
-import { COLORS, FONT_SIZES, GATEWAY_ADDRESS, NUMBER_OF_PAGES } from "../../../public/Consts";
+import { COLORS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
 import axios from "axios";
 import Browser from "../organisms/Browser.vue";
 
@@ -37,7 +37,7 @@ export default {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      NUMBER_OF_PAGES: NUMBER_OF_PAGES,
+      NUMBER_OF_OFFERS_PER_PAGE: 5,
       offersIds: [],
       offers: [],
       currentPage: 1,
@@ -83,31 +83,40 @@ export default {
     changePage(page) {
       this.currentPage = page;
     },
-    async getCategories() {
-      try {
-        const response = await axios.get(GATEWAY_ADDRESS + `/offer/getCategories`);
-        this.categories = response.data.categories.map(category => ({
-          name: category.displayName,
-          numberOfOffers: 0
-        }));
-      } catch (error) {
-        console.error('ERROR: ', error);
-      }
+    getCategories() {
+      axios.get(GATEWAY_ADDRESS + `/offer/getCategories`)
+        .then(response => {
+          this.categories = response.data.categories.map(category => ({
+            name: category.displayName,
+            numberOfOffers: 0
+          }));
+        })
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
     },
-    async getOffersData() {
-      try {
-        const response = await axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds');
-        this.offersIds = response.data.offerIds;
-        for (let i = 0; i < this.offersIds.length; i++) {
-          const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.offersIds[i]}`);
-          const category = this.categories.find(category => category.name === response.data.category);
-          if (category) {
-            category.numberOfOffers++;
+    getOffersData() {
+      axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds')
+        .then(
+          response => {
+            this.offersIds = response.data.offerIds;
+            let promises = this.offersIds.map(offerId =>
+              axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
+                .then(response => {
+                  let category = this.categories.find(category => category.name === response.data.category);
+                  if (category) {
+                    category.numberOfOffers++;
+                  }
+                })
+            );
+            return Promise.all(promises);
           }
-        }
-      } catch (error) {
-        console.error('ERROR: ', error);
-      }
+        )
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
     }
   },
   computed: {
@@ -115,11 +124,11 @@ export default {
       if (!this.isMounted) {
         return [];
       }
-      const startIndex = (this.currentPage - 1) * NUMBER_OF_PAGES;
-      return this.offersIds.slice(startIndex, startIndex + NUMBER_OF_PAGES);
+      const startIndex = (this.currentPage - 1) * this.NUMBER_OF_OFFERS_PER_PAGE;
+      return this.offersIds.slice(startIndex, startIndex + this.NUMBER_OF_OFFERS_PER_PAGE);
     },
     totalPages() {
-      return Math.ceil(this.offersIds.length / NUMBER_OF_PAGES);
+      return Math.ceil(this.offersIds.length / this.NUMBER_OF_OFFERS_PER_PAGE);
     },
   },
   mounted() {

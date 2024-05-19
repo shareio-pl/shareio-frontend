@@ -8,7 +8,7 @@
     </div>
     <div id="map-container">
       <div class="map" v-if="markersAreLoaded">
-        <l-map :zoom="zoom" :center="center" ref="mapRef">
+        <l-map :zoom="zoom" :center="center" :min-zoom="minZoom" ref="mapRef">
           <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
           <div v-if="markersAreLoaded">
             <l-marker v-for="(marker, index) in markers" :key="index" :lat-lng="marker.location">
@@ -60,7 +60,8 @@ export default {
       attribution:
         '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       zoom: 6,
-      center: [50, 19.50],
+      minZoom: 6, // 7 zawiera całą Polskę, ale nie na każdej rozdzielczości
+      center: [52.066667, 19.466667], // Środek Polski; wieś Piątek
       offersIds: [],
       markerLatLng: [],
       markersAreLoaded: false

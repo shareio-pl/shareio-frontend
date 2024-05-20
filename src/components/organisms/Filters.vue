@@ -66,6 +66,7 @@ export default {
       }
       this.sendFilters();
     },
+
     handleFilterStars(payload) {
       this.stars_chosen = payload.starsAmount;
       this.sendFilters();

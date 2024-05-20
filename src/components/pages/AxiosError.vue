@@ -10,24 +10,23 @@ export default {
   data() {
     return {
       url: 'https://http.cat/',
+      url_base: 'https://http.cat/',
       isShown: false,
     }
   },
   methods:
-      {
-        closeError() {
-          this.isShown = false;
-          this.url = 'https://http.cat/';
-        }
-      },
+  {
+    closeError() {
+      this.isShown = false;
+      this.url = 'https://http.cat/';
+    }
+  },
   mounted() {
     this.emitter.on('axiosError', (data) => {
       console.log('Error code: ', data.error);
-
-      this.url = this.url + data.error;
+      this.url = this.url_base + data.error;
+      console.log('URL: ', this.url);
       this.isShown = true;
-
-      setTimeout(this.closeError, 5000);
     });
   },
 }
@@ -50,5 +49,6 @@ img {
   background-color: rgba(0, 0, 0, 0.5);
   top: 0;
   left: 0;
+  z-index: 5;
 }
 </style>

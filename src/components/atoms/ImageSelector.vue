@@ -2,13 +2,13 @@
   <div id="image-adder-main">
     <div v-if="!image">
       <font-awesome-icon id="input-icon" :icon="UploadIcon" @click="triggerFileInput" />
-      <input type="file" ref="fileInput" accept="image/png, image/jpeg" @change="handleImageUpload"
+      <input type="file" ref="fileInput" :accept="file_types.join(', ')" @change="handleImageUpload"
         style="display: none;" />
     </div>
     <div v-else>
       <img :src="image" id="image-adder-image" alt="Uploaded image" />
       <font-awesome-icon id="input-icon-overlay" :icon="UploadIcon" @click="triggerFileInput" />
-      <input type="file" ref="fileInput" accept="image/png, image/jpeg" @change="handleImageUpload"
+      <input type="file" ref="fileInput" :accept="file_types.join(', ')" @change="handleImageUpload"
         style="display: none;" />
     </div>
   </div>

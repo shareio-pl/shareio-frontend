@@ -1,7 +1,10 @@
 <template>
   <div id="filter">
     <div id="header">
-      {{ name }}
+      <div class="header-left">
+        <font-awesome-icon :icon="propIcon" id="prop-icon" />
+        {{ name }}
+      </div>
       <font-awesome-icon :icon="showInput ? iconChevronUp : iconChevronDown" id="arrow-icon" @click="onArrowClick" />
     </div>
     <input id="input" v-show="showInput" type="text" onkeypress="return /[0-9]/i.test(event.key)"
@@ -42,6 +45,11 @@ export default {
     identifier:
     {
       type: String,
+      required: true,
+    },
+    propIcon:
+    {
+      type: Object,
       required: true,
     },
   },
@@ -93,6 +101,10 @@ export default {
   margin-top: 1%;
 }
 
+#prop-icon {
+  width: 10%;
+}
+
 input {
   margin-left: 5%;
   margin-bottom: 5%;
@@ -106,5 +118,11 @@ input {
 ::placeholder {
   color: v-bind('COLORS.TEXT_SECONDARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  width: 90%;
 }
 </style>

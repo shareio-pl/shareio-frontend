@@ -1,7 +1,10 @@
 <template>
   <div class="filter-open-rate">
     <div class="filter-header">
-      <div class="filter-name">{{ filterName }}</div>
+      <div class="filter-header-left">
+        <FontAwesomeIcon :icon="propIcon" id="prop-icon" />
+        <div class="filter-name">{{ filterName }}</div>
+      </div>
       <FontAwesomeIcon :icon="showStars ? iconChevronUp : iconChevronDown" id="arrow-icon" @click="onArrowClick" />
     </div>
     <div class="filter-open-rate-stars" @click="handleClick">
@@ -32,6 +35,10 @@ export default {
     },
     filledStars: {
       type: Number,
+      required: false
+    },
+    propIcon: {
+      type: Object,
       required: false
     }
   },
@@ -100,6 +107,12 @@ export default {
   cursor: pointer;
 }
 
+.filter-header-left {
+  display: flex;
+  justify-content: flex-start;
+  width: 90%;
+}
+
 .filter-stars {
   display: flex;
   justify-content: flex-start;
@@ -116,5 +129,9 @@ export default {
   cursor: pointer;
   margin-right: 1%;
   margin-top: 1%;
+}
+
+#prop-icon {
+  width: 10%;
 }
 </style>

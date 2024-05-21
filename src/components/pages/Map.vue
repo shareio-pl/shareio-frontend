@@ -10,7 +10,7 @@
       <div class="map" v-if="markersAreLoaded">
         <l-map :zoom="zoom" :center="center" :min-zoom="minZoom" ref="mapRef">
           <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-          <div v-if="markersAreLoaded">
+          <div>
             <l-marker v-for="(marker, index) in markers" :key="index" :lat-lng="marker.location">
               <l-popup>
                 <div v-for="(offer, index) in marker.offers" :key="index">
@@ -80,53 +80,77 @@ export default {
   },
   methods:
   {
-    async createUser() {
-      const response = await axios.get(GATEWAY_ADDRESS + '/debug/createUser');
-      this.userId = response.data.id;
-    },
+    // TODO: Optimize this
     async getOfferIds() {
-      const response = await axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds');
-      this.offersIds = response.data.offerIds;
+      try {
+        const response = await axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds');
+        this.offersIds = response.data.offerIds;
+      } catch (error) {
+        console.error('ERROR: ', error);
+        this.emitter.emit('axiosError', { error: error.response.status });
+      }
     },
     async getOffer(offerId) {
-      const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`);
-      const locationKey = `${response.data.latitude},${response.data.longitude}`;
-      if (!this.markerLatLng[locationKey]) {
-        this.markerLatLng[locationKey] = [];
+      try {
+        const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`);
+        const locationKey = `${response.data.latitude},${response.data.longitude}`;
+        if (!this.markerLatLng[locationKey]) {
+          this.markerLatLng[locationKey] = [];
+        }
+        this.markerLatLng[locationKey].push({
+          id: response.data.offerId,
+          name: response.data.title
+        });
+      } catch (error) {
+        console.error('ERROR: ', error);
+        this.emitter.emit('axiosError', { error: error.response.status });
       }
-      this.markerLatLng[locationKey].push({
-        id: response.data.offerId,
-        name: response.data.title
-      });
     },
-    centerMap(id) {
+    // TODO: ID of the user from getUserFromSession [look mounted comment]
+    centerMap() {
       console.log('Map has been centred');
       this.isFirstTime = false;
 
-      axios.get(GATEWAY_ADDRESS + `/user/get/${id}`).then((response) => {
-        console.log('User data', response.data);
-        axios.get(GATEWAY_ADDRESS + `/address/location/get/${response.data.address.id}`)
-          .then((response) => {
-            console.log('Address data: ', response.data);
+      axios.get(GATEWAY_ADDRESS + `/offer/get/${this.offersIds[0]}`)
+        .then((offerResponse) => {
+          axios.get(GATEWAY_ADDRESS + `/user/get/${offerResponse.data.ownerId}`)
+            .then((userResponse) => {
+              axios.get(GATEWAY_ADDRESS + `/address/location/get/${userResponse.data.address.id}`)
+                .then((addressResponse) => {
+                  console.log('Address data: ', addressResponse.data);
 
-            this.zoom = 15;
-            this.center = [response.data.latitude, response.data.longitude];
-            this.$refs.mapRef.leafletObject.setView(this.center, this.zoom);
-          });
-      });
+                  this.zoom = 15;
+                  this.center = [addressResponse.data.latitude, addressResponse.data.longitude];
+                  this.$refs.mapRef.leafletObject.setView(this.center, this.zoom);
+                })
+                .catch(error => {
+                  console.error('ERROR: ', error);
+                  this.emitter.emit('axiosError', { error: error.response.status });
+                });
+            })
+            .catch(error => {
+              console.error('ERROR: ', error);
+              this.emitter.emit('axiosError', { error: error.response.status });
+            });
+        })
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
     },
   },
   async mounted() {
-    await this.createUser();
+    // TODO: Get the ID of user from getUserFromSession()
     await this.getOfferIds();
 
     const offerPromises = this.offersIds.map(offerId => this.getOffer(offerId));
     await Promise.all(offerPromises);
 
-    console.log('Markers: ', this.markerLatLng);
     this.markersAreLoaded = true;
 
-    console.log("Computed markers: ", this.markers);
+    console.log('Offers IDs: ', this.offersIds);
+    console.log('Markers: ', this.markerLatLng);
+
   },
 }
 

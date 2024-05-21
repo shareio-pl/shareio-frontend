@@ -1,22 +1,28 @@
 <template>
   <div id="filtersComponent">
     <div id="categoryName">
-      <p> Kategorie </p>
+      <div class="filter-header-left">
+        <FontAwesomeIcon :icon="CategoryIcon" id="prop-icon" />
+        <p> Kategorie </p>
+      </div>
     </div>
     <div id="categories">
-      <Category v-for="category in categories" :key="category.category" :category="category.category"
+      <Category v-for="category in categories" :key="category.name" :category="category.name"
         :number-of-offers="category.numberOfOffers" style="width: 90%;" />
     </div>
     <div id="filterName">
-      <p> Filtry </p>
+      <div class="filter-header-left">
+        <FontAwesomeIcon :icon="FilterIcon" id="prop-icon" />
+        <p> Filtry </p>
+      </div>
     </div>
     <div id="filters">
       <FilterOpenDefault class="filter" name="Czas (dni)" placeholder="Do..." style="width: 90%;" identifier="time"
-        numericInputOnly="true" />
+        numericInputOnly="true" :prop-icon="ClockIcon" />
       <FilterOpenDefault class="filter" name="Odległość (km)" placeholder="Do..." style="width: 90%;"
-        identifier="distance" />
-      <FilterOptions class="filter" name="Stan" />
-      <FilterOpenRate class="filter" filterName="Ocena wystawiającego" />
+        identifier="distance" :prop-icon="RoadIcon" />
+      <FilterOptions class="filter" name="Stan" :prop-icon="StateIcon" />
+      <FilterOpenRate class="filter" filterName="Ocena wystawiającego" :prop-icon="RatingIcon" />
     </div>
   </div>
 </template>
@@ -26,12 +32,20 @@ import FilterOpenDefault from '../atoms/FilterOpenDefault.vue';
 import FilterOptions from '../atoms/FilterOptions.vue';
 import Category from '../atoms/Category.vue';
 import FilterOpenRate from '../atoms/FilterOpenRate.vue';
+
 import { COLORS, FONT_SIZES } from "../../../public/Consts";
+import { faClock as ClockIcon } from '@fortawesome/free-solid-svg-icons';
+import { faRoad as RoadIcon } from '@fortawesome/free-solid-svg-icons';
+import { faTag as StateIcon } from '@fortawesome/free-solid-svg-icons';
+import { faFaceSmileBeam as RatingIcon } from '@fortawesome/free-solid-svg-icons';
+import { faFilter as FilterIcon } from '@fortawesome/free-solid-svg-icons';
+import { faClipboardList as CategoryIcon } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Filters",
-  components: { FilterOpenDefault, FilterOpenRate, FilterOptions, Category },
+  components: { FilterOpenDefault, FilterOpenRate, FilterOptions, Category, FontAwesomeIcon },
   mounted() {
     this.emitter.on('filter-open-default', this.handleFilterOpenDefault);
     this.emitter.on('filter-stars', this.handleFilterStars);
@@ -52,6 +66,7 @@ export default {
       }
       this.sendFilters();
     },
+
     handleFilterStars(payload) {
       this.stars_chosen = payload.starsAmount;
       this.sendFilters();
@@ -73,6 +88,12 @@ export default {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
+      ClockIcon: ClockIcon,
+      RoadIcon: RoadIcon,
+      StateIcon: StateIcon,
+      RatingIcon: RatingIcon,
+      FilterIcon: FilterIcon,
+      CategoryIcon: CategoryIcon,
       time_chosen: '',
       option_chosen: '',
       stars_chosen: '',
@@ -98,8 +119,19 @@ export default {
   justify-content: left;
   width: 90%;
   margin-left: 5%;
+  margin-top: 4%;
   font-size: v-bind('FONT_SIZES.IMPORTANT');
   color: v-bind('COLORS.SECONDARY');
+}
+
+.filter-header-left {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+p {
+  margin-bottom: 0;
 }
 
 #categories,

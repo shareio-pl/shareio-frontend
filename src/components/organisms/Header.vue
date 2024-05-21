@@ -43,7 +43,7 @@ export default {
       // TODO: implementation
     },
     onOffersClick() {
-      // TODO: implementation
+      this.$router.push('/offers');
     },
     onMapClick() {
       this.$router.push('/map');

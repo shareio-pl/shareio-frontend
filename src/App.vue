@@ -1,6 +1,7 @@
 <template>
   <div :style="{ fontFamily: FONTS.PRIMARY }">
     <AxiosError/>
+    <DefaultError/>
     <RouterView/>
   </div>
 </template>
@@ -8,16 +9,16 @@
 <script>
 import {FONTS} from "../public/Consts";
 import AxiosError from "@/components/pages/AxiosError.vue";
+import DefaultError from "@/components/pages/DefaultError.vue";
 
 export default {
   name: "App",
   components: {
+    DefaultError,
     AxiosError,
   },
   data() {
-    return {
-
-    };
+    return {};
   },
   computed: {
     FONTS() {

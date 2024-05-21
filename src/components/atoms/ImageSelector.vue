@@ -18,6 +18,8 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faFileArrowUp as UploadIcon } from '@fortawesome/free-solid-svg-icons';
 
+const reader = new FileReader();
+
 export default {
   name: 'ImageSelector',
   components: {
@@ -36,8 +38,6 @@ export default {
     },
     handleImageUpload(event) {
       let file = event.target.files[0];
-      let reader = new FileReader();
-
       if (file && (this.file_types.includes(file.type))) {
         reader.onload = () => {
           this.image = reader.result;

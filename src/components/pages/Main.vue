@@ -41,7 +41,7 @@ export default {
       this.offersIds = response.data.offerIds;
       this.closestOffer = this.offersIds[1]; //TODO: Change to endpoint call
 
-      const closestOfferIndex = this.offersIds.indexOf(this.closestOffer);
+      let closestOfferIndex = this.offersIds.indexOf(this.closestOffer);
       if (closestOfferIndex > -1) {
         this.offersIds.splice(closestOfferIndex, 1);
       }

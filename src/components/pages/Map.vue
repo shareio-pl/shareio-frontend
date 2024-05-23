@@ -7,10 +7,20 @@
       <p>Kliknij, aby wycentrować mapę na Twojej lokalizacji </p>
     </div>
     <div id="map-container">
-      <div class="map">
+      <div class="map" v-if="markersAreLoaded">
         <l-map :zoom="zoom" :center="center" :min-zoom="minZoom" ref="mapRef">
           <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-          <!--          <l-marker :lat-lng="markerLatLng"></l-marker>-->
+          <div>
+            <l-marker v-for="(marker, index) in markers" :key="index" :lat-lng="marker.location">
+              <l-popup>
+                <div v-for="(offer, index) in marker.offers" :key="index">
+                  <span class="map-offer-preview">
+                    <router-link :to="`/offer/${offer.id}`">{{ offer.name }}</router-link>
+                  </span>
+                </div>
+              </l-popup>
+            </l-marker>
+          </div>
         </l-map>
       </div>
     </div>
@@ -19,12 +29,12 @@
 
 <script>
 import Header from "@/components/organisms/Header.vue";
-import { COLORS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
+import { COLORS, FONTS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import "leaflet/dist/leaflet.css"
-import { LMap, LMarker, LTileLayer } from "@vue-leaflet/vue-leaflet";
+import { LMap, LMarker, LTileLayer, LPopup } from "@vue-leaflet/vue-leaflet";
 import axios from "axios";
 
 export default {
@@ -35,12 +45,14 @@ export default {
     LMarker,
     LTileLayer,
     LMap,
+    LPopup,
     FontAwesomeIcon, ButtonPrimary, Header
   },
   data() {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
+      FONTS: FONTS,
       iconArrowUp: faArrowUp,
       isFirstTime: true,
       userId: '',
@@ -50,35 +62,98 @@ export default {
       zoom: 6,
       minZoom: 6, // 7 zawiera całą Polskę, ale nie na każdej rozdzielczości
       center: [52.066667, 19.466667], // Środek Polski; wieś Piątek
+      offersIds: [],
       markerLatLng: [],
+      markersAreLoaded: false
+    }
+  },
+  computed: {
+    markers() {
+      return Object.entries(this.markerLatLng).map(([locationKey, offers]) => {
+        const [latitude, longitude] = locationKey.split(',').map(Number);
+        return {
+          location: [latitude, longitude],
+          offers
+        };
+      });
     }
   },
   methods:
   {
-    centerMap(id) {
+    // TODO: Optimize this
+    async getOfferIds() {
+      try {
+        const response = await axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds');
+        this.offersIds = response.data.offerIds;
+      } catch (error) {
+        console.error('ERROR: ', error);
+        this.emitter.emit('axiosError', { error: error.response.status });
+      }
+    },
+    async getOffer(offerId) {
+      try {
+        const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`);
+        const locationKey = `${response.data.latitude},${response.data.longitude}`;
+        if (!this.markerLatLng[locationKey]) {
+          this.markerLatLng[locationKey] = [];
+        }
+        this.markerLatLng[locationKey].push({
+          id: response.data.offerId,
+          name: response.data.title
+        });
+      } catch (error) {
+        console.error('ERROR: ', error);
+        this.emitter.emit('axiosError', { error: error.response.status });
+      }
+    },
+    // TODO: ID of the user from getUserFromSession [look mounted comment]
+    centerMap() {
       console.log('Map has been centred');
       this.isFirstTime = false;
 
-      axios.get(GATEWAY_ADDRESS + `/user/get/${id}`).then((response) => {
-        console.log('User data', response.data);
-        axios.get(GATEWAY_ADDRESS + `/address/location/get/${response.data.address.id}`)
-          .then((response) => {
-            console.log('Address data: ', response.data);
+      axios.get(GATEWAY_ADDRESS + `/offer/get/${this.offersIds[0]}`)
+        .then((offerResponse) => {
+          axios.get(GATEWAY_ADDRESS + `/user/get/${offerResponse.data.ownerId}`)
+            .then((userResponse) => {
+              axios.get(GATEWAY_ADDRESS + `/address/location/get/${userResponse.data.address.id}`)
+                .then((addressResponse) => {
+                  console.log('Address data: ', addressResponse.data);
 
-            this.zoom = 15;
-            this.center = [response.data.latitude, response.data.longitude];
-            this.$refs.mapRef.leafletObject.setView(this.center, this.zoom);
-          });
-      });
+                  this.zoom = 15;
+                  this.center = [addressResponse.data.latitude, addressResponse.data.longitude];
+                  this.$refs.mapRef.leafletObject.setView(this.center, this.zoom);
+                })
+                .catch(error => {
+                  console.error('ERROR: ', error);
+                  this.emitter.emit('axiosError', { error: error.response.status });
+                });
+            })
+            .catch(error => {
+              console.error('ERROR: ', error);
+              this.emitter.emit('axiosError', { error: error.response.status });
+            });
+        })
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
     },
   },
-  mounted() {
-    axios.get(GATEWAY_ADDRESS + '/debug/createUser').then((response) => {
-      console.log(response.data.id);
-      this.userId = response.data.id;
-    });
+  async mounted() {
+    // TODO: Get the ID of user from getUserFromSession()
+    await this.getOfferIds();
+
+    const offerPromises = this.offersIds.map(offerId => this.getOffer(offerId));
+    await Promise.all(offerPromises);
+
+    this.markersAreLoaded = true;
+
+    console.log('Offers IDs: ', this.offersIds);
+    console.log('Markers: ', this.markerLatLng);
+
   },
 }
+
 </script>
 
 <style scoped>
@@ -138,5 +213,20 @@ p {
 .map {
   height: 100vh;
   z-index: 1;
+}
+
+.map-offer-preview {
+  cursor: pointer;
+}
+
+.map>>>.leaflet-popup-content-wrapper {
+  background-color: v-bind('COLORS.OFFER_FOREGROUND');
+  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-family: v-bind('FONTS.PRIMARY');
+  /* It's necessary to use it here even if it's definied as main font for our webpage. */
+}
+
+.map>>>a {
+  color: v-bind('COLORS.TEXT_SECONDARY');
 }
 </style>

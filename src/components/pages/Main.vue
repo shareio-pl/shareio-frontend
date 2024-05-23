@@ -39,12 +39,17 @@ export default {
     axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds').then((response) => {
       console.log('Offers: ', response.data.offerIds);
       this.offersIds = response.data.offerIds;
+      this.closestOffer = this.offersIds[1]; //TODO: Change to endpoint call
+
+      const closestOfferIndex = this.offersIds.indexOf(this.closestOffer);
+      if (closestOfferIndex > -1) {
+        this.offersIds.splice(closestOfferIndex, 1);
+      }
 
       let numberOfOffers;
-      if(this.offersIds.length % 2 === 0)
-      {
+      if (this.offersIds.length % 2 === 0) {
         numberOfOffers = this.offersIds.length;
-      }
+      } 
       else {
         numberOfOffers = this.offersIds.length - 1;
       }
@@ -53,7 +58,6 @@ export default {
         this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
       }
 
-      this.closestOffer = this.offersIds[1]; // TODO: change to endpoint call
     }).catch(error => {
       console.error('ERROR: ', error);
 

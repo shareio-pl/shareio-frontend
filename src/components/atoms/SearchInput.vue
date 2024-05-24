@@ -1,7 +1,7 @@
 <template>
   <div class="search-input">
     <font-awesome-icon :icon="SearchIcon" class="search-icon"/>
-    <input type="text" :placeholder="placeholder" class="search-field" v-model="input" @keyup.enter="search"/>
+    <input type="text" :placeholder="placeholder" class="search-field" v-model="input" @input="search"/>
   </div>
 </template>
 

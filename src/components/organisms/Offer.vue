@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     submitOffer() {
-      //TODO
+      this.reserveOffer();
       console.log('Button on Offer was clicked.');
     },
     arrayBufferToBase64(buffer) {
@@ -132,6 +132,30 @@ export default {
         console.error('ERROR: ', error);
         this.emitter.emit('axiosError', { error: error.response.status });
       }
+    },
+    async prepareDataToSend() {
+      // Let's pretend we have an user. TODO, get ID from session. And then 
+      // remove async from this
+      let user = await axios.get(GATEWAY_ADDRESS + '/debug/createUser');
+
+      let formData = {
+        offerId: this.id,
+        recieverId: user.data.id,
+      }
+
+      return formData;
+    },
+    async reserveOffer() {
+      let data = await this.prepareDataToSend();
+      axios.post(GATEWAY_ADDRESS + `/offer/reserve`, data)
+        .then(response => {
+          console.log("Response: ", response.data);
+          console.log('Offer ', this.id, ' was reserved successfully.');
+        })
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
     },
   },
   mounted() {

@@ -201,10 +201,11 @@ export default {
 #form-offer-description {
   display: flex;
   flex-direction: column;
-  height: 200%;
 }
 
-
+FieldTextBox {
+  height: 150px;
+}
 
 .form-offer-flex {
   display: flex;

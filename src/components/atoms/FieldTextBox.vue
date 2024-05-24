@@ -49,7 +49,7 @@ export default {
 <style scoped>
 .field-input {
   width: 100%;
-  height: 300px;
+  height: 200px;
   appearance: none;
   padding: 1.25rem;
   border: none;

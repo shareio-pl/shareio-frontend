@@ -20,7 +20,7 @@
       <div class="add-offer-right-map">
         <MapPreview zoom=16 :address="fullAddress" />
       </div>
-      <ButtonPrimary class="add-offer-right-button" buttonText="offerButtonName" @click="submitOffer" />
+      <ButtonPrimary class="add-offer-right-button" buttonText="Zarezerwuj" @click="submitOffer" />
     </div>
   </div>
   <div>

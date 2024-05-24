@@ -8,6 +8,7 @@
     <div class="select-wrapper">
       <select :class="{ 'selected': selectedOption !== '' }" v-model="selectedOption"
         @change="onSortChange(selectedOption)">
+        <!-- TODO: Figure how to make have some color by default... -->
         <option disabled value="">{{ placeholder }}</option>
         <option v-for="(option, index) in options" :key="index" :value="option.category">
           {{ option.displayName }}
@@ -69,7 +70,13 @@ export default {
   display: inline-block;
   width: 100%;
   background-color: v-bind('COLORS.PRIMARY');
+  font-size: v-bind('FONT_SIZES.PRIMARY');
   border-radius: 0.25rem;
+  padding: 0.5rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin-bottom: 1em;
 }
 
 .select-wrapper select {
@@ -80,6 +87,7 @@ export default {
   width: 100%;
   height: 45px;
   border: none;
+  cursor: pointer;
 }
 
 .select-wrapper select.selected {
@@ -90,11 +98,16 @@ option {
   background-color: v-bind('COLORS.PRIMARY');
   font-family: v-bind("FONTS.PRIMARY");
   color: v-bind("COLORS.TEXT_SECONDARY");
+  font-size: v-bind('FONT_SIZES.SECONDARY');
+}
+
+select:disabled {
+  color: v-bind("COLORS.TEXT_SECONDARY");
 }
 
 .arrow-icon {
   position: absolute;
-  right: 1%;
+  right: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
@@ -103,8 +116,6 @@ option {
 .dropdown-select-header {
   display: flex;
   justify-content: space-between;
-  margin-left: 2%;
-  padding: 3%;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: gray;
   cursor: pointer;

@@ -54,7 +54,6 @@ export default {
 <style scoped>
 .field {
   position: relative;
-  margin-top: 1.5rem;
 }
 
 .field-input {

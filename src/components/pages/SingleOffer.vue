@@ -7,8 +7,8 @@
     <h1>Inne oferty oddającego</h1>
     <div id="other-offers">
       <span v-for="pair in offerPairs" :key="pair">
-        <OfferPreview :is-new="true" :id="pair[0]"/>
-        <OfferPreview :is-new="true" :id="pair[1]"/>
+        <OfferPreview :id="pair[0]"/>
+        <OfferPreview :id="pair[1]"/>
       </span>
     </div>
   </div>
@@ -37,30 +37,32 @@ export default {
   },
   methods: {
     async getOwnerOffers() {
-      try {
-        let response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.singleOffer}`);
-        console.log(response);
-        this.offerOwnerId = response.data.ownerId;
-      } catch (error) {
-        console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', {error: error.response.status});
-      }
-      axios.get(GATEWAY_ADDRESS + `/offer/getOffersByUser/${this.offerOwnerId}`).then((response) => {
-        console.log('Other Owner Offers: ', response.data.offerIds);
-        this.offersIds = response.data.offerIds.filter((offerId) => offerId !== this.singleOffer);
-        let numberOfOffers;
-        if (this.offersIds.length % 2 === 0) {
-          numberOfOffers = this.offersIds.length;
-        } else {
-          numberOfOffers = this.offersIds.length - 1;
-        }
-        for (let offerId = 0; offerId < numberOfOffers; offerId += 2) {
-          this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
-        }
-      }).catch(error => {
-        console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', {error: error.response.status});
-      });
+      axios.get(GATEWAY_ADDRESS + `/offer/get/${this.singleOffer}`)
+          .then(response => {
+            console.log(response);
+            this.offerOwnerId = response.data.ownerId;
+
+            axios.get(GATEWAY_ADDRESS + `/offer/getOffersByUser/${this.offerOwnerId}`).then((response) => {
+              console.log('Other Owner Offers: ', response.data.offerIds);
+              this.offersIds = response.data.offerIds.filter((offerId) => offerId !== this.singleOffer);
+              let numberOfOffers;
+              if (this.offersIds.length % 2 === 0) {
+                numberOfOffers = this.offersIds.length;
+              } else {
+                numberOfOffers = this.offersIds.length - 1;
+              }
+              for (let offerId = 0; offerId < numberOfOffers; offerId += 2) {
+                this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
+              }
+            }).catch(error => {
+              console.error('ERROR: ', error);
+              this.emitter.emit('axiosError', {error: error.response.status});
+            });
+          })
+          .catch(error => {
+            console.error('ERROR: ', error);
+            this.emitter.emit('axiosError', {error: error.response.status});
+          });
     }
   },
   mounted() {

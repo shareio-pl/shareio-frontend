@@ -49,7 +49,7 @@ export default {
       this.$router.push('/map');
     },
     onNewOfferClick() {
-      // TODO: implementation
+      this.$router.push('/newOffer');
     },
     onAboutUsClick() {
       // TODO: implementation

@@ -161,6 +161,7 @@ export default {
           }
         });
         console.log('Offer added: ', response.data);
+        this.$router.push('/offer/' + response.data.offerId);
       } catch (error) {
         console.error('ERROR: ', error);
       }

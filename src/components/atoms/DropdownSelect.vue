@@ -65,6 +65,13 @@ export default {
 </script>
 
 <style scoped>
+.dropdown-select {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
 .select-wrapper {
   position: relative;
   display: inline-block;
@@ -72,11 +79,10 @@ export default {
   background-color: v-bind('COLORS.PRIMARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');
   border-radius: 0.25rem;
-  padding: 0.5rem;
+  padding: 0.35rem;
   border: none;
   outline: none;
   cursor: pointer;
-  margin-bottom: 1em;
 }
 
 .select-wrapper select {

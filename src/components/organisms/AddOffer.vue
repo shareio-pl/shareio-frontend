@@ -130,7 +130,7 @@ export default {
         title: formData.offerTitle,
         condition: formData.offerState,
         description: formData.offerDescription,
-        category: formData.category,
+        category: formData.offerCategory,
         creationDate: new Date().toISOString(),
         addressSaveDto: {
           city: "Łódź",

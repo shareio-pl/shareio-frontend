@@ -14,8 +14,8 @@
           :error="{ active: v$.offerHomeNumber.$error && v$.offerHomeNumber.$dirty, message: offerHomeNumberError }" />
       </div>
       <div id="form-offer-options">
-        <DropdownSelect :options="categories" type="Category" />
-        <DropdownSelect :options="states" type="State" />
+        <DropdownSelect :options="categories" type="Category" placeholder="Wybierz kategorię" />
+        <DropdownSelect :options="states" type="State" placeholder="Wybierz stan" />
       </div>
     </div>
     <div id="form-offer-description">

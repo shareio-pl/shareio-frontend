@@ -47,13 +47,16 @@ export default {
       distance_chosen: '',
       sorting: 'Najbliższe',
       isMounted: false,
-      categories: []
+      categories: [],
+      searched_item: ''
     }
   },
   methods: {
     setBrowserEmitter() {
       this.emitter.on('browser-change', (data) => {
         console.log('Received browser change: ', data);
+        this.searched_item = data.input;
+        this.getOffersDataByName();
       });
     },
     setPagesEmitter() {
@@ -98,6 +101,29 @@ export default {
     },
     getOffersData() {
       axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds')
+        .then(
+          response => {
+            this.offersIds = response.data.offerIds;
+            let promises = this.offersIds.map(offerId =>
+              axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
+                .then(response => {
+                  let category = this.categories.find(category => category.name === response.data.category);
+                  if (category) {
+                    category.numberOfOffers++;
+                  }
+                })
+            );
+            return Promise.all(promises);
+          }
+        )
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
+    },
+    getOffersDataByName() {
+      this.categories.forEach(category => category.numberOfOffers = 0);
+      axios.get(GATEWAY_ADDRESS + '/offer/getOffersByName?name=' + this.searched_item)
         .then(
           response => {
             this.offersIds = response.data.offerIds;

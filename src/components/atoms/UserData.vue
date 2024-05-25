@@ -41,7 +41,6 @@ export default {
 
 <style scoped>
 .user-data {
-  min-width: 200px;
   display: flex;
   align-items: center;
   justify-content: center;

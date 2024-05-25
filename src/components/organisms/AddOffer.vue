@@ -20,7 +20,8 @@
       <div class="add-offer-right-map">
         <MapPreview zoom=16 :address="fullAddress" />
       </div>
-      <ButtonPrimary class="add-offer-right-button" buttonText="Zarezerwuj" @click="submitOffer" />
+      <ButtonPrimary v-if="!dataSending" class="add-offer-right-button" buttonText="Zarezerwuj" @click="submitOffer" />
+      <div v-else class="spinner"></div>
     </div>
   </div>
   <div>
@@ -68,7 +69,9 @@ export default {
       region: '',
       country: '',
       postCode: '',
+      addressId: '',
       addressDataLoaded: false,
+      dataSending: false,
 
       categories: [],
       states: []
@@ -115,17 +118,8 @@ export default {
         this.states = response.data.conditions.map(condition => ({ displayName: condition.displayName, category: condition.condition }));
       });
     },
-    async submitOffer() {
-      let formData = this.$refs.formOffer.getFormData();
-
-      if (!formData) {
-        return;
-      }
-
-      formData.state = "ALMOST_NEW";
-      formData.image = this.offerImage;
-
-      let dataToSend = {
+    prepareFormData(formData) {
+      return {
         ownerId: this.ownerId,
         title: formData.offerTitle,
         condition: formData.offerState,
@@ -133,66 +127,97 @@ export default {
         category: formData.offerCategory,
         creationDate: new Date().toISOString(),
         addressSaveDto: {
-          city: "Łódź",
-          street: "Wólczańska",
-          houseNumber: "215",
-          flatNumber: "1",
-          region: "Łódzkie",
-          country: "Polska",
-          postCode: "91-001",
+          city: formData.offerCity,
+          street: formData.offerStreet,
+          houseNumber: formData.offerHouseNumber,
+          flatNumber: this.flatNumber,
+          region: this.region,
+          country: this.country,
+          postCode: this.postCode,
         }
       };
+    },
+    async submitOffer() {
+      this.dataSending = true;
 
-      console.log('Data to send: ', dataToSend);
+      let formData = await this.$refs.formOffer.getFormData();
+      if (!formData) {
+        this.dataSending = false;
+        return;
+      }
+      if (!this.offerImage) {
+        this.dataSending = false;
+        this.emitter.emit('error', { error: 'Nie wybrano zdjęcia oferty' });
+        return;
+      }
 
-      let jsonDataArray = dataToSend;
-      let jsonBlob = new Blob([JSON.stringify(jsonDataArray)], { type: 'application/json' });
+      let dataToSend = this.prepareFormData(formData);
+      let jsonBlob = new Blob([JSON.stringify(dataToSend)], { type: 'application/json' });
 
       let form = new FormData();
       form.append("json", jsonBlob);
       form.append("file", ('image', this.offerImage));
-      console.log("Test", this.offerImage);
-      console.log(form);
 
-      try {
-        let response = await axios.post(GATEWAY_ADDRESS + '/offer/add', form, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+      axios.post(GATEWAY_ADDRESS + '/offer/add', form, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then((response) => {
+          console.log('Offer added: ', response.data);
+          this.dataSending = false;
+          this.$router.push('/offer/' + response.data.offerId);
+        })
+        .catch((error) => {
+          console.error('ERROR: ', error);
+          this.dataSending = false;
         });
-        console.log('Offer added: ', response.data);
-        this.$router.push('/offer/' + response.data.offerId);
-      } catch (error) {
-        console.error('ERROR: ', error);
-      }
-    }
-
-  },
-  mounted() {
-    this.emitter.on('image-uploaded', (data) => {
-      console.log('Image uploaded:', data);
-      this.offerImage = data;
-    });
-    console.log('Owner id: ', this.ownerId);
-    axios.get(GATEWAY_ADDRESS + '/user/get/' + this.ownerId).then((response) => {
-      console.log('User data: ', response.data);
-      this.userFirstName = response.data.name;
-      this.userSurname = response.data.surname;
-      this.userImage = response.data.image;
-
-      axios.get(GATEWAY_ADDRESS + '/address/get/' + response.data.address.id).then((response) => {
-        console.log('Address data: ', response.data);
-        this.city = response.data.city;
-        this.street = response.data.street;
-        this.houseNumber = response.data.houseNumber;
-        this.flatNumber = response.data.flatNumber;
-        this.region = response.data.region;
-        this.country = response.data.country;
-        this.postCode = response.data.postCode;
-        this.addressDataLoaded = true;
-        console.log("Address: ", this.city, this.street, this.houseNumber, this.flatNumber, this.region, this.country);
+    },
+    setImageUploadedEmitter() {
+      this.emitter.on('image-uploaded', (data) => {
+        console.log('Image uploaded:', data);
+        this.offerImage = data;
       });
-    });
+    },
+    async getUserData() {
+      return axios.get(GATEWAY_ADDRESS + '/user/get/' + this.ownerId)
+        .then((response) => {
+          console.log('User data: ', response.data);
+          this.userFirstName = response.data.name;
+          this.userSurname = response.data.surname;
+          this.userImage = response.data.image;
+          this.addressId = response.data.address.id;
+          console.log('Address id: ', this.addressId);
+          console.log("Response data: ", response.data);
+        })
+        .catch((error) => {
+          console.error('Error getting user data: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
+    },
+    async getAddressData() {
+      return axios.get(GATEWAY_ADDRESS + '/address/get/' + this.addressId)
+        .then((response) => {
+          console.log('Address data: ', response.data);
+          this.city = response.data.city;
+          this.street = response.data.street;
+          this.houseNumber = response.data.houseNumber;
+          this.flatNumber = response.data.flatNumber;
+          this.region = response.data.region;
+          this.country = response.data.country;
+          this.postCode = response.data.postCode;
+          this.addressDataLoaded = true;
+        })
+        .catch((error) => {
+          console.error('Error getting address data: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
+    }
+  },
+  async mounted() {
+    this.setImageUploadedEmitter();
+    await this.getUserData();
+    await this.getAddressData();
     this.getCategories();
     this.getConditions();
   },
@@ -205,7 +230,8 @@ export default {
   height: 55%;
   margin: 0 auto;
   background-color: v-bind('COLORS.OFFER_FOREGROUND');
-  border-radius: 25px 25px 25px 25px;
+  /* TODO: Fix border */
+  border-radius: 8em 25px 25px 25px;
 }
 
 .add-offer-left {
@@ -317,6 +343,26 @@ textarea {
   width: 75%;
   height: 15%;
   margin-bottom: 15%;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+  margin-bottom: 20%;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .buttonAI {

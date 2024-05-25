@@ -54,7 +54,6 @@ export default {
   },
   methods: {
     onSortChange(option) {
-      console.log('Option has been changed to: ', option);
       this.emitter.emit('dropdown-change', { option: option, type: this.type });
     },
   },

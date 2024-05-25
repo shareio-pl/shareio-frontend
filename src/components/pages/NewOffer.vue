@@ -22,12 +22,26 @@ export default {
       userId: '',
     }
   },
-  mounted() {
+  async mounted() {
     // TODO: get user from session
-    axios.get(GATEWAY_ADDRESS + '/debug/createUser').then((response) => {
-      console.log(response.data.id);
-      this.userId = response.data.id;
+
+    let ids = await axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds').then((response) => {
+      console.log('Offers: ', response.data.offerIds);
+      return response.data.offerIds;
+    }).catch(error => {
+      console.error('ERROR: ', error);
+      this.emitter.emit('axiosError', { error: error.response.status });
     });
+
+    console.log('userId: ', ids);
+    await axios.get(GATEWAY_ADDRESS + `/offer/get/${ids[0]}`)
+      .then((offerResponse) => {
+        this.userId = offerResponse.data.ownerId;
+      })
+      .catch(error => {
+        console.error('ERROR: ', error);
+        this.emitter.emit('axiosError', { error: error.response.status });
+      });
   },
 }
 </script>

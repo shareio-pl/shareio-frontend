@@ -157,7 +157,24 @@ export default {
     async prepareDataToSend() {
       // Let's pretend we have an user. TODO, get ID from session. And then 
       // remove async from this
-      let user = await axios.get(GATEWAY_ADDRESS + '/debug/createUser');
+
+      let user = '';
+
+      axios.get(GATEWAY_ADDRESS + `/offer/get/${this.offersIds[0]}`)
+        .then((offerResponse) => {
+          axios.get(GATEWAY_ADDRESS + `/user/get/${offerResponse.data.ownerId}`)
+            .then((userResponse) => {
+              user = userResponse.data.userid;
+            })
+            .catch(error => {
+              console.error('ERROR: ', error);
+              this.emitter.emit('axiosError', { error: error.response.status });
+            });
+        })
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
 
       let formData = {
         offerId: this.id,
@@ -172,7 +189,15 @@ export default {
         .then(response => {
           console.log("Response: ", response.data);
           console.log('Offer ', this.id, ' was reserved successfully.');
-          this.status = 'RESERVED';
+          axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`)
+            .then(response => {
+              this.unreservationDate = response.data.unreservationDate;
+              this.status = 'RESERVED';
+            })
+            .catch(error => {
+              console.error('ERROR: ', error);
+              this.emitter.emit('axiosError', { error: error.response.status });
+            });
         })
         .catch(error => {
           console.error('ERROR: ', error);
@@ -306,6 +331,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: v-bind('COLORS.BUTTON_DISABLED');
+  border: none;
 }
 
 .button-disabled:hover {

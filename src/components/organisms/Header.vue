@@ -55,7 +55,7 @@ export default {
       // TODO: implementation
     },
     onLogoClick() {
-      // TODO: implementation
+      this.$router.push("/");
     },
   },
 };

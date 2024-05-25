@@ -213,6 +213,10 @@ export default {
   margin-top: 1em;
 }
 
+#offers-page-content-offers>>>.offer-preview-action {
+  min-width: 200px;
+}
+
 #offers-page-content-pagechange {
   margin-top: 1em;
   color: v-bind('COLORS.TEXT_PRIMARY');

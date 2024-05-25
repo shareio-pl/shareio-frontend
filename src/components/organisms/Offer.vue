@@ -26,7 +26,12 @@
       <div class="offer-right-map">
         <MapPreview v-if="mapDataLoaded" :zoom="zoom" :center="center" />
       </div>
-      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer" />
+      <span v-if="status === 'CREATED'" class="offer-right-button">
+        <ButtonPrimary class="button" :buttonText="offerButtonName" @click="submitOffer" />
+      </span>
+      <span v-if="status === 'RESERVED'" class="offer-right-button">
+        <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved" @click="submitOffer" />
+      </span>
     </div>
   </div>
 </template>
@@ -61,6 +66,9 @@ export default {
       amountOfRatings: 37,
       userFirstName: 'Janusz',
       userSurname: 'Kowalski',
+      status: '',
+      unreservationDate: '',
+      timeUntilUnreserved: '',
       userImage: DEFAULT_USER_PROFILE_IMAGE,
       zoom: 16,
       center: [0, 0],
@@ -97,6 +105,17 @@ export default {
         new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
       );
     },
+    getTimeUntilUnreserved() {
+      if (this.unreservationDate) {
+        const now = new Date();
+        const unreservationDate = new Date(this.unreservationDate);
+        const diffTime = Math.abs(unreservationDate - now);
+        const hours = Math.floor(diffTime / (1000 * 60 * 60)).toString().padStart(2, '0');
+        const minutes = Math.floor((diffTime / (1000 * 60)) % 60).toString().padStart(2, '0');
+        const seconds = Math.floor((diffTime / 1000) % 60).toString().padStart(2, '0');
+        this.timeUntilUnreserved = `Czas do odbioru: ${hours}:${minutes}:${seconds}`;
+      }
+    },
     // These methods are async, because otherwise they'd return undefined in getImageData.
     // Alternatively another option would be to pass the variable for image data in here
     // as a parameter
@@ -115,6 +134,8 @@ export default {
         this.userSurname = response.data.ownerSurname;
         this.center = [response.data.latitude, response.data.longitude];
         this.mapDataLoaded = true;
+        this.status = response.data.status;
+        this.unreservationDate = response.data.unreservationDate;
         this.offerImage = await this.getImageData(response.data.photoId);
         this.userImage = await this.getImageData(response.data.ownerPhotoId);
         this.imageIsLoading = false;
@@ -151,6 +172,7 @@ export default {
         .then(response => {
           console.log("Response: ", response.data);
           console.log('Offer ', this.id, ' was reserved successfully.');
+          this.status = 'RESERVED';
         })
         .catch(error => {
           console.error('ERROR: ', error);
@@ -160,6 +182,8 @@ export default {
   },
   mounted() {
     this.getOfferData();
+    this.getTimeUntilUnreserved();
+    setInterval(this.getTimeUntilUnreserved, 1000);
   },
 }
 </script>
@@ -271,5 +295,20 @@ export default {
   width: 75%;
   height: 15%;
   margin-bottom: 15%;
+}
+
+.button {
+  width: 100%;
+  height: 100%;
+}
+
+.button-disabled {
+  width: 100%;
+  height: 100%;
+  background-color: v-bind('COLORS.BUTTON_DISABLED');
+}
+
+.button-disabled:hover {
+  background-color: v-bind('COLORS.BUTTON_DISABLED');
 }
 </style>

@@ -10,8 +10,7 @@
       <div class="input-row">
         <FieldInput v-model="surname" placeholder="Nazwisko" label="Nazwisko"
           :error="{ active: v$.surname.$error && v$.surname.$dirty, message: surnameError }" />
-        <FieldInput v-model="dateOfBirth" placeholder="Data urodzenia" label="Data urodzenia"
-          :error="{ active: v$.dateOfBirth.$error && v$.dateOfBirth.$dirty, message: dateOfBirthError }" />
+        <VueDatePicker class="datepicker" v-model="date" placeholder="Data urodzenia" text-input />
       </div>
       <div class="input-row">
         <FieldInput v-model="password" placeholder="Hasło" label="Hasło" type="password"
@@ -29,12 +28,12 @@
         <FieldInput v-model="city" placeholder="Miasto" label="Miasto"
           :error="{ active: v$.city.$error && v$.city.$dirty, message: cityError }" />
         <FieldInput v-model="street" placeholder="Ulica" label="Ulica" />
+      </div>
+      <div class="input-row">
+        <FieldInput v-model="postCode" placeholder="Kod pocztowy" label="Kod pocztowy" />
         <div class="input-row">
-          <FieldInput v-model="postCode" placeholder="Kod pocztowy" label="Kod pocztowy" />
-          <div class="input-row">
-            <FieldInput v-model="houseNumber" placeholder="Numer domu" label="Numer domu" />
-            <FieldInput v-model="flatNumber" placeholder="Numer mieszkania" label="Numer mieszkania" />
-          </div>
+          <FieldInput v-model="houseNumber" placeholder="Numer domu" label="Numer domu" />
+          <FieldInput v-model="flatNumber" placeholder="Numer mieszkania" label="Numer mieszkania" />
         </div>
       </div>
     </div>
@@ -45,17 +44,28 @@
 
 <script>
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
+import { FONT_SIZES, COLORS, FONTS } from "../../../public/Consts";
 import { required, minLength, maxLength, email, sameAs } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import axios from 'axios';
+
+import { ref } from 'vue';
+
+// eslint-disable-next-line no-unused-vars
+const date = ref();
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 import FieldInput from "@/components/atoms/FieldInput.vue";
 
 export default {
   name: "FormRegister",
-  components: { FieldInput },
+  components: { FieldInput, VueDatePicker },
   data() {
     return {
+      FONT_SIZES: FONT_SIZES,
+      COLORS: COLORS,
+      FONTS: FONTS,
       email: "",
       name: "",
       surname: "",
@@ -200,3 +210,32 @@ export default {
   }
 }
 </script>
+
+<style>
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.input-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+}
+
+.dp__theme_light {
+  width: 40%;
+  height: 150%;
+  --dp-text-color: gray;
+  --dp-font-size: v-bind("FONT_SIZES.PRIMARY");
+  --dp-background-color: v-bind("COLORS.OFFER_BACKGROUND");
+  --dp-font-family: v-bind("FONTS.PRIMARY");
+  --dp-common-padding: 0.75rem;
+}
+</style>

@@ -44,10 +44,8 @@ import ImageLoadingAnimation from "@/components/atoms/ImageLoadingAnimation.vue"
 
 import axios from 'axios'
 import "leaflet/dist/leaflet.css"
-import { COLORS, DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
+import { COLORS } from "../../../public/Consts";
 import { FONT_SIZES } from "../../../public/Consts";
-import { DEFAULT_OFFER_IMAGE } from "../../../public/Consts";
-import { DEFAULT_OFFER_MAP_IMAGE } from "../../../public/Consts";
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
 export default {
@@ -57,25 +55,22 @@ export default {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      offerTitle: 'SzopSzop Szop',
-      offerDescription: 'The raccoon, also spelled racoon and sometimes called the common raccoon to distinguish it from the other species, is a mammal native to North America. It is the largest of the procyonid family, having a body length of 40 to 70 cm, and a body weight of 5 to 26 kg.',
-      submittedOn: '01/01/2001',
-      location: 'Uć, 15 km stąd',
-      condition: 'nowy',
-      amountOfStars: 4,
-      amountOfRatings: 37,
-      userFirstName: 'Janusz',
-      userSurname: 'Kowalski',
-      status: '',
-      unreservationDate: '',
-      timeUntilUnreserved: '',
-      userImage: DEFAULT_USER_PROFILE_IMAGE,
       zoom: 16,
       center: [0, 0],
       mapDataLoaded: false,
       imageIsLoading: true,
-      offerImage: DEFAULT_OFFER_IMAGE,
-      offerMapImage: DEFAULT_OFFER_MAP_IMAGE,
+      offerImage: '',
+      offerMapImage: '',
+      userImage: '',
+      offerTitle: '',
+      offerDescription: '',
+      submittedOn: '',
+      location: '',
+      condition: '',
+      amountOfStars: '',
+      amountOfRatings: '',
+      userFirstName: '',
+      userSurname: '',
     }
   },
   props: {

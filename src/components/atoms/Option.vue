@@ -56,8 +56,10 @@ export default {
 }
 
 .checkbox-circle {
-  width: 20px;
-  height: 20px;
+  max-width: 20px;
+  max-height: 20px;
+  min-width: 20px;
+  min-height: 20px;
   border-radius: 50%;
   border: 1px solid v-bind('COLORS.BORDER_BLACK');
   background: v-bind('COLORS.OFFER_FOREGROUND');

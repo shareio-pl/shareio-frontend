@@ -160,7 +160,7 @@ export default {
 }
 
 .offer-preview-title {
-  margin-top: 0.8%;
+  margin-top: 3%;
   margin-bottom: 3%;
   display: flex;
   font-size: v-bind('FONT_SIZES.PRIMARY');

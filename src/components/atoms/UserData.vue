@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import {DEFAULT_USER_PROFILE_IMAGE} from "../../../public/Consts";
-import {FONT_SIZES, COLORS} from "../../../public/Consts";
+import { DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
+import { FONT_SIZES, COLORS } from "../../../public/Consts";
 
 export default {
   name: 'UserData',
@@ -30,9 +30,8 @@ export default {
       default: DEFAULT_USER_PROFILE_IMAGE
     }
   },
-  data()
-  {
-    return{
+  data() {
+    return {
       FONT_SIZES: FONT_SIZES,
       COLORS: COLORS,
     }
@@ -41,11 +40,21 @@ export default {
 </script>
 
 <style scoped>
+.user-data {
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: v-bind('FONT_SIZES.PRIMARY');
+  color: v-bind('COLORS.TEXT_SECONDARY');
+}
+
 .user-image {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   overflow: hidden;
+  align-self: flex-start;
 }
 
 .user-image img {
@@ -54,18 +63,15 @@ export default {
   object-fit: cover;
 }
 
-.user-data {
-  display: flex;
-  align-items: center;
-  font-size: v-bind('FONT_SIZES.PRIMARY');
-  color: v-bind('COLORS.TEXT_SECONDARY');
-}
-
 .user-info {
   margin-left: 0.8em;
   /* Percentage here wouldn't be the best choice, I think.
   Because then the margin varies too much on the width of component this atom would be in;
   in my testing the difference was noticeable. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 .user-name {

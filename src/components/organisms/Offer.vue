@@ -30,7 +30,7 @@
         <ButtonPrimary class="button" :buttonText="offerButtonName" @click="submitOffer" />
       </span>
       <span v-if="status === 'RESERVED'" class="offer-right-button">
-        <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved" @click="submitOffer" />
+        <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved" />
       </span>
     </div>
   </div>

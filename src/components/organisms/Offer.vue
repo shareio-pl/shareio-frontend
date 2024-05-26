@@ -59,6 +59,7 @@ export default {
       center: [0, 0],
       mapDataLoaded: false,
       imageIsLoading: true,
+      offersIds: [], // TODO: Remove once get ID from session
       offerImage: '',
       offerMapImage: '',
       userImage: '',
@@ -71,6 +72,9 @@ export default {
       amountOfRatings: '',
       userFirstName: '',
       userSurname: '',
+      userId: '',
+      timeUntilUnreserved: '',
+      status: '',
     }
   },
   props: {
@@ -93,7 +97,6 @@ export default {
   methods: {
     submitOffer() {
       this.reserveOffer();
-      console.log('Button on Offer was clicked.');
     },
     arrayBufferToBase64(buffer) {
       return btoa(
@@ -109,6 +112,7 @@ export default {
         const minutes = Math.floor((diffTime / (1000 * 60)) % 60).toString().padStart(2, '0');
         const seconds = Math.floor((diffTime / 1000) % 60).toString().padStart(2, '0');
         this.timeUntilUnreserved = `Czas do odbioru: ${hours}:${minutes}:${seconds}`;
+        console.log(this.timeUntilUnreserved);
       }
     },
     // These methods are async, because otherwise they'd return undefined in getImageData.
@@ -149,37 +153,41 @@ export default {
         this.emitter.emit('axiosError', { error: error.response.status });
       }
     },
-    async prepareDataToSend() {
-      // Let's pretend we have an user. TODO, get ID from session. And then 
-      // remove async from this
+    async getUserId() {
+      // Let's pretend we have an user. TODO, get ID from session.
 
-      let user = '';
-
-      axios.get(GATEWAY_ADDRESS + `/offer/get/${this.offersIds[0]}`)
+      return axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds')
+        .then((response) => {
+          this.offersIds = response.data.offerIds;
+          console.log('Offers IDs: ', this.offersIds);
+          console.log('Offer ID: ', this.offersIds[0]);
+          return axios.get(GATEWAY_ADDRESS + `/offer/get/${this.offersIds[0]}`);
+        })
         .then((offerResponse) => {
-          axios.get(GATEWAY_ADDRESS + `/user/get/${offerResponse.data.ownerId}`)
-            .then((userResponse) => {
-              user = userResponse.data.userid;
-            })
-            .catch(error => {
-              console.error('ERROR: ', error);
-              this.emitter.emit('axiosError', { error: error.response.status });
-            });
+          return axios.get(GATEWAY_ADDRESS + `/user/get/${offerResponse.data.ownerId}`);
+        })
+        .then((userResponse) => {
+          this.user = userResponse.data.userId.id;
+          console.log("USER ID: ", this.user);
         })
         .catch(error => {
           console.error('ERROR: ', error);
           this.emitter.emit('axiosError', { error: error.response.status });
         });
+    },
+    async prepareDataToSend() {
 
+      await this.getUserId();
       let formData = {
         offerId: this.id,
-        recieverId: user.data.id,
+        recieverId: this.user,
       }
 
       return formData;
     },
     async reserveOffer() {
       let data = await this.prepareDataToSend();
+      console.log('Data to send: ', data);
       axios.post(GATEWAY_ADDRESS + `/offer/reserve`, data)
         .then(response => {
           console.log("Response: ", response.data);
@@ -187,7 +195,9 @@ export default {
           axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`)
             .then(response => {
               this.unreservationDate = response.data.unreservationDate;
+              console.log('Status: ', response.data.status);
               this.status = 'RESERVED';
+              console.log('Unreservation date: ', this.unreservationDate);
             })
             .catch(error => {
               console.error('ERROR: ', error);
@@ -200,8 +210,8 @@ export default {
         });
     },
   },
-  mounted() {
-    this.getOfferData();
+  async mounted() {
+    await this.getOfferData();
     this.getTimeUntilUnreserved();
     setInterval(this.getTimeUntilUnreserved, 1000);
   },

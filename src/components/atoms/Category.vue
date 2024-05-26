@@ -53,6 +53,7 @@ export default {
 
 .category.bold {
   font-weight: bolder;
+  color: v-bind('COLORS.BORDER_BLACK');
 }
 
 .category:hover {

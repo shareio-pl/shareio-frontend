@@ -5,6 +5,7 @@ import Map from "@/components/pages/Map.vue";
 import SingleOffer from "@/components/pages/SingleOffer.vue";
 import Offers from "@/components/pages/Offers.vue";
 import Register from "@/components/pages/Register.vue";
+import DatePicker from "@/components/atoms/DatePicker.vue";
 
 const routes = [
   {
@@ -31,6 +32,11 @@ const routes = [
     path: "/register",
     component: Register,
     name: "Rejestracja - ShareIO"
+  },
+  {
+    path: "/date",
+    component: DatePicker,
+    name: "DatePicker"
   },
   {
     path: "/:catchAll(.*)",

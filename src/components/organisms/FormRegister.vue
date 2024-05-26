@@ -10,7 +10,7 @@
       <div class="input-row">
         <FieldInput v-model="surname" placeholder="Nazwisko" label="Nazwisko"
           :error="{ active: v$.surname.$error && v$.surname.$dirty, message: surnameError }" />
-        <VueDatePicker class="datepicker" v-model="date" placeholder="Data urodzenia" text-input />
+        <DatePicker class="datepicker" v-model="date" placeholder="Data urodzenia" />
       </div>
       <div class="input-row">
         <FieldInput v-model="password" placeholder="Hasło" label="Hasło" type="password"
@@ -49,18 +49,12 @@ import { required, minLength, maxLength, email, sameAs } from '@vuelidate/valida
 import { useVuelidate } from '@vuelidate/core';
 import axios from 'axios';
 
-import { ref } from 'vue';
-
-// eslint-disable-next-line no-unused-vars
-const date = ref();
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
-
+import DatePicker from "@/components/atoms/DatePicker.vue";
 import FieldInput from "@/components/atoms/FieldInput.vue";
 
 export default {
   name: "FormRegister",
-  components: { FieldInput, VueDatePicker },
+  components: { FieldInput, DatePicker },
   data() {
     return {
       FONT_SIZES: FONT_SIZES,

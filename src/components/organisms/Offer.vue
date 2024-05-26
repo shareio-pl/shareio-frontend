@@ -112,7 +112,6 @@ export default {
         const minutes = Math.floor((diffTime / (1000 * 60)) % 60).toString().padStart(2, '0');
         const seconds = Math.floor((diffTime / 1000) % 60).toString().padStart(2, '0');
         this.timeUntilUnreserved = `Czas do odbioru: ${hours}:${minutes}:${seconds}`;
-        console.log(this.timeUntilUnreserved);
       }
     },
     // These methods are async, because otherwise they'd return undefined in getImageData.

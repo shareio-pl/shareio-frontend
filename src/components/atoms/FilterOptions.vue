@@ -37,6 +37,10 @@ export default {
     propIcon: {
       type: Object,
       required: false
+    },
+    clear: {
+      type: Number,
+      required: false
     }
   },
   data() {
@@ -65,6 +69,14 @@ export default {
         console.log('Received conditions: ', response.data);
         this.options = response.data.conditions.map(condition => ({ name: condition.displayName }));
       });
+    },
+    clearFilter() {
+      this.selectedOption = null;
+    }
+  },
+  watch: {
+    clear: function () {
+      this.clearFilter();
     }
   },
   mounted() {

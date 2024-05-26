@@ -4,6 +4,7 @@
       <div class="filter-header-left">
         <FontAwesomeIcon :icon="CategoryIcon" id="prop-icon" />
         <p> Kategorie </p>
+        <FontAwesomeIcon :icon="XIcon" class="clear-icon" @click="onCategoriesClearClicked" />
       </div>
     </div>
     <div id="categories">
@@ -14,15 +15,16 @@
       <div class="filter-header-left">
         <FontAwesomeIcon :icon="FilterIcon" id="prop-icon" />
         <p> Filtry </p>
+        <FontAwesomeIcon :icon="XIcon" class="clear-icon" @click="onFiltersClearClicked" />
       </div>
     </div>
     <div id="filters">
       <FilterOpenDefault class="filter" name="Czas (dni)" placeholder="Do..." style="width: 90%;" identifier="time"
-        numericInputOnly="true" :prop-icon="ClockIcon" />
+        numericInputOnly="true" :prop-icon="ClockIcon" :clear="clearCounter" />
       <FilterOpenDefault class="filter" name="Odległość (km)" placeholder="Do..." style="width: 90%;"
-        identifier="distance" :prop-icon="RoadIcon" />
-      <FilterOptions class="filter" name="Stan" :prop-icon="StateIcon" />
-      <FilterOpenRate class="filter" filterName="Ocena wystawiającego" :prop-icon="RatingIcon" />
+        identifier="distance" :prop-icon="RoadIcon" :clear="clearCounter" />
+      <FilterOptions class="filter" name="Stan" :prop-icon="StateIcon" :clear="clearCounter" />
+      <FilterOpenRate class="filter" filterName="Ocena wystawiającego" :prop-icon="RatingIcon" :clear="clearCounter" />
     </div>
   </div>
 </template>
@@ -40,6 +42,7 @@ import { faTag as StateIcon } from '@fortawesome/free-solid-svg-icons';
 import { faFaceSmileBeam as RatingIcon } from '@fortawesome/free-solid-svg-icons';
 import { faFilter as FilterIcon } from '@fortawesome/free-solid-svg-icons';
 import { faClipboardList as CategoryIcon } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark as XIcon } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 export default {
@@ -64,16 +67,23 @@ export default {
       } else if (payload.identifier === 'distance') {
         this.distance_chosen = payload.input;
       }
-      this.sendFilters();
+      //this.sendFilters(); TODO: Send filters via button in different commit
     },
-
+    onFiltersClearClicked() {
+      this.time_chosen = '';
+      this.option_chosen = '';
+      this.stars_chosen = '';
+      this.distance_chosen = '';
+      this.clearCounter++;
+    },
+    onCategoriesClearClicked() {
+      // TODO: Implement after categories commit is merged
+    },
     handleFilterStars(payload) {
       this.stars_chosen = payload.starsAmount;
-      this.sendFilters();
     },
     handleFilterOptions(payload) {
       this.option_chosen = payload.optionName;
-      this.sendFilters();
     },
     sendFilters() {
       this.emitter.emit('filter', {
@@ -82,6 +92,7 @@ export default {
         stars_chosen: this.stars_chosen,
         distance_chosen: this.distance_chosen
       });
+      console.log('Filters sent: ', this.time_chosen, this.option_chosen, this.stars_chosen, this.distance_chosen);
     },
   },
   data() {
@@ -94,10 +105,14 @@ export default {
       RatingIcon: RatingIcon,
       FilterIcon: FilterIcon,
       CategoryIcon: CategoryIcon,
+      XIcon: XIcon,
       time_chosen: '',
       option_chosen: '',
       stars_chosen: '',
       distance_chosen: '',
+      clearCounter: 0, // This needs some sort of explanation - it's used to tell the children that something has changed via props. 
+      // It's int because boolean would have been... quite inelegant, although we don't care about this value - what matters is
+      // that something changed.
     }
   }
 }
@@ -128,10 +143,14 @@ export default {
   display: flex;
   align-items: center;
   margin-bottom: 0.5em;
+  justify-content: space-between;
+  width: 98%;
 }
 
 p {
   margin-bottom: 0;
+  text-align: left;
+  flex-grow: 1;
 }
 
 #categories,
@@ -151,5 +170,9 @@ p {
   width: 90%;
   display: flex;
   justify-content: center;
+}
+
+.clear-icon {
+  cursor: pointer;
 }
 </style>

@@ -7,8 +7,8 @@
       </div>
     </div>
     <div id="categories">
-      <Category v-for="category in categories" :key="category.name" :category="category.name"
-        :number-of-offers="category.numberOfOffers" style="width: 90%;" />
+      <Category v-for="category in categories" :key="category.name" :displayName="category.displayName"
+        :category-name="category.categoryName" :number-of-offers="category.numberOfOffers" style="width: 90%;" />
     </div>
     <div id="filterName">
       <div class="filter-header-left">

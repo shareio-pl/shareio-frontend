@@ -40,7 +40,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   font-size: v-bind('FONT_SIZES.TITLE');
-  color: v-bind('COLORS.TEXT_SECONDARY');
+  color: v-bind('COLORS.PRIMARY');
   width: 90%;
   margin-bottom: 0.5em;
 }

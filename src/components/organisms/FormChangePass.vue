@@ -107,9 +107,6 @@ export default {
   padding: 0.5%;
   margin-bottom: 1%;
 }
-.input-row .error {
-  color: #ff0000 !important;
-}
 
 .password-submit {
   margin-top: 1%;

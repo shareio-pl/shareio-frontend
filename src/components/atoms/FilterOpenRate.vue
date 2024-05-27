@@ -9,7 +9,7 @@
     </div>
     <div class="filter-open-rate-stars" @click="handleClick">
       <div class="filter-min-note" v-show="showStars">
-        <span>Min</span>
+        <span>min</span>
       </div>
       <div class="filter-stars" v-show="showStars" ref="stars">
         <FontAwesomeIcon v-for="index in 5" :key="index" :icon="getStarIcon(index)" class="star" />

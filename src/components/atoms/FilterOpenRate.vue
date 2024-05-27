@@ -8,6 +8,9 @@
       <FontAwesomeIcon :icon="showStars ? iconChevronUp : iconChevronDown" id="arrow-icon" @click="onArrowClick" />
     </div>
     <div class="filter-open-rate-stars" @click="handleClick">
+      <div class="filter-min-note" v-show="showStars">
+        <span>min</span>
+      </div>
       <div class="filter-stars" v-show="showStars" ref="stars">
         <FontAwesomeIcon v-for="index in 5" :key="index" :icon="getStarIcon(index)" class="star" />
       </div>
@@ -135,6 +138,15 @@ export default {
   padding: 3%;
   padding-top: 1%;
   cursor: pointer;
+}
+
+.filter-min-note {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 2%;
+  padding-left: 3%;
+  color: v-bind('COLORS.TEXT_SECONDARY');
 }
 
 #arrow-icon {

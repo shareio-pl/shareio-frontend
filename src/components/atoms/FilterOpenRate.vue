@@ -40,6 +40,10 @@ export default {
     propIcon: {
       type: Object,
       required: false
+    },
+    clear: {
+      type: Number,
+      required: false
     }
   },
   data() {
@@ -82,6 +86,14 @@ export default {
     },
     onArrowClick() {
       this.showStars = !this.showStars;
+    },
+    clearFilter() {
+      this.localFilledStars = 0;
+    }
+  },
+  watch: {
+    clear: function () {
+      this.clearFilter();
     }
   }
 }

@@ -2,7 +2,7 @@
   <div class="scoreboard-position">
     <div class="position" :class="{ 'current-user': currentUser }">{{ position }}</div>
     <div class="score" :class="{ 'current-user': currentUser }">{{ score }}</div>
-    <div class="name" :class="{ 'current-user': currentUser }" @click="sendToProfile">{{ name }}</div>
+    <div class="name" :class="{ 'current-user': currentUser }" @click="sendToProfile">{{ name + " " + surname }}</div>
   </div>
 </template>
 
@@ -23,6 +23,10 @@ export default {
       required: true
     },
     name: {
+      type: String,
+      required: true
+    },
+    surname: {
       type: String,
       required: true
     },

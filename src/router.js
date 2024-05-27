@@ -28,7 +28,7 @@ const routes = [
     name: "Lista ofert - ShareIO"
   },
   {
-    path: "/changepassword",
+    path: "/changePassword",
     component: ChangePass,
     name: "Zmiana hasła - ShareIO"
   },

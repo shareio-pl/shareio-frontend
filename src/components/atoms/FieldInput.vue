@@ -25,7 +25,7 @@ export default {
     },
     error: {
       type: Object,
-      default: () => ({ active: false, message: "" }),
+      required: false,
     },
     label: {
       type: String,
@@ -54,7 +54,7 @@ export default {
 <style scoped>
 .field {
   position: relative;
-  margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
 }
 
 .field-input {
@@ -72,11 +72,11 @@ export default {
 }
 
 .field-input:focus {
-  border-bottom: 2px solid v-bind("COLORS.FORM_FOCUS");
+  border-bottom: 2px solid v-bind("COLORS.NOTIFICATION_PRIMARY_FOCUS");
 }
 
 .field-input:not(:placeholder-shown) {
-  border-bottom: 2px solid v-bind("COLORS.FORM_CORRECT");
+  border-bottom: 2px solid v-bind("COLORS.NOTIFICATION_PRIMARY_CORRECT");
 }
 
 label {
@@ -106,7 +106,10 @@ input:not(:placeholder-shown)+span {
 }
 
 .error-border {
-  border-bottom: 2px solid v-bind("COLORS.FORM_ERROR") !important;
+  border-bottom: 2px solid v-bind("COLORS.NOTIFICATION_PRIMARY_ERROR") !important;
   transition: border-bottom 1s ease-in-out;
+}
+.field-input-paragraph {
+  color: v-bind("COLORS.SECONDARY ");
 }
 </style>

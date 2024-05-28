@@ -2,30 +2,30 @@
   <div>
     <div id="header" v-if="!showDrawer">
       <div id="header_wrapper">
-        <img src="../../assets/logo.png" alt="" @click="onLogoClick">
+        <img src="../../assets/logo.png" alt="" @click="onLogoClick" class="logo">
         <div id="buttons">
           <ButtonPrimary class="button" button-text="Oferty" @click="onOffersClick"/>
           <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick"/>
           <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
           <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick"/>
         </div>
-        <div id="user-data" @click="onUserDataClick">
-          <UserData :user-surname="this.surname" :user-first-name="this.name"/>
+        <div id="user-data" @click="onUserDataClick" v-if="!isSmallScreen">
+          <UserData :user-surname="surname" :user-first-name="name"/>
           <font-awesome-icon :icon="iconChevronDown" id="arrow-icon"/>
         </div>
       </div>
     </div>
 
     <div id="header-drawer">
-      <img src="../../assets/logo.png" alt="Logo" @click="onLogoClick">
+      <img src="../../assets/logo.png" alt="Logo" @click="onLogoClick" class="logo">
       <font-awesome-icon :icon="showDrawer ? iconChevronUp : iconChevronDown" id="arrow-icon" class="showButtons"
                          @click="onArrowClick"/>
-      <div id="user-drawer" @click="onUserDataClick">
-        <UserData :user-surname="this.surname" :user-first-name="this.name" class="userName"/>
-        <font-awesome-icon :icon="iconChevronDown" id="arrow-icon" class="userArrow"/>
-      </div>
     </div>
+
     <div id="drawer" v-if="showDrawer">
+      <div id="user-drawer">
+        <UserData :user-surname="surname" :user-first-name="name" class="userName"/>
+      </div>
       <ButtonPrimary class="button" button-text="Oferty" @click="onOffersClick"/>
       <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick"/>
       <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
@@ -55,6 +55,7 @@ export default {
       surname: 'Nazwisko',
       name: 'Imię',
       showDrawer: false,
+      isSmallScreen: false,
     };
   },
   mounted() {
@@ -85,6 +86,7 @@ export default {
     },
     updateWidth() {
       this.width = window.innerWidth;
+      this.isSmallScreen = this.width < 850;
       if (parseInt(this.width) >= 850) {
         this.showDrawer = false;
       }
@@ -92,6 +94,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 @media screen and (min-width: 850px) {
@@ -115,6 +118,10 @@ export default {
     cursor: pointer;
     aspect-ratio: 3.166;
     height: 100px;
+  }
+
+  .logo {
+    margin-left: 1%;
   }
 
   #buttons {
@@ -158,63 +165,62 @@ export default {
     width: 100%;
     height: 100px;
     background-color: v-bind('COLORS.PRIMARY');
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    padding-left: 1%;
+    position: relative;
   }
 
   #header-drawer img {
     cursor: pointer;
     aspect-ratio: 3.166;
     height: calc(3px + 11vw);
-    margin-left: 1%;
-  }
-
-  #user-drawer {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    cursor: pointer;
-    margin: 1% auto;
-    margin-right: 2%;
   }
 
   #drawer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    top: 100px;
-    width: 100%;
-    height: 85px;
+    justify-content: start;
+    position: absolute;
+    top: 36px;
+    right: 0;
+    width: 30%;
     background-color: v-bind('COLORS.PRIMARY');
     padding: 20px;
     z-index: 1;
+    border-bottom: 2px solid;
+    border-color: v-bind('COLORS.SECONDARY');
+    opacity: 0.96;
+  }
+
+  #user-drawer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  #drawer .button {
+    min-width: 100px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  #arrow-icon {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    z-index: 2;
+    font-size: v-bind('FONT_SIZES.IMPORTANT');
+    color: v-bind('COLORS.TEXT_SECONDARY');
+    cursor: pointer;
   }
 }
-  @media screen and (max-width: 700px) {
-    #user-drawer {
-      flex-direction: row;
-      align-items: center;
-    }
-    #user-drawer .userName {
-      font-size: 15px;
-      margin-left:5%;
-    }
+
+@media screen and (max-width: 450px) {
+  #drawer {
+    width: 50%;
   }
-
-  @media screen and (max-width: 500px) {
-    #drawer {
-      height: 60px;
-      margin-bottom: 0;
-    }
-    #header-drawer img {
-      height: 38px;
-    }
-    #user-drawer .userName {
-      font-size: 13px;
-      margin-left:0;
-    }
-  }
-
-
+}
 </style>

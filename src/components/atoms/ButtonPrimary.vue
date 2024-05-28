@@ -25,7 +25,7 @@ export default {
 
 <style scoped>
 .button-primary {
-  width: calc(20% + 0.5vw);
+  width: calc(15% + 0.4vw);
   height: 45px;
   margin-left: 2%;
   border-radius: 20px;

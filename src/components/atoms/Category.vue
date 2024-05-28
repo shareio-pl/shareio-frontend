@@ -32,13 +32,26 @@ export default {
       type: Number,
       required: true,
     },
+    clear: {
+      type: Number,
+      required: false,
+    }
   },
   methods: {
     handleClick() {
       this.selected = !this.selected;
-      this.emitter.emit('category-clicked', { categoryName: this.categoryName, displayName: this.displayName, selected: this.selected });
+      this.emitter.emit('category-changed', { categoryName: this.categoryName, displayName: this.displayName, selected: this.selected });
+    },
+    clearCategory() {
+      this.selected = false;
+      this.emitter.emit('category-changed', { categoryName: this.categoryName, displayName: this.displayName, selected: this.selected });
     }
-  }
+  },
+  watch: {
+    clear: function () {
+      this.clearCategory();
+    }
+  },
 };
 </script>
 

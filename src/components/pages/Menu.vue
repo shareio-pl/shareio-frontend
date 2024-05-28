@@ -23,6 +23,7 @@ export default {
       COLORS: COLORS,
       showMenu: false,
       isSticky: false,
+      isLogged: false, // To obtain from get ID from session (?)
     };
   },
   methods: {

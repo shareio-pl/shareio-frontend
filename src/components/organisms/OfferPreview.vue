@@ -175,6 +175,8 @@ export default {
 
 .offer-preview-action {
   padding: 2%;
+  margin-right: max(2%, 15px);
+  width: 30%;
   display: flex;
   flex-direction: column;
 }

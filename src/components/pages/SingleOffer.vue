@@ -42,7 +42,7 @@ export default {
             console.log(response);
             this.offerOwnerId = response.data.ownerId;
 
-            axios.get(GATEWAY_ADDRESS + `/offer/getOffersByUser/${this.offerOwnerId}`).then((response) => {
+            axios.get(GATEWAY_ADDRESS + `/offer/getCreatedOffersByUser/${this.offerOwnerId}`).then((response) => {
               console.log('Other Owner Offers: ', response.data.offerIds);
               this.offersIds = response.data.offerIds.filter((offerId) => offerId !== this.singleOffer);
               let numberOfOffers;

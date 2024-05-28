@@ -164,11 +164,12 @@ export default {
 }
 
 #button {
-  width: 40%;
-  height: 70px;
+  width: calc(30% + 1.5vw);
+  height: calc(66px + 1.9vw);
   z-index: 3;
-  font-size: 250%;
+  font-size: calc( 7px + 1.8vw );
   margin-right: 2%;
+  line-height: calc( 17px + 2.1vw );
 }
 
 #header {

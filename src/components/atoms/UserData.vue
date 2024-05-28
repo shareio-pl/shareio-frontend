@@ -49,8 +49,8 @@ export default {
 }
 
 .user-image {
-  width: 50px;
-  height: 50px;
+  width: calc(20px + 2vw);
+  height: calc(20px + 2vw);
   border-radius: 50%;
   overflow: hidden;
   align-self: flex-start;

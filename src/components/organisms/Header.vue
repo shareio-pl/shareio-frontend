@@ -52,7 +52,7 @@ export default {
       // TODO: implementation
     },
     onAboutUsClick() {
-      // TODO: implementation
+      this.$router.push('/about');
     },
     onLogoClick() {
       this.$router.push("/");

@@ -4,6 +4,7 @@ import Main from "./components/pages/Main.vue";
 import Map from "@/components/pages/Map.vue";
 import SingleOffer from "@/components/pages/SingleOffer.vue";
 import Offers from "@/components/pages/Offers.vue";
+import AboutUs from "@/components/pages/AboutUs.vue";
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     path: "/offers",
     component: Offers,
     name: "Lista ofert - ShareIO"
+  },
+  {
+    path: "/about",
+    component: AboutUs,
+    name: "O nas - ShareIO"
   },
   {
     path: "/:catchAll(.*)",

@@ -101,7 +101,5 @@ export default {
 
 .current-user {
   font-weight: bolder;
-  color: red;
-  /* to choose */
 }
 </style>

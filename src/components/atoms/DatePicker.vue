@@ -1,8 +1,7 @@
 <template>
   <div class="date-picker">
     <VueDatePicker class="datepicker" v-model="date" :placeholder="placeholder" utc @update:model-value="handleDate"
-      ref="datepicker" :max-date="new Date().setFullYear(new Date().getFullYear() - 13)"
-      :start-date="new Date().setFullYear(new Date().getFullYear() - 13)" />
+      ref="datepicker" :max-date=current_date_minus_thirteen :start-date=current_date_minus_thirteen />
   </div>
 </template>
 
@@ -21,6 +20,9 @@ export default {
       COLORS: COLORS,
       FONTS: FONTS,
       date: null,
+      // Looks inelegant, but setFullYear returns a timestamp, not date object. 
+      // This way there won't be warnings about wrong type.
+      current_date_minus_thirteen: new Date(new Date().setFullYear(new Date().getFullYear() - 13))
     };
   },
   props: {
@@ -31,7 +33,6 @@ export default {
   },
   methods: {
     handleDate(value) {
-      console.log(value);
       this.emitter.emit('date', { date: value });
     },
   },

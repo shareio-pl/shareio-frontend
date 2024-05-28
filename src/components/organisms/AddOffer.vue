@@ -125,16 +125,14 @@ export default {
         condition: formData.offerState,
         description: formData.offerDescription,
         category: formData.offerCategory,
-        creationDate: new Date().toISOString(),
-        addressSaveDto: {
-          city: formData.offerCity,
-          street: formData.offerStreet,
-          houseNumber: formData.offerHouseNumber,
-          flatNumber: this.flatNumber,
-          region: this.region,
-          country: this.country,
-          postCode: this.postCode,
-        }
+        city: formData.offerCity,
+        street: formData.offerStreet,
+        houseNumber: formData.offerHouseNumber,
+        flatNumber: this.flatNumber,
+        region: this.region,
+        country: this.country,
+        postCode: this.postCode,
+
       };
     },
     async submitOffer() {

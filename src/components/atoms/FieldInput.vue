@@ -5,7 +5,7 @@
         placeholder="&nbsp;" :class="{ 'error-border': error.active }">
       <span>{{ label }}</span>
     </label>
-    <p class="field-input-paragraph" v-if="error.active">{{ error.message }}</p>
+    <p class="field-input-paragraph" v-if="error.active && error.message !== ''">{{ error.message }}</p>
   </div>
 </template>
 
@@ -25,7 +25,7 @@ export default {
     },
     error: {
       type: Object,
-      required: false,
+      default: () => ({ active: false, message: "" }),
     },
     label: {
       type: String,
@@ -54,7 +54,6 @@ export default {
 <style scoped>
 .field {
   position: relative;
-  margin-top: 1.5rem;
 }
 
 .field-input {
@@ -109,7 +108,8 @@ input:not(:placeholder-shown)+span {
   border-bottom: 2px solid v-bind("COLORS.NOTIFICATION_PRIMARY_ERROR") !important;
   transition: border-bottom 1s ease-in-out;
 }
+
 .field-input-paragraph {
-  color: v-bind("COLORS.SECONDARY ");
+  color: v-bind("COLORS.SECONDARY");
 }
 </style>

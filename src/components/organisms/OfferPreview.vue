@@ -1,21 +1,21 @@
 <template>
   <div v-if="imageIsLoading" class="offer-preview-card">
-    <ImageLoadingAnimation />
+    <ImageLoadingAnimation/>
   </div>
   <div v-else class="offer-preview-card" @click="navigateToOfferPage">
     <div class="offer-preview-image">
-      <img :src="offerPreviewImage" alt="Offer image" />
+      <img :src="offerPreviewImage" alt="Offer image"/>
     </div>
     <div class="offer-preview-content">
       <h2 class="offer-preview-title">{{ title }}</h2>
       <p class="offer-preview-is-new" v-if="isNew"> Nowe! </p>
       <p class="offer-preview-is-not-new" v-else></p> <!-- An hack to keep the location in the same place; -->
-      <p class="offer-preview-location">{{ location }}</p>
+      <p class="offer-preview-location">{{ city }}, {{ street }}</p>
     </div>
     <div class="offer-preview-action">
       <UserData class="offer-preview-user" :userFirstName="userFirstName" :userSurname="userLastName"
-        :userImage="userImage" />
-      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount" />
+                :userImage="userImage"/>
+      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount"/>
     </div>
   </div>
 </template>
@@ -25,10 +25,9 @@ import Stars from '../atoms/Stars.vue';
 import UserData from '../atoms/UserData.vue';
 import ImageLoadingAnimation from '../atoms/ImageLoadingAnimation.vue';
 
-import { COLORS, FONT_SIZES } from "../../../public/Consts";
-import { DEFAULT_PREVIEW_OFFER_IMAGE } from "../../../public/Consts";
-import { DEFAULT_USER_PROFILE_IMAGE } from '../../../public/Consts';
-import { GATEWAY_ADDRESS } from "../../../public/Consts";
+import {COLORS, FONT_SIZES} from "../../../public/Consts";
+import {DEFAULT_USER_PROFILE_IMAGE} from '../../../public/Consts';
+import {GATEWAY_ADDRESS} from "../../../public/Consts";
 import axios from "axios";
 
 export default {
@@ -42,14 +41,15 @@ export default {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      userFirstName: 'Rafał',
-      userLastName: 'Cybula',
-      starsAmount: 3,
-      ratingsAmount: 12,
-      location: 'Remiszewiece',
-      title: 'Oferta',
+      userFirstName: '',
+      userLastName: '',
+      starsAmount: 0,
+      ratingsAmount: 0,
+      city: '',
+      street: '',
+      title: '',
       imageIsLoading: true,
-      offerPreviewImage: DEFAULT_PREVIEW_OFFER_IMAGE,
+      offerPreviewImage: null,
       userImage: DEFAULT_USER_PROFILE_IMAGE,
     };
   },
@@ -72,7 +72,7 @@ export default {
     },
     arrayBufferToBase64(buffer) {
       return btoa(
-        new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+          new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
       );
     },
     async getOfferData() {
@@ -83,24 +83,25 @@ export default {
         this.userLastName = response.data.ownerSurname;
         this.starsAmount = response.data.ownerRating;
         this.ratingsAmount = response.data.ownerReviewCount;
-        this.location = response.data.city;
+        this.city = response.data.city;
+        this.street = response.data.street;
         this.title = response.data.title;
         this.offerPreviewImage = await this.getImageData(response.data.photoId);
         this.userImage = await this.getImageData(response.data.ownerPhotoId);
         this.imageIsLoading = false;
       } catch (error) {
         console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', { error: error.response.status });
+        this.emitter.emit('axiosError', {error: error.response.status});
       }
     },
     async getImageData(photoId) {
       try {
-        const response = await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' });
+        const response = await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, {responseType: 'arraybuffer'});
         let image = this.arrayBufferToBase64(response.data);
         return `data:image/jpeg;base64,${image}`;
       } catch (error) {
         console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', { error: error.response.status });
+        this.emitter.emit('axiosError', {error: error.response.status});
       }
     },
   },
@@ -125,6 +126,7 @@ export default {
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_PRIMARY');
   width: 25%;
+  min-width: 65px;
   margin-bottom: 0.5%;
   margin-top: 0.5%;
   border-radius: 25px;
@@ -160,7 +162,7 @@ export default {
 }
 
 .offer-preview-title {
-  margin-top: 0.8%;
+  margin-top: 3%;
   margin-bottom: 3%;
   display: flex;
   font-size: v-bind('FONT_SIZES.PRIMARY');
@@ -175,8 +177,12 @@ export default {
 
 .offer-preview-action {
   padding: 2%;
+  margin-right: max(2%, 15px);
+  width: 30%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .offer-preview-user {
@@ -189,5 +195,11 @@ export default {
   align-self: center;
   font-size: v-bind('FONT_SIZES.STARS');
   margin-left: 4%;
+}
+
+@media (max-width: 500px) {
+  .offer-preview-action {
+    display: none;
+  }
 }
 </style>

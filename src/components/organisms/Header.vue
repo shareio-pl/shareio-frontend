@@ -11,15 +11,14 @@
         </div>
         <div id="user-data" @click="onUserDataClick" v-if="!isSmallScreen">
           <UserData :user-surname="surname" :user-first-name="name"/>
-          <font-awesome-icon :icon="iconChevronDown" id="arrow-icon"/>
+          <font-awesome-icon :icon="iconHamburger" id="hamburger-icon"/>
         </div>
       </div>
     </div>
 
     <div id="header-drawer">
       <img src="../../assets/logo.png" alt="Logo" @click="onLogoClick" class="logo">
-      <font-awesome-icon :icon="showDrawer ? iconChevronUp : iconChevronDown" id="arrow-icon" class="showButtons"
-                         @click="onArrowClick"/>
+      <font-awesome-icon :icon="iconHamburger" id="hamburger-icon" class="showButtons" @click="onHamburgerClick"/>
     </div>
 
     <div id="drawer" v-if="showDrawer">
@@ -35,23 +34,22 @@
 </template>
 
 <script>
-import {COLORS} from "../../../public/Consts";
-import {FONT_SIZES} from "../../../public/Consts";
+import { COLORS } from "../../../public/Consts";
+import { FONT_SIZES } from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import UserData from "@/components/atoms/UserData.vue";
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Header",
-  components: {FontAwesomeIcon, UserData, ButtonPrimary},
+  components: { FontAwesomeIcon, UserData, ButtonPrimary },
   data() {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      iconChevronDown: faChevronDown,
-      iconChevronUp: faChevronUp,
+      iconHamburger: faBars,
       surname: 'Nazwisko',
       name: 'Imię',
       showDrawer: false,
@@ -81,7 +79,7 @@ export default {
     onLogoClick() {
       this.$router.push('/');
     },
-    onArrowClick() {
+    onHamburgerClick() {
       this.showDrawer = !this.showDrawer;
     },
     updateWidth() {
@@ -94,7 +92,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 @media screen and (min-width: 850px) {
@@ -149,10 +146,12 @@ export default {
   }
 }
 
-#arrow-icon {
+#hamburger-icon {
   font-size: v-bind('FONT_SIZES.IMPORTANT');
   color: v-bind('COLORS.TEXT_SECONDARY');
   padding-left: 1em;
+  cursor: pointer;
+  z-index: 4;
 }
 
 @media screen and (max-width: 850px) {
@@ -177,13 +176,20 @@ export default {
     height: calc(3px + 11vw);
   }
 
+  #header-drawer .showButtons {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+  }
+
   #drawer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: start;
     position: absolute;
-    top: 36px;
+    top: 10px;
     right: 0;
     width: 30%;
     background-color: v-bind('COLORS.PRIMARY');
@@ -201,20 +207,21 @@ export default {
     margin-bottom: 10px;
   }
 
+  #user-drawer .userName {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   #drawer .button {
     min-width: 100px;
     width: 100%;
     margin-bottom: 10px;
   }
 
-  #arrow-icon {
-    position: absolute;
-    top: 0;
-    right: 10px;
-    z-index: 2;
+  #hamburger-icon {
     font-size: v-bind('FONT_SIZES.IMPORTANT');
     color: v-bind('COLORS.TEXT_SECONDARY');
-    cursor: pointer;
   }
 }
 

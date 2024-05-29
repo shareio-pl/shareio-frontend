@@ -53,7 +53,6 @@ export default {
   height: calc(20px + 2vw);
   border-radius: 50%;
   overflow: hidden;
-  align-self: flex-start;
 }
 
 .user-image img {
@@ -63,10 +62,7 @@ export default {
 }
 
 .user-info {
-  margin-left: 0.8em;
-  /* Percentage here wouldn't be the best choice, I think.
-  Because then the margin varies too much on the width of component this atom would be in;
-  in my testing the difference was noticeable. */
+  margin-left: 5px;
   display: flex;
   flex-direction: column;
   justify-content: center;

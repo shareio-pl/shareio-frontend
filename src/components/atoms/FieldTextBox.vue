@@ -1,8 +1,8 @@
 <template>
   <div class="field">
     <label class="field-label" v-bind:for="modelValue">
-      <textarea class="field-input" :type="type" :value="modelValue" @input="updateValue" placeholder="&nbsp;"
-        :class="{ 'error-border': error.active }" />
+      <textarea class="field-input" :disabled="disabled" :type="type" :value="modelValue" @input="updateValue"
+        placeholder="&nbsp;" :class="{ 'error-border': error.active }" />
       <span>{{ label }}</span>
     </label>
     <p class="field-input-paragraph" v-if="error.active && error.message !== ''">{{ error.message }}</p>
@@ -30,6 +30,10 @@ export default {
     label: {
       type: String,
       required: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

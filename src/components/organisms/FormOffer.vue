@@ -18,9 +18,11 @@
         <DropdownSelect :options="states" type="State" placeholder="Wybierz stan" />
       </div>
     </div>
-    <div id="form-offer-description">
-      <FieldTextBox v-model="offerDescription" placeholder="Opis" label="Opis przedmiotu"
+    <div id="form-offer-description" class="position-relative">
+      <FieldTextBox v-model="offerDescription" placeholder="Opis" label="Opis przedmiotu" style="width:200%;"
+        :disabled="isAIDescriptionLoading"
         :error="{ active: v$.offerDescription.$error && v$.offerDescription.$dirty, message: '' }" />
+      <div class="spinner" v-if="isAIDescriptionLoading"></div>
     </div>
   </form>
 </template>
@@ -79,6 +81,9 @@ export default {
       offerDescriptionError: '',
       category: '',
       condition: '',
+      categoryDisplayName: '',
+      conditionDisplayName: '',
+      isAIDescriptionLoading: false,
     };
   },
   validations() {
@@ -109,18 +114,24 @@ export default {
         return;
       }
       else {
-        axios.get(GATEWAY_ADDRESS + `/offer/generateDescription`, { params: { title: this.offerTitle, condition: this.condition, category: this.category } })
+        this.isAIDescriptionLoading = true;
+        axios.get(GATEWAY_ADDRESS + `/offer/generateDescription`, {
+          params: {
+            title: this.offerTitle, condition: this.conditionDisplayName,
+            category: this.categoryDisplayName
+          }
+        })
           .then((response) => {
             console.log("Description from AI: ", response.data);
             this.offerDescription = response.data;
+            this.isAIDescriptionLoading = false;
           })
           .catch((error) => {
             console.log(error);
             this.emitter.emit('axiosError', { error: error.response.status });
+            this.isAIDescriptionLoading = false;
           })
-
       }
-
     },
     async getFormData() {
       this.v$.$validate();
@@ -167,12 +178,14 @@ export default {
       }
     },
     handleDropdownOptions(data) {
+      console.log("Dropdown change: ", data);
       if (data.type === 'Category') {
         this.category = data.option;
-        console.log("Emitter: ", data.option);
+        this.categoryDisplayName = data.displayName;
       }
       else if (data.type === 'State') {
         this.condition = data.option;
+        this.conditionDisplayName = data.displayName;
       }
     },
   },
@@ -261,10 +274,11 @@ export default {
 
 #form-offer-description {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
 }
-
-
 
 .form-offer-flex {
   display: flex;
@@ -274,5 +288,29 @@ export default {
 
 .options {
   margin-bottom: 1em;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+  position: absolute;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

@@ -10,7 +10,7 @@
         @change="onSortChange(selectedOption)">
         <!-- TODO: Figure how to make have some color by default... -->
         <option disabled value="">{{ placeholder }}</option>
-        <option v-for="(option, index) in options" :key="index" :value="option.category">
+        <option v-for="(option, index) in options" :key="index" :value="option">
           {{ option.displayName }}
         </option>
       </select>
@@ -55,7 +55,7 @@ export default {
   methods: {
     onSortChange(option) {
       console.log(this.options);
-      this.emitter.emit('dropdown-change', { option: option, type: this.type });
+      this.emitter.emit('dropdown-change', { option: option.category, displayName: option.displayName, type: this.type });
     },
   },
   mounted() {

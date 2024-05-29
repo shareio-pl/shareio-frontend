@@ -10,7 +10,9 @@
       <div class="input-row">
         <FieldInput v-model="surname" placeholder="Nazwisko" label="Nazwisko"
           :error="{ active: v$.surname.$error && v$.surname.$dirty, message: surnameError }" />
-        <DatePicker class="datepicker" v-model="date" placeholder="Data urodzenia" />
+        <div class="date-picker-wrapper">
+          <DatePicker class="datepicker" v-model="date" placeholder="Data urodzenia" />
+        </div>
       </div>
       <div class="input-row">
         <FieldInput v-model="password" placeholder="Hasło" label="Hasło" type="password"
@@ -21,7 +23,7 @@
     </div>
     <div id="register-user-location">
       <div class="input-row">
-        <FieldInput v-model="country" placeholder="Miasto" label="Miasto" />
+        <FieldInput v-model="country" placeholder="Kraj" label="Kraj" />
         <FieldInput v-model="region" placeholder="Województwo" label="Województwo" />
       </div>
       <div class="input-row">
@@ -32,13 +34,15 @@
       <div class="input-row">
         <FieldInput v-model="postCode" placeholder="Kod pocztowy" label="Kod pocztowy" />
         <div class="input-row">
-          <FieldInput v-model="houseNumber" placeholder="Numer domu" label="Numer domu" />
-          <FieldInput v-model="flatNumber" placeholder="Numer mieszkania" label="Numer mieszkania" />
+          <FieldInput v-model="houseNumber" placeholder="Nr. domu" label="Nr. domu"
+            v-bind:style="{ fontSize: FONT_SIZES.SECONDARY }" />
+          <FieldInput v-model="flatNumber" placeholder="Nr. mieszkania" label="Nr. mieszkania"
+            v-bind:style="{ fontSize: FONT_SIZES.SECONDARY }" />
         </div>
       </div>
     </div>
     <p> '*' - pole wymagane </p>
-    <button type="submit" onclick="this.submitForm">Zarejestruj</button>
+    <ButtonPrimary buttonText="Zarejestruj" @click="submitForm" style="margin-left:0;" />
   </form>
 </template>
 
@@ -51,10 +55,11 @@ import axios from 'axios';
 
 import DatePicker from "@/components/atoms/DatePicker.vue";
 import FieldInput from "@/components/atoms/FieldInput.vue";
+import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 
 export default {
   name: "FormRegister",
-  components: { FieldInput, DatePicker },
+  components: { FieldInput, DatePicker, ButtonPrimary },
   data() {
     return {
       FONT_SIZES: FONT_SIZES,
@@ -206,6 +211,22 @@ export default {
 </script>
 
 <style>
+#register-user-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+#register-user-location {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -218,9 +239,13 @@ export default {
 .input-row {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 40%;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 50%;
+}
+
+.input-row>* {
+  width: 48%;
 }
 
 .dp__theme_light {

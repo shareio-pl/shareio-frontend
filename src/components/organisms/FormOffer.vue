@@ -101,7 +101,7 @@ export default {
       await this.$nextTick();
       if (this.v$.$error) {
         // TODO better message and change the error font
-        let errorMessage = 'Wypełnij wszystkie pola: ';
+        let errorMessage = '';
         if (this.v$.offerTitle.$error) {
           errorMessage += this.offerTitleError + ', ';
         }

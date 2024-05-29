@@ -44,7 +44,7 @@ export default {
         };
         reader.readAsDataURL(file);
       } else {
-        console.error('File is not a jpeg or png');
+        this.emitter.emit('error', { error: 'File is not a jpeg or png' });
       }
     }
   }

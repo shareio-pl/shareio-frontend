@@ -18,7 +18,7 @@
     </div>
     <div class="add-offer-right">
       <div class="add-offer-right-map">
-        <MapPreview zoom=16 :address="fullAddress" />
+        <MapPreview zoom=16 :address="fullAddress" style="z-index:0;" />
       </div>
       <ButtonPrimary v-if="!dataSending" class="add-offer-right-button" buttonText="Wystaw" @click="submitOffer" />
       <div v-else class="spinner"></div>
@@ -42,7 +42,6 @@ import axios from 'axios'
 import "leaflet/dist/leaflet.css"
 import { COLORS } from "../../../public/Consts";
 import { FONT_SIZES } from "../../../public/Consts";
-import { DEFAULT_OFFER_MAP_IMAGE } from "../../../public/Consts";
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
 export default {
@@ -55,7 +54,6 @@ export default {
       center: [0, 0],
       mapDataLoaded: false,
       offerImage: '',
-      offerMapImage: DEFAULT_OFFER_MAP_IMAGE,
       offerData: '',
       GATEWAY_ADDRESS: GATEWAY_ADDRESS,
       userFirstName: '',
@@ -368,5 +366,9 @@ textarea {
   width: 90%;
   height: 4em;
   margin-left: 0;
+}
+
+.buttonAI:hover {
+  background-color: green;
 }
 </style>

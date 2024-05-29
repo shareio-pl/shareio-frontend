@@ -48,6 +48,12 @@ export default {
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
 
+@media screen and (min-width: 1200px) {
+  div {
+    font-size: v-bind('FONT_SIZES.PRIMARY');
+  }
+}
+
 .user-image {
   width: calc(20px + 2vw);
   height: calc(20px + 2vw);

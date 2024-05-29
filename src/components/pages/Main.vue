@@ -8,8 +8,8 @@
     <h1>Najnowsze w Twojej okolicy</h1>
     <div id="newest-offers">
       <span v-for="pair in offerPairs" :key="pair">
-        <OfferPreview :is-new="true" :id="pair[0]"/>
-        <OfferPreview :is-new="true" :id="pair[1]"/>
+        <OfferPreview :is-new="true" :id="pair[0]" class="bigPreview"/>
+        <OfferPreview :is-new="true" :id="pair[1]" class="bigPreview"/>
       </span>
     </div>
   </div>
@@ -39,13 +39,17 @@ export default {
     axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds').then((response) => {
       console.log('Offers: ', response.data.offerIds);
       this.offersIds = response.data.offerIds;
+      this.closestOffer = this.offersIds[1]; //TODO: Change to endpoint call
+
+      let closestOfferIndex = this.offersIds.indexOf(this.closestOffer);
+      if (closestOfferIndex > -1) {
+        this.offersIds.splice(closestOfferIndex, 1);
+      }
 
       let numberOfOffers;
-      if(this.offersIds.length % 2 === 0)
-      {
+      if (this.offersIds.length % 2 === 0) {
         numberOfOffers = this.offersIds.length;
-      }
-      else {
+      } else {
         numberOfOffers = this.offersIds.length - 1;
       }
 
@@ -53,7 +57,6 @@ export default {
         this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
       }
 
-      this.closestOffer = this.offersIds[1]; // TODO: change to endpoint call
     }).catch(error => {
       console.error('ERROR: ', error);
 
@@ -78,12 +81,12 @@ export default {
 
 p {
   background-color: v-bind('COLORS.NOTIFICATION_PRIMARY');
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc(2px + 1.6vw);
   color: v-bind('COLORS.TEXT_PRIMARY');
   width: 18%;
   margin: -1% 5%;
   border-radius: 25px;
-  padding: 10px;
+  padding: 5px;
   z-index: 2;
   position: absolute;
 }
@@ -108,8 +111,30 @@ OfferPreview {
   flex-direction: column;
 }
 
-span{
+span {
   display: flex;
   justify-content: center;
+}
+
+@media screen and (max-width: 450px) {
+  p {
+    width: 25%;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  #newest-offers {
+    flex-direction: column;
+  }
+
+  span {
+    flex-direction: column;
+  }
+
+  .bigPreview {
+    width: 88%;
+    margin: 0 auto;
+    margin-bottom: 10px;
+  }
 }
 </style>

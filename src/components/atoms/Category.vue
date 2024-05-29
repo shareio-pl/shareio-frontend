@@ -1,7 +1,7 @@
 <template>
-  <div class="category">
+  <div class="category" :class="{ 'bold': selected }" @click="handleClick">
     <span class="dot"> &bull;</span>
-    <span class="category-display"> {{ category }}</span>
+    <span class="category-display"> {{ displayName }}</span>
     <span class="number">({{ numberOfOffers }})</span>
   </div>
 </template>
@@ -16,10 +16,15 @@ export default {
     return {
       FONT_SIZES: FONT_SIZES,
       COLORS: COLORS,
+      selected: false,
     };
   },
   props: {
-    category: {
+    displayName: {
+      type: String,
+      required: true,
+    },
+    categoryName: {
       type: String,
       required: true,
     },
@@ -27,6 +32,25 @@ export default {
       type: Number,
       required: true,
     },
+    clear: {
+      type: Number,
+      required: false,
+    }
+  },
+  methods: {
+    handleClick() {
+      this.selected = !this.selected;
+      this.emitter.emit('category-changed', { categoryName: this.categoryName, displayName: this.displayName, selected: this.selected });
+    },
+    clearCategory() {
+      this.selected = false;
+      this.emitter.emit('category-changed', { categoryName: this.categoryName, displayName: this.displayName, selected: this.selected });
+    }
+  },
+  watch: {
+    clear: function () {
+      this.clearCategory();
+    }
   },
 };
 </script>
@@ -38,6 +62,11 @@ export default {
   width: 100%;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
+}
+
+.category.bold {
+  font-weight: bolder;
+  color: v-bind('COLORS.BORDER_BLACK');
 }
 
 .category:hover {

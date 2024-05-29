@@ -6,7 +6,10 @@
     </div>
     <h1>Inne oferty oddającego</h1>
     <div id="other-offers">
-      <OfferPreview v-for="id in ownerOffers" :key="id" :id=id />
+      <span v-for="pair in offerPairs" :key="pair">
+        <OfferPreview :id="pair[0]" class="bigPreview"/>
+        <OfferPreview :id="pair[1]" class="bigPreview"/>
+      </span>
     </div>
   </div>
 </template>
@@ -25,29 +28,45 @@ export default {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      ownerOffers: [],
+      offerPairs: [],
       offersIds: [],
-      singleOffer: '',
+      singleOffer: this.$route.params.id,
+      offerOwnerId: ''
+
     }
   },
-  // TODO change to getOffersByUserId endpoint
+  methods: {
+    async getOwnerOffers() {
+      axios.get(GATEWAY_ADDRESS + `/offer/get/${this.singleOffer}`)
+          .then(response => {
+            console.log(response);
+            this.offerOwnerId = response.data.ownerId;
+
+            axios.get(GATEWAY_ADDRESS + `/offer/getCreatedOffersByUser/${this.offerOwnerId}`).then((response) => {
+              console.log('Other Owner Offers: ', response.data.offerIds);
+              this.offersIds = response.data.offerIds.filter((offerId) => offerId !== this.singleOffer);
+              let numberOfOffers;
+              if (this.offersIds.length % 2 === 0) {
+                numberOfOffers = this.offersIds.length;
+              } else {
+                numberOfOffers = this.offersIds.length - 1;
+              }
+              for (let offerId = 0; offerId < numberOfOffers; offerId += 2) {
+                this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
+              }
+            }).catch(error => {
+              console.error('ERROR: ', error);
+              this.emitter.emit('axiosError', {error: error.response.status});
+            });
+          })
+          .catch(error => {
+            console.error('ERROR: ', error);
+            this.emitter.emit('axiosError', {error: error.response.status});
+          });
+    }
+  },
   mounted() {
-    axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds').then((response) => {
-      console.log('Offers: ', response.data.offerIds);
-
-      this.offersIds = response.data.offerIds;
-      this.singleOffer = this.$route.params.id;
-
-      for (let offerId = 0; offerId < this.offersIds.length; offerId++) {
-        if (this.singleOffer.ownerId === this.offersIds[offerId].ownerId
-            && this.singleOffer !== this.offersIds[offerId])
-          this.ownerOffers.push(this.offersIds[offerId]);
-      }
-    }).catch(error => {
-      console.error('ERROR: ', error);
-
-      this.emitter.emit('axiosError', {error: error.response.status});
-    });
+    this.getOwnerOffers();
   }
 }
 </script>
@@ -83,8 +102,27 @@ OfferPreview {
 #other-offers {
   display: flex;
   flex-direction: column;
-  align-items: center;
-
 }
 
+span {
+  display: flex;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 1100px) {
+  #other-offers {
+    flex-direction: column;
+  }
+
+  span {
+    flex-direction: column;
+  }
+
+  .bigPreview {
+    width: 88%;
+    margin: 0 auto;
+    margin-bottom: 10px;
+  }
+
+}
 </style>

@@ -26,9 +26,12 @@
 </template>
 
 <script>
-import { required, minLength, maxLength } from '@vuelidate/validators'
+import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
-import { useVuelidate } from '@vuelidate/core'
+import { required, minLength, maxLength } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core';
+
+import axios from 'axios';
 
 import FieldInput from "../atoms/FieldInput.vue";
 import FieldTextBox from "../atoms/FieldTextBox.vue";
@@ -57,6 +60,10 @@ export default {
       type: Array,
       required: true
     },
+    generateDescription: {
+      type: Number,
+      required: false
+    },
   },
   data() {
     return {
@@ -71,7 +78,7 @@ export default {
       offerDescription: '',
       offerDescriptionError: '',
       category: '',
-      state: '',
+      condition: '',
     };
   },
   validations() {
@@ -95,6 +102,25 @@ export default {
       if (this.v$.$error) {
         return
       }
+    },
+    async generateDescriptionByAI() {
+      if (this.offerTitle === '' || this.condition === '' || this.category === '') {
+        console.log("Offer title, condition or category is empty");
+        return;
+      }
+      else {
+        axios.get(GATEWAY_ADDRESS + `/offer/generateDescription`, { params: { title: this.offerTitle, condition: this.condition, category: this.category } })
+          .then((response) => {
+            console.log("Description from AI: ", response.data);
+            this.offerDescription = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.emitter.emit('axiosError', { error: error.response.status });
+          })
+
+      }
+
     },
     async getFormData() {
       this.v$.$validate();
@@ -142,9 +168,10 @@ export default {
     handleDropdownOptions(data) {
       if (data.type === 'Category') {
         this.category = data.option;
+        console.log("Emitter: ", data.option);
       }
       else if (data.type === 'State') {
-        this.state = data.option;
+        this.condition = data.option;
       }
     },
   },
@@ -152,6 +179,9 @@ export default {
     this.emitter.on('dropdown-change', this.handleDropdownOptions);
   },
   watch: {
+    generateDescription: function () {
+      this.generateDescriptionByAI();
+    },
     'v$.offerTitle.$error'(newVal) {
       if (newVal) {
         if (!this.v$.offerTitle.minLength.$model) {

@@ -89,7 +89,7 @@ export default {
       offerStreet: { required, minLength: minLength(3) },
       offerHomeNumber: { required, minLength: minLength(1) },
       category: { required },
-      state: { required },
+      condition: { required },
     }
   },
   setup() {
@@ -124,7 +124,6 @@ export default {
     },
     async getFormData() {
       this.v$.$validate();
-      await this.$nextTick();
       if (this.v$.$error) {
         // TODO better message and change the error font
         let errorMessage = '';
@@ -146,11 +145,12 @@ export default {
         else if (this.category === '') {
           errorMessage += 'Kategoria jest obowiązkowa, ';
         }
-        else if (this.state === '') {
+        else if (this.condition === '') {
           errorMessage += 'Stan jest obowiązkowy, ';
         }
         errorMessage = errorMessage.slice(0, -2);
         this.emitter.emit('error', { error: errorMessage });
+        console.log("Error w walidacji: ", errorMessage);
         return null;
       }
       else {
@@ -161,7 +161,7 @@ export default {
           offerCity: this.offerCity,
           offerStreet: this.offerStreet,
           offerCategory: this.category,
-          offerState: this.state,
+          offerState: this.condition,
         };
       }
     },

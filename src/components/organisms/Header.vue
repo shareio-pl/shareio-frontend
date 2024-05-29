@@ -188,7 +188,7 @@ export default {
     width: 30%;
     background-color: v-bind('COLORS.PRIMARY');
     padding: 20px;
-    z-index: 1;
+    z-index: 3;
     border-bottom: 2px solid;
     border-color: v-bind('COLORS.SECONDARY');
     opacity: 0.96;

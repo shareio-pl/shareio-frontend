@@ -239,6 +239,7 @@ export default {
   border-top-right-radius: 25px;
   border-bottom-left-radius: 25px;
   overflow: hidden;
+  z-index: 1;
 }
 
 .offer-right-button {

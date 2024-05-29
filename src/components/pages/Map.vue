@@ -196,7 +196,7 @@ export default {
 }
 
 p {
-  font-size: v-bind('FONT_SIZES.TITLE');
+  font-size: calc( 7px + 1.8vw );
   background-color: v-bind('COLORS.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
   width: 30%;
@@ -206,8 +206,9 @@ p {
 }
 
 #arrow-icon {
-  scale: 500%;
-  margin-top: -5%;
+  position: absolute;
+  scale: 400%;
+  margin-top: -13%;
   z-index: 2;
 }
 
@@ -229,5 +230,16 @@ p {
 
 .map>>>a {
   color: v-bind('COLORS.TEXT_SECONDARY');
+}
+
+@media screen and (max-height: 400px) {
+  #arrow-icon {
+    display: none;
+  }
+}
+@media screen and (max-height: 420px) {
+  p {
+    display: none;
+  }
 }
 </style>

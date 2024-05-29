@@ -111,7 +111,7 @@ export default {
     async generateDescriptionByAI() {
       if (this.offerTitle === '' || this.condition === '' || this.category === '') {
         console.log("Offer title, condition or category is empty");
-        return;
+        this.emitter.emit('error', { error: 'Tytuł, stan lub kategoria jest pusta' });
       }
       else {
         this.isAIDescriptionLoading = true;

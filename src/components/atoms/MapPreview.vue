@@ -1,7 +1,8 @@
 <template>
   <div class="map" v-if="coordinates">
     <l-map :zoom="zoom" :center="coordinates"
-      :options="{ zoomControl: false, scrollWheelZoom: false, dragging: false, doubleClickZoom: false }" ref="mapRef">
+      :options="{ zoomControl: false, scrollWheelZoom: false, dragging: false, doubleClickZoom: false }" ref="mapRef"
+      style="z-index: 0;">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       <l-marker :lat-lng="coordinates"></l-marker>
     </l-map>

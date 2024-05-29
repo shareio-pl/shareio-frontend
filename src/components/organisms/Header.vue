@@ -52,10 +52,10 @@ export default {
       this.$router.push('/newOffer');
     },
     onAboutUsClick() {
-      // TODO: implementation
+      this.$router.push('/about');
     },
     onLogoClick() {
-      // TODO: implementation
+      this.$router.push("/");
     },
   },
 };

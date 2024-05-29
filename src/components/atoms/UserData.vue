@@ -30,9 +30,8 @@ export default {
       default: DEFAULT_USER_PROFILE_IMAGE
     }
   },
-  data()
-  {
-    return{
+  data() {
+    return {
       FONT_SIZES: FONT_SIZES,
       COLORS: COLORS,
     }
@@ -41,11 +40,26 @@ export default {
 </script>
 
 <style scoped>
+.user-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 1.0vw);
+  color: v-bind('COLORS.TEXT_SECONDARY');
+}
+
+@media screen and (min-width: 1200px) {
+  div {
+    font-size: v-bind('FONT_SIZES.PRIMARY');
+  }
+}
+
 .user-image {
-  width: 50px;
-  height: 50px;
+  width: calc(20px + 2vw);
+  height: calc(20px + 2vw);
   border-radius: 50%;
   overflow: hidden;
+  align-self: flex-start;
 }
 
 .user-image img {
@@ -54,18 +68,15 @@ export default {
   object-fit: cover;
 }
 
-.user-data {
-  display: flex;
-  align-items: center;
-  font-size: v-bind('FONT_SIZES.PRIMARY');
-  color: v-bind('COLORS.TEXT_SECONDARY');
-}
-
 .user-info {
   margin-left: 0.8em;
   /* Percentage here wouldn't be the best choice, I think.
   Because then the margin varies too much on the width of component this atom would be in;
   in my testing the difference was noticeable. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 .user-name {

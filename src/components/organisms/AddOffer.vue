@@ -18,7 +18,7 @@
     </div>
     <div class="add-offer-right">
       <div class="add-offer-right-map">
-        <MapPreview zoom=16 :address="fullAddress" style="z-index:0;" />
+        <MapPreview zoom=16 :address="fullAddress" />
       </div>
       <ButtonPrimary v-if="!dataSending" class="add-offer-right-button" buttonText="Wystaw" @click="submitOffer" />
       <div v-else class="spinner"></div>

@@ -84,7 +84,7 @@ export default {
   validations() {
     return {
       offerTitle: { required, minLength: minLength(5) },
-      offerDescription: { required, minLength: minLength(20), maxLength: maxLength(300) },
+      offerDescription: { required, minLength: minLength(20), maxLength: maxLength(255) },
       offerCity: { required, minLength: minLength(3) },
       offerStreet: { required, minLength: minLength(3) },
       offerHomeNumber: { required, minLength: minLength(1) },
@@ -124,6 +124,7 @@ export default {
     },
     async getFormData() {
       this.v$.$validate();
+      await this.$nextTick();
       if (this.v$.$error) {
         // TODO better message and change the error font
         let errorMessage = '';
@@ -220,6 +221,7 @@ export default {
       }
     },
     'v$.offerDescription.$error'(newVal) {
+      // TODO: Fix this, rn it doesn't seem to work with ifs. 
       if (newVal) {
         if (!this.v$.offerDescription.minLength.$model) {
           this.offerDescriptionError = `Opis musi mieć co najmniej ${this.v$.offerDescription.minLength.$params.min} znaków`;

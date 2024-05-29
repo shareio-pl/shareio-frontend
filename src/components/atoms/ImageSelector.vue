@@ -27,7 +27,8 @@ export default {
     return {
       UploadIcon: UploadIcon,
       image: null,
-      file_types: ['image/jpeg', 'image/png'],
+      //file_types: ['image/jpeg', 'image/png'],
+      file_types: ['image/png'],
     };
   },
   methods: {
@@ -44,7 +45,7 @@ export default {
         };
         reader.readAsDataURL(file);
       } else {
-        this.emitter.emit('error', { error: 'File is not a jpeg or png' });
+        this.emitter.emit('error', { error: 'File is not a png' });
       }
     }
   }

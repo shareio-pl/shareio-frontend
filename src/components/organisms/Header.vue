@@ -8,10 +8,9 @@
         <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick" />
         <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick" />
       </div>
-      <div id="user-data" @click="onUserDataClick">
+      <div id="user-data" @click="changeMenuState">
         <UserData :user-surname="this.surname" :user-first-name="this.name" />
-        <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon"
-          @click="changeMenuState" />
+        <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon" />
       </div>
     </div>
   </div>

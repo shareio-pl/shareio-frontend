@@ -102,6 +102,10 @@ export default {
   font-weight: bold;
 }
 
+.menu-items>span:hover {
+  text-decoration: underline;
+}
+
 hr {
   margin-left: auto;
   width: 100%;

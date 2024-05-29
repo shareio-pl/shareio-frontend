@@ -108,7 +108,6 @@ export default {
             let promises = this.offersIds.map(offerId =>
               axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
                 .then(response => {
-                  console.log('Offer: ', response.data);
                   let category = this.categories.find(category => category.displayName === response.data.category);
                   if (category) {
                     category.numberOfOffers++;
@@ -128,7 +127,6 @@ export default {
       axios.get(GATEWAY_ADDRESS + '/offer/getOffersByName?name=' + this.searched_item)
         .then(
           response => {
-            console.log('Offers by name: ', response.data);
             this.offersIds = response.data.offerIds;
             let promises = this.offersIds.map(offerId =>
               axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)

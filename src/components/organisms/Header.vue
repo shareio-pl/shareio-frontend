@@ -9,56 +9,53 @@
           <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
           <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick"/>
         </div>
-        <div id="user-data" @click="onUserDataClick" v-if="!isSmallScreen">
+        <div id="user-data" @click="changeMenuState" v-if="!isSmallScreen">
           <UserData :user-surname="surname" :user-first-name="name"/>
-          <font-awesome-icon :icon="iconHamburger" id="hamburger-icon"/>
+          <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon"/>
         </div>
       </div>
     </div>
-
     <div id="header-drawer">
       <img src="../../assets/logo.png" alt="Logo" @click="onLogoClick" class="logo">
-      <font-awesome-icon :icon="iconHamburger" id="hamburger-icon" class="showButtons" @click="onHamburgerClick"/>
-    </div>
-
-    <div id="drawer" v-if="showDrawer">
-      <div id="user-drawer">
-        <UserData :user-surname="surname" :user-first-name="name" class="userName"/>
-      </div>
-      <ButtonPrimary class="button" button-text="Oferty" @click="onOffersClick"/>
-      <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick"/>
-      <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
-      <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick"/>
+      <font-awesome-icon :icon="iconHamburger" id="hamburger-icon" class="showMenu" @click="changeMenuState"/>
     </div>
   </div>
 </template>
 
 <script>
-import { COLORS } from "../../../public/Consts";
-import { FONT_SIZES } from "../../../public/Consts";
+import {COLORS} from "../../../public/Consts";
+import {FONT_SIZES} from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import UserData from "@/components/atoms/UserData.vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {faBars} from "@fortawesome/free-solid-svg-icons";
+import {faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {faChevronDown} from "@fortawesome/free-solid-svg-icons";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Header",
-  components: { FontAwesomeIcon, UserData, ButtonPrimary },
+  components: {FontAwesomeIcon, UserData, ButtonPrimary},
   data() {
     return {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
       iconHamburger: faBars,
+      iconChevronDown: faChevronDown,
+      iconChevronUp: faChevronUp,
+      menuIsShown: false,
       surname: 'Nazwisko',
       name: 'Imię',
-      showDrawer: false,
       isSmallScreen: false,
     };
   },
   mounted() {
-    window.addEventListener('resize', this.updateWidth);
-    this.updateWidth();
+    this.emitter.on('menu-closed', () => {
+      this.menuIsShown = false;
+    });
+    this.emitter.on('menu-opened', () => {
+      this.menuIsShown = true;
+    });
   },
   methods: {
     onUserDataClick() {
@@ -79,16 +76,9 @@ export default {
     onLogoClick() {
       this.$router.push('/');
     },
-    onHamburgerClick() {
-      this.showDrawer = !this.showDrawer;
-    },
-    updateWidth() {
-      this.width = window.innerWidth;
-      this.isSmallScreen = this.width < 850;
-      if (parseInt(this.width) >= 850) {
-        this.showDrawer = false;
-      }
-    },
+    changeMenuState() {
+      this.emitter.emit('change-menu');
+    }
   },
 };
 </script>
@@ -141,7 +131,7 @@ export default {
     margin-bottom: 0;
   }
 
-  #drawer, #header-drawer img, .showButtons, #user-drawer {
+  #header-drawer img, .showMenu {
     display: none;
   }
 }
@@ -149,8 +139,8 @@ export default {
 #hamburger-icon {
   font-size: v-bind('FONT_SIZES.IMPORTANT');
   color: v-bind('COLORS.TEXT_SECONDARY');
-  padding-left: 1em;
   cursor: pointer;
+  margin-right: 11%;
   z-index: 4;
 }
 
@@ -176,58 +166,16 @@ export default {
     height: calc(3px + 11vw);
   }
 
-  #header-drawer .showButtons {
+  #header-drawer .showMenu {
     position: absolute;
     top: 50%;
     right: 10px;
     transform: translateY(-50%);
   }
 
-  #drawer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: start;
-    position: absolute;
-    top: 10px;
-    right: 0;
-    width: 30%;
-    background-color: v-bind('COLORS.PRIMARY');
-    padding: 20px;
-    z-index: 3;
-    border-bottom: 2px solid;
-    border-color: v-bind('COLORS.SECONDARY');
-    opacity: 0.96;
-  }
-
-  #user-drawer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-
-  #user-drawer .userName {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  #drawer .button {
-    min-width: 100px;
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
   #hamburger-icon {
     font-size: v-bind('FONT_SIZES.IMPORTANT');
     color: v-bind('COLORS.TEXT_SECONDARY');
-  }
-}
-
-@media screen and (max-width: 450px) {
-  #drawer {
-    width: 50%;
   }
 }
 </style>

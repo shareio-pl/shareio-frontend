@@ -1,12 +1,11 @@
 <template>
   <div v-if="showMenu" @click='changeStateOfMenu' :class="['menu-page', { sticky: isSticky }]" ref="menuPage">
     <div class="menu-items">
-      <span v-if="isLogged" @click="onMyAccountClick">Moje konto</span>
+      <span @click="onMyAccountClick">Moje konto</span>
       <span @click="onHelpClick">Pomoc</span>
       <span @click="onPasswordChangeClick">Zmień hasło</span>
       <hr />
-      <span v-if="isLogged" @click="onLogout">Wyloguj się</span>
-      <span v-else @click="onLogin">Zaloguj się</span>
+      <span @click="onLogout">Wyloguj się</span>
     </div>
   </div>
 </template>
@@ -23,7 +22,6 @@ export default {
       COLORS: COLORS,
       showMenu: false,
       isSticky: false,
-      isLogged: false, // To obtain from get ID from session (?)
     };
   },
   methods: {
@@ -88,15 +86,16 @@ export default {
 .menu-items {
   display: flex;
   flex-direction: column;
-  width: 10%;
-  margin-left: 90%;
+  justify-content: flex-end;
+  width: 8%;
+  margin-right: 6%;
+  margin-left: 86%;
 }
 
 .menu-items>span {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  margin-right: 4%;
+  align-self: flex-end;
   color: v-bind('COLORS.TEXT_SECONDARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');
   cursor: pointer;

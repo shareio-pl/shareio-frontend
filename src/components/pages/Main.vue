@@ -82,12 +82,12 @@ export default {
 
 p {
   background-color: v-bind('COLORS.NOTIFICATION_PRIMARY');
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc(2px + 1.6vw);
   color: v-bind('COLORS.TEXT_PRIMARY');
   width: 18%;
   margin: -1% 5%;
   border-radius: 25px;
-  padding: 10px;
+  padding: 5px;
   z-index: 2;
   position: absolute;
 }
@@ -115,5 +115,10 @@ OfferPreview {
 span{
   display: flex;
   justify-content: center;
+}
+@media screen and (max-width: 450px) {
+  p {
+    width: 25%;
+  }
 }
 </style>

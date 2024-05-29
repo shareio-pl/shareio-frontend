@@ -44,9 +44,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(12px + 0.5vw);
-
+  font-size: calc(10px + 1.0vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
+}
+
+@media screen and (min-width: 1200px) {
+  div {
+    font-size: v-bind('FONT_SIZES.PRIMARY');
+  }
 }
 
 .user-image {

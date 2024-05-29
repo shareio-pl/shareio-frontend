@@ -180,6 +180,8 @@ export default {
   width: 30%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .offer-preview-user {

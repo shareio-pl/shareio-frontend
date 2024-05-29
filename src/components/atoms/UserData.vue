@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import { DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
-import { FONT_SIZES, COLORS } from "../../../public/Consts";
+import {DEFAULT_USER_PROFILE_IMAGE} from "../../../public/Consts";
+import {FONT_SIZES, COLORS} from "../../../public/Consts";
 
 export default {
   name: 'UserData',

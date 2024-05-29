@@ -8,8 +8,8 @@
     <h1>Najnowsze w Twojej okolicy</h1>
     <div id="newest-offers">
       <span v-for="pair in offerPairs" :key="pair">
-        <OfferPreview :is-new="true" :id="pair[0]"/>
-        <OfferPreview :is-new="true" :id="pair[1]"/>
+        <OfferPreview :is-new="true" :id="pair[0]" class="bigPreview"/>
+        <OfferPreview :is-new="true" :id="pair[1]" class="bigPreview"/>
       </span>
     </div>
   </div>
@@ -49,8 +49,7 @@ export default {
       let numberOfOffers;
       if (this.offersIds.length % 2 === 0) {
         numberOfOffers = this.offersIds.length;
-      } 
-      else {
+      } else {
         numberOfOffers = this.offersIds.length - 1;
       }
 
@@ -112,13 +111,30 @@ OfferPreview {
   flex-direction: column;
 }
 
-span{
+span {
   display: flex;
   justify-content: center;
 }
+
 @media screen and (max-width: 450px) {
   p {
     width: 25%;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  #newest-offers {
+    flex-direction: column;
+  }
+
+  span {
+    flex-direction: column;
+  }
+
+  .bigPreview {
+    width: 88%;
+    margin: 0 auto;
+    margin-bottom: 10px;
   }
 }
 </style>

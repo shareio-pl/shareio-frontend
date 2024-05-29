@@ -105,22 +105,22 @@ export default {
         if (this.v$.offerTitle.$error) {
           errorMessage += this.offerTitleError + ', ';
         }
-        if (this.v$.offerCity.$error) {
+        else if (this.v$.offerCity.$error) {
           errorMessage += this.offerCityError + ', ';
         }
-        if (this.v$.offerStreet.$error) {
+        else if (this.v$.offerStreet.$error) {
           errorMessage += this.offerStreetError + ', ';
         }
-        if (this.v$.offerHomeNumber.$error) {
+        else if (this.v$.offerHomeNumber.$error) {
           errorMessage += this.offerHomeNumberError + ', ';
         }
-        if (this.v$.offerDescription.$error) {
+        else if (this.v$.offerDescription.$error) {
           errorMessage += this.offerDescriptionError + ', ';
         }
-        if (this.category === '') {
+        else if (this.category === '') {
           errorMessage += 'Kategoria jest obowiązkowa, ';
         }
-        if (this.state === '') {
+        else if (this.state === '') {
           errorMessage += 'Stan jest obowiązkowy, ';
         }
         errorMessage = errorMessage.slice(0, -2);

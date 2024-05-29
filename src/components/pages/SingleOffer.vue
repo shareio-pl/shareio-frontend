@@ -7,8 +7,8 @@
     <h1>Inne oferty oddającego</h1>
     <div id="other-offers">
       <span v-for="pair in offerPairs" :key="pair">
-        <OfferPreview :id="pair[0]"/>
-        <OfferPreview :id="pair[1]"/>
+        <OfferPreview :id="pair[0]" class="bigPreview"/>
+        <OfferPreview :id="pair[1]" class="bigPreview"/>
       </span>
     </div>
   </div>
@@ -107,5 +107,22 @@ OfferPreview {
 span {
   display: flex;
   justify-content: center;
+}
+
+@media only screen and (max-width: 1100px) {
+  #other-offers {
+    flex-direction: column;
+  }
+
+  span {
+    flex-direction: column;
+  }
+
+  .bigPreview {
+    width: 88%;
+    margin: 0 auto;
+    margin-bottom: 10px;
+  }
+
 }
 </style>

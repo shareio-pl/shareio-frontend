@@ -125,6 +125,7 @@ export default {
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_PRIMARY');
   width: 25%;
+  min-width: 65px;
   margin-bottom: 0.5%;
   margin-top: 0.5%;
   border-radius: 25px;
@@ -191,5 +192,11 @@ export default {
   align-self: center;
   font-size: v-bind('FONT_SIZES.STARS');
   margin-left: 4%;
+}
+
+@media (max-width: 500px) {
+  .offer-preview-action {
+    display: none;
+  }
 }
 </style>

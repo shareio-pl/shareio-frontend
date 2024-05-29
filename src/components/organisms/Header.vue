@@ -8,9 +8,9 @@
         <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick" />
         <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick" />
       </div>
-      <div id="user-data" @click="onUserDataClick">
+      <div id="user-data" @click="changeMenuState">
         <UserData :user-surname="this.surname" :user-first-name="this.name" />
-        <font-awesome-icon :icon="iconChevronDown" id="arrow-icon" />
+        <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon" />
       </div>
     </div>
   </div>
@@ -22,6 +22,7 @@ import { FONT_SIZES } from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import UserData from "@/components/atoms/UserData.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 export default {
@@ -33,6 +34,8 @@ export default {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
       iconChevronDown: faChevronDown,
+      iconChevronUp: faChevronUp,
+      menuIsShown: false,
       surname: 'Nazwisko',
       name: 'Imię',
     };
@@ -57,6 +60,17 @@ export default {
     onLogoClick() {
       this.$router.push("/");
     },
+    changeMenuState() {
+      this.emitter.emit('change-menu');
+    }
+  },
+  mounted() {
+    this.emitter.on('menu-closed', () => {
+      this.menuIsShown = false;
+    });
+    this.emitter.on('menu-opened', () => {
+      this.menuIsShown = true;
+    });
   },
 };
 </script>

@@ -20,6 +20,7 @@ export const COLORS = {
   FORM_FOCUS: '#325EA8',
   FORM_ERROR: '#E8220C',
   FORM_CORRECT: '#26A318',
+  MENU_OVERLAY: '#C2B280CC',
 }
 
 export const FONTS = {

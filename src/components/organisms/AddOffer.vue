@@ -14,7 +14,7 @@
     <div class="add-offer-content">
       <FormOffer v-if="addressDataLoaded" ref="formOffer" :city="city" :street="street" :houseNumber="houseNumber"
         :flatNumber="flatNumber" :region="region" :country="country" :post-code="postCode" :categories="categories"
-        :states="states" />
+        :states="states" :generateDescription="generateByAI" />
     </div>
     <div class="add-offer-right">
       <div class="add-offer-right-map">
@@ -25,7 +25,7 @@
     </div>
   </div>
   <div>
-    <ButtonPrimary class="buttonAI" buttonText="Użyj AI do wygenerowania opisu" />
+    <ButtonPrimary class="buttonAI" buttonText="Użyj AI do wygenerowania opisu" @click="generateDescription" />
   </div>
 </template>
 
@@ -70,6 +70,7 @@ export default {
       addressId: '',
       addressDataLoaded: false,
       dataSending: false,
+      generateByAI: 0,
 
       categories: [],
       states: []
@@ -190,6 +191,10 @@ export default {
           console.error('Error getting user data: ', error);
           this.emitter.emit('axiosError', { error: error.response.status });
         });
+    },
+    generateDescription() {
+      console.log('Generating description');
+      this.generateByAI++;
     },
     async getAddressData() {
       return axios.get(GATEWAY_ADDRESS + '/address/get/' + this.addressId)

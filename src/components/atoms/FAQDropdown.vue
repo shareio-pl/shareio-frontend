@@ -1,10 +1,10 @@
 <template>
-  <div class="faq-dropdown">
+  <div class="faq-dropdown" @click="onArrowClick">
     <div class="faq-header">
       <div class="header-left">
         {{ title }}
       </div>
-      <font-awesome-icon :icon="showMessage ? iconChevronUp : iconChevronDown" id="arrow-icon" @click="onArrowClick" />
+      <font-awesome-icon :icon="showMessage ? iconChevronUp : iconChevronDown" id="arrow-icon"/>
     </div>
     <p v-show="showMessage">
       {{ message }}
@@ -13,11 +13,11 @@
 </template>
 
 <script>
-import { FONT_SIZES, COLORS } from "../../../public/Consts";
+import {FONT_SIZES, COLORS} from "../../../public/Consts";
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {faChevronDown} from "@fortawesome/free-solid-svg-icons";
 
 export default {
   name: "FAQDropdown",
@@ -30,7 +30,7 @@ export default {
       FONT_SIZES: FONT_SIZES,
       iconChevronUp: faChevronUp,
       iconChevronDown: faChevronDown,
-      showMessage: true,
+      showMessage: false,
     }
   },
   props: {
@@ -64,7 +64,7 @@ export default {
   display: flex;
   margin-left: 1%;
   font-size: v-bind('FONT_SIZES.PRIMARY');
-  color: v-bind('COLORS.TEXT_SECONDARY');
+  color: v-bind('COLORS.SECONDARY');
   padding: 0.75em;
   cursor: pointer;
 }
@@ -83,7 +83,7 @@ p {
   margin-bottom: 1em;
   padding: 0.25em;
   width: auto;
-  color: v-bind('COLORS.TEXT_SECONDARY');
+  color: v-bind('COLORS.SECONDARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');
   background-color: v-bind('COLORS.OFFER_FOREGROUND');
   align-items: flex-start;

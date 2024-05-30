@@ -51,7 +51,7 @@ export default {
       // TODO: Add router push
     },
     onHelpClick() {
-      // TODO: Add router push
+      this.$router.push("/help");
       console.log('Help clicked');
     },
     onPasswordChangeClick() {
@@ -77,7 +77,7 @@ export default {
   position: fixed;
   width: 100%;
   height: 100%;
-  background-color: rgba(249, 235, 224, 0.79);
+  background-color: rgba(249, 235, 224, 0.81);
   top: 100px;
   left: 0;
   z-index: 5;

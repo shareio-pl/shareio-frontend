@@ -18,8 +18,6 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faFileArrowUp as UploadIcon } from '@fortawesome/free-solid-svg-icons';
 
-const reader = new FileReader();
-
 export default {
   name: 'ImageSelector',
   components: {
@@ -29,7 +27,8 @@ export default {
     return {
       UploadIcon: UploadIcon,
       image: null,
-      file_types: ['image/jpeg', 'image/png'],
+      //file_types: ['image/jpeg', 'image/png'],
+      file_types: ['image/png'],
     };
   },
   methods: {
@@ -37,17 +36,16 @@ export default {
       this.$refs.fileInput.click();
     },
     handleImageUpload(event) {
-      let file = event.target.files[0];
+      const file = event.target.files[0];
+      const reader = new FileReader();
       if (file && (this.file_types.includes(file.type))) {
         reader.onload = () => {
           this.image = reader.result;
-          this.emitter.emit('image-uploaded', this.image);
+          this.emitter.emit('image-uploaded', file);
         };
         reader.readAsDataURL(file);
-      }
-      else {
-        // TODO: Display visible error
-        console.error('File is not a jpeg or png');
+      } else {
+        this.emitter.emit('error', { error: 'File is not a png' });
       }
     }
   }

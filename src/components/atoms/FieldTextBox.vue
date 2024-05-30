@@ -1,8 +1,8 @@
 <template>
   <div class="field">
     <label class="field-label" v-bind:for="modelValue">
-      <input class="field-input" :type="type" :value="modelValue" @input="updateValue" :id="modelValue"
-        placeholder="&nbsp;" :class="{ 'error-border': error.active }">
+      <textarea class="field-input" :disabled="disabled" :type="type" :value="modelValue" @input="updateValue"
+        placeholder="&nbsp;" :class="{ 'error-border': error.active }" />
       <span>{{ label }}</span>
     </label>
     <p class="field-input-paragraph" v-if="error.active && error.message !== ''">{{ error.message }}</p>
@@ -13,7 +13,7 @@
 import { FONT_SIZES, COLORS } from '../../../public/Consts';
 
 export default {
-  name: "FieldInput",
+  name: "FieldTextBox",
   props: {
     modelValue: {
       type: String,
@@ -31,6 +31,10 @@ export default {
       type: String,
       required: true,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -40,11 +44,7 @@ export default {
   },
   methods: {
     updateValue(event) {
-      // I would prefer to stick with this.$emit for this one particular task. 
-      // It's just very convenient to be able to just use v-model on the parent
-      // Compared to having to write in the mounted the logic, also as I have a 
-      // lot of forms I'd have to write a lot of ifs and also include name of the form
-      // in the event
+      // Same reasoning as in the FieldInput
       this.$emit("update:modelValue", event.target.value);
     },
   },
@@ -52,14 +52,11 @@ export default {
 </script>
 
 <style scoped>
-.field {
-  position: relative;
-}
-
 .field-input {
   width: 100%;
+  height: 200px;
   appearance: none;
-  padding: 0.75rem;
+  padding: 1.25rem;
   border: none;
   border-bottom: 2px solid transparent;
   outline: none;
@@ -70,12 +67,16 @@ export default {
   transition: border-bottom .5s ease-in-out;
 }
 
+textarea {
+  resize: none;
+}
+
 .field-input:focus {
-  border-bottom: 2px solid v-bind("COLORS.NOTIFICATION_PRIMARY_FOCUS");
+  border-bottom: 2px solid v-bind("COLORS.FORM_FOCUS");
 }
 
 .field-input:not(:placeholder-shown) {
-  border-bottom: 2px solid v-bind("COLORS.NOTIFICATION_PRIMARY_CORRECT");
+  border-bottom: 2px solid v-bind("COLORS.FORM_CORRECT");
 }
 
 label {
@@ -87,7 +88,7 @@ label {
 span {
   position: absolute;
   left: 50%;
-  top: 25%;
+  top: 5%;
   font-size: v-bind("FONT_SIZES.PRIMARY");
   color: gray;
   transform-origin: 0 0;
@@ -96,20 +97,16 @@ span {
   pointer-events: none;
 }
 
-input:focus+span {
+textarea:focus+span {
   transform: translate(-50%, -50%) scale(.75);
 }
 
-input:not(:placeholder-shown)+span {
+textarea:not(:placeholder-shown)+span {
   transform: translate(-50%, -50%) scale(.75)
 }
 
 .error-border {
-  border-bottom: 2px solid v-bind("COLORS.NOTIFICATION_PRIMARY_ERROR") !important;
+  border-bottom: 2px solid v-bind("COLORS.FORM_ERROR") !important;
   transition: border-bottom 1s ease-in-out;
-}
-
-.field-input-paragraph {
-  color: v-bind("COLORS.SECONDARY");
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div v-if="isShown" class="background">
-    <div class="error" v-on:click="closeError">
+    <div class="message" v-on:click="closeError">
       <p>
-        {{ this.error }}
+        {{ this.message }}
       </p>
     </div>
   </div>
@@ -15,7 +15,7 @@ export default {
   name: "DefaultSuccess",
   data() {
     return {
-      error: 'Test Error',
+      message: '',
       isShown: false,
       COLORS: COLORS,
     }
@@ -28,7 +28,7 @@ export default {
       },
   mounted() {
     this.emitter.on('success', (data) => {
-      this.error = data.message;
+      this.message = data.message;
       this.isShown = true;
 
       setTimeout(this.closeError, 5000);
@@ -48,7 +48,7 @@ export default {
   z-index: 5;
 }
 
-.error {
+.message {
   display: flex;
   position: fixed;
   width: 50%;

@@ -57,6 +57,6 @@ export default {
 }
 
 #new-offer-container {
-  margin-top: 2%;
+  margin-top: 1%;
 }
 </style>

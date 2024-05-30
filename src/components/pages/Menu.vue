@@ -2,6 +2,7 @@
   <div v-if="showMenu" @click='changeStateOfMenu' :class="['menu-page', { sticky: isSticky }]" ref="menuPage">
     <div class="menu-items">
       <div class="pages-menu">
+        <hr class="firstLine" />
         <div id="user-data">
           <UserData ref="userDataComp" class="user" :user-surname="surname" :user-first-name="name"
             style="display: flex; flex-direction: column;" />
@@ -17,7 +18,9 @@
         <hr />
       </div>
       <span @click="onMyAccountClick">Moje konto</span>
+      <hr class="conditionalLines" />
       <span @click="onHelpClick">Pomoc</span>
+      <hr class="conditionalLines" />
       <span @click="onPasswordChangeClick">Zmień hasło</span>
       <hr />
       <span @click="onLogout">Wyloguj się</span>
@@ -182,13 +185,17 @@ hr {
   .pages-menu {
     display: none;
   }
+
+  .conditionalLines {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 850px) {
   .menu-page {
     width: 30%;
     margin-left: 70%;
-    background-color: rgba(249, 235, 224, 0.92);
+    background-color: rgba(249, 235, 224);
   }
 
   .menu-items {
@@ -198,6 +205,10 @@ hr {
 
   .menu-items>span {
     align-self: auto;
+  }
+
+  .firstLine {
+    margin-top: 0%;
   }
 }
 </style>

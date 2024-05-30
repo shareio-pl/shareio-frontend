@@ -252,7 +252,6 @@ export default {
 @media screen and (max-width: 450px) {
   .offer-right-map {
     margin-right: 33%;
-    width: 75%;
   }
 }
 </style>

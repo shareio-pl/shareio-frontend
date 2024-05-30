@@ -108,7 +108,8 @@ input:not(:placeholder-shown)+span {
   border-bottom: 2px solid v-bind("COLORS.NOTIFICATION_PRIMARY_ERROR") !important;
   transition: border-bottom 1s ease-in-out;
 }
+
 .field-input-paragraph {
-  color: v-bind("COLORS.SECONDARY ");
+  color: v-bind("COLORS.PRIMARY");
 }
 </style>

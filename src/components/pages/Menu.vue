@@ -58,10 +58,11 @@ export default {
       // TODO: Add router push
     },
     onLogout() {
-      // TODO: Add router push
+      localStorage.removeItem('token');
+      this.$router.push('/');
     },
     onLogin() {
-      // TODO: Add router push
+      this.$router.push('/login');
     },
   },
   mounted() {

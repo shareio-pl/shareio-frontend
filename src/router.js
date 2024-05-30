@@ -4,8 +4,12 @@ import Main from "./components/pages/Main.vue";
 import Map from "@/components/pages/Map.vue";
 import SingleOffer from "@/components/pages/SingleOffer.vue";
 import Offers from "@/components/pages/Offers.vue";
+import ChangePass from "@/components/pages/ChangePass.vue";
+import Login from "@/components/pages/Login.vue";
+import NewOffer from "@/components/pages/NewOffer.vue";
+import AboutUs from "@/components/pages/AboutUs.vue";
+import Helpdesk from "@/components/pages/Helpdesk.vue";
 import Register from "@/components/pages/Register.vue";
-import DatePicker from "@/components/atoms/DatePicker.vue";
 
 const routes = [
   {
@@ -16,7 +20,8 @@ const routes = [
   {
     path: "/map",
     component: Map,
-    name: "Mapa - ShareIO"
+    name: "Mapa - ShareIO",
+    meta: { requiresAuth: true }
   },
   {
     path: "/offer/:id",
@@ -26,7 +31,45 @@ const routes = [
   {
     path: "/offers",
     component: Offers,
-    name: "Lista ofert - ShareIO"
+    name: "Lista ofert - ShareIO",
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/login",
+    component: Login,
+    name: "Login - ShareIO"
+  },
+  {
+    path: "/newOffer",
+    component: NewOffer,
+    name: "Nowa oferta - ShareIO",
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/about",
+    component: AboutUs,
+    name: "O nas - ShareIO"
+  },
+  {
+    path: "/help",
+    component: Helpdesk,
+    name: "Pomoc - ShareIO"
+  },
+  {
+    path: "/changePassword",
+    component: ChangePass,
+    name: "Zmiana hasła - ShareIO",
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/register",
+    component: Register,
+    name: "Rejestracja - ShareIO"
+  },
+  {
+    path: "/date",
+    component: DatePicker,
+    name: "DatePicker"
   },
   {
     path: "/register",
@@ -51,7 +94,15 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = to.name;
-  next();
+
+  if (to.matched.some(record => record.meta.requiresAuth) && !localStorage.getItem('token')) {
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath }
+    });
+  } else {
+    next();
+  }
 });
 
 export default router;

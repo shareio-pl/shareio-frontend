@@ -47,13 +47,16 @@ export default {
       distance_chosen: '',
       sorting: 'Najbliższe',
       isMounted: false,
-      categories: []
+      categories: [],
+      searched_item: ''
     }
   },
   methods: {
     setBrowserEmitter() {
       this.emitter.on('browser-change', (data) => {
         console.log('Received browser change: ', data);
+        this.searched_item = data.input;
+        this.getOffersDataByName();
       });
     },
     setPagesEmitter() {
@@ -87,7 +90,8 @@ export default {
       axios.get(GATEWAY_ADDRESS + `/offer/getCategories`)
         .then(response => {
           this.categories = response.data.categories.map(category => ({
-            name: category.displayName,
+            displayName: category.displayName,
+            categoryName: category.category,
             numberOfOffers: 0
           }));
         })
@@ -104,7 +108,30 @@ export default {
             let promises = this.offersIds.map(offerId =>
               axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
                 .then(response => {
-                  let category = this.categories.find(category => category.name === response.data.category);
+                  let category = this.categories.find(category => category.displayName === response.data.category);
+                  if (category) {
+                    category.numberOfOffers++;
+                  }
+                })
+            );
+            return Promise.all(promises);
+          }
+        )
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
+    },
+    getOffersDataByName() {
+      this.categories.forEach(category => category.numberOfOffers = 0);
+      axios.get(GATEWAY_ADDRESS + '/offer/getOffersByName?name=' + this.searched_item)
+        .then(
+          response => {
+            this.offersIds = response.data.offerIds;
+            let promises = this.offersIds.map(offerId =>
+              axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
+                .then(response => {
+                  let category = this.categories.find(category => category.displayName === response.data.category);
                   if (category) {
                     category.numberOfOffers++;
                   }
@@ -185,6 +212,10 @@ export default {
 
 #offers-page-content-offers {
   margin-top: 1em;
+}
+
+#offers-page-content-offers>>>.offer-preview-action {
+  min-width: 200px;
 }
 
 #offers-page-content-pagechange {

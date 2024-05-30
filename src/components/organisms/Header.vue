@@ -171,6 +171,7 @@ export default {
     top: 50%;
     right: 10px;
     transform: translateY(-50%);
+    margin-right: 1%;
   }
 
   #hamburger-icon {

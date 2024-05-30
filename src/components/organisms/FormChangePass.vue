@@ -60,19 +60,26 @@ export default {
       if (this.v$.$error) {
         return null;
       }
-      // TODO confirm endpoint correctness
-      await axios.post(GATEWAY_ADDRESS + '/user/modify', { oldPassword: this.oldPassword, newPassword: this.password })
-        .catch(get => {
-          console.error('ERROR: ', get);
-          if (get.response.data.error === 'Invalid old password') {
-            this.oldPasswordError = 'Invalid old password';
-          } else {
-            this.emitter.emit('axiosError', { error: get.response.status });
+      await axios.put(GATEWAY_ADDRESS + '/user/changePassword/' + localStorage.getItem('userId'),
+        { userPasswordDto: { oldPassword: this.oldPassword, newPassword: this.password } },
+        {
+          headers:
+          {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
           }
         })
-        .then(response => {
-          console.log('User password modified: ', response.data);
+        .then(() => {
+          console.log('Password changed successfully');
           this.$router.push('/');
+        })
+        .catch(get => {
+          console.error('ERROR: ', get);
+          if (get.response && get.response.data.error === 'Invalid old password') {
+            this.oldPasswordError = 'Invalid old password';
+          } else {
+            this.emitter.emit('axiosError', { error: get.response ? get.response.status : get });
+          }
         });
     }
   },

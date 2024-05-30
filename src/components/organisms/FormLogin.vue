@@ -1,13 +1,15 @@
 <template>
   <form @submit.prevent="submitForm">
     <div class="input-row">
-      <FieldInput v-model="email" placeholder="Email" label="Email" type="email" :error="{ active: v$.email.$error && v$.email.$dirty, message: emailError }"/>
+      <FieldInput v-model="email" placeholder="Email" label="Email" type="email"
+        :error="{ active: v$.email.$error && v$.email.$dirty, message: emailError }" />
     </div>
     <div class="input-row">
-      <FieldInput v-model="password" placeholder="Hasło" label="Hasło" type="password" :error="{ active: v$.password.$error && v$.password.$dirty, message: passwordError }"/>
+      <FieldInput v-model="password" placeholder="Hasło" label="Hasło" type="password"
+        :error="{ active: v$.password.$error && v$.password.$dirty, message: passwordError }" />
     </div>
     <div class="login-submit">
-      <ButtonPrimary class="login-submit" type="submit" :buttonText="text"/>
+      <ButtonPrimary class="login-submit" type="submit" :buttonText="text" />
     </div>
   </form>
 </template>
@@ -17,8 +19,8 @@ import { GATEWAY_ADDRESS } from "../../../public/Consts";
 import axios from 'axios';
 import FieldInput from "@/components/atoms/FieldInput.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
-import {required, minLength, maxLength} from '@vuelidate/validators';
-import {useVuelidate} from "@vuelidate/core";
+import { required, minLength, maxLength } from '@vuelidate/validators';
+import { useVuelidate } from "@vuelidate/core";
 
 export default {
   name: "FormLogin",
@@ -39,7 +41,7 @@ export default {
   validations() {
     return {
       email: { required, email: { required: true, maxLength: maxLength(100) } },
-      password: { required, minLength: minLength(8), maxLength: maxLength(20) },
+      password: { required, minLength: minLength(6), maxLength: maxLength(20) },
     }
   },
   methods: {
@@ -49,15 +51,16 @@ export default {
         return null;
       }
       axios.post(GATEWAY_ADDRESS + '/login', { email: this.email, password: this.password })
-          .then(response => {
-            console.log('User logged in: ', response.data);
-            this.$router.push('/');
-          })
-          .catch(error => {
-            console.error('ERROR: ', error);
-            this.emailError = 'Invalid email or password';
-            this.passwordError = 'Invalid email or password';
-          });
+        .then(response => {
+          console.log('User logged in: ', response.data);
+          localStorage.setItem('token', response.data.token);
+          this.$router.push('/');
+        })
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emailError = 'Invalid email or password';
+          this.passwordError = 'Invalid email or password';
+        });
     }
   },
   watch: {
@@ -80,7 +83,8 @@ export default {
 </script>
 
 <style>
-.input-row input[type="email"], .input-row input[type="password"] {
+.input-row input[type="email"],
+.input-row input[type="password"] {
   width: 25%;
   padding: 0.5%;
   margin-bottom: 1%;

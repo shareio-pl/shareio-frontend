@@ -255,10 +255,12 @@ export default {
   align-items: center;
   margin-bottom: 3%;
   margin-right: 8%;
+  font-size: calc(10px + 1.0vw);
+
 }
 
 .offer-left-giver {
-  font-size: v-bind('FONT_SIZES.IMPORTANT');
+  font-size: calc(10px + 1.0vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
 
@@ -277,7 +279,7 @@ export default {
 .offer-content-title {
   padding-top: 3%;
   text-align: start;
-  font-size: v-bind('FONT_SIZES.TITLE');
+  font-size: calc(15px + 1.5vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
 
@@ -285,7 +287,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc(13px + 0.5vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
   margin-top: 7%;
 }
@@ -297,7 +299,7 @@ export default {
 
 .offer-content-metadata-desc {
   margin-top: 10%;
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc(13px + 0.5vw);
   width: 90%;
 }
 
@@ -324,6 +326,13 @@ export default {
   width: 75%;
   height: 15%;
   margin-bottom: 15%;
+}
+
+@media screen and (max-width: 450px) {
+  .offer-right-map {
+    margin-right: 33%;
+    width: 75%;
+  }
 }
 
 .button {

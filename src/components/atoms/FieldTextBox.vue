@@ -1,11 +1,11 @@
 <template>
   <div class="field">
     <label class="field-label" v-bind:for="modelValue">
-      <textarea class="field-input" :type="type" :value="modelValue" @input="updateValue" placeholder="&nbsp;"
-        :class="{ 'error-border': error.active }" />
+      <textarea class="field-input" :disabled="disabled" :type="type" :value="modelValue" @input="updateValue"
+        placeholder="&nbsp;" :class="{ 'error-border': error.active }" />
       <span>{{ label }}</span>
     </label>
-    <p class="field-input-paragraph" v-if="error.active">{{ error.message }}</p>
+    <p class="field-input-paragraph" v-if="error.active && error.message !== ''">{{ error.message }}</p>
   </div>
 </template>
 
@@ -25,10 +25,15 @@ export default {
     },
     error: {
       type: Object,
+      default: () => ({ active: false, message: "" }),
     },
     label: {
       type: String,
       required: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -49,7 +54,7 @@ export default {
 <style scoped>
 .field-input {
   width: 100%;
-  height: 300px;
+  height: 200px;
   appearance: none;
   padding: 1.25rem;
   border: none;

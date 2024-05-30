@@ -72,4 +72,10 @@ export default {
 .star-items {
   font-size: v-bind('FONT_SIZES.STARS');
 }
+
+@media screen and (max-width: 450px) {
+  .star-items {
+    font-size: 10px;
+  }
+}
 </style>

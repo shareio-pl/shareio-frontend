@@ -5,7 +5,7 @@
         :class="{ 'error-border': error.active }" />
       <span>{{ label }}</span>
     </label>
-    <p class="field-input-paragraph" v-if="error.active">{{ error.message }}</p>
+    <p class="field-input-paragraph" v-if="error.active && error.message !== ''">{{ error.message }}</p>
   </div>
 </template>
 
@@ -25,6 +25,7 @@ export default {
     },
     error: {
       type: Object,
+      default: () => ({ active: false, message: "" }),
     },
     label: {
       type: String,
@@ -49,7 +50,7 @@ export default {
 <style scoped>
 .field-input {
   width: 100%;
-  height: 300px;
+  height: 200px;
   appearance: none;
   padding: 1.25rem;
   border: none;

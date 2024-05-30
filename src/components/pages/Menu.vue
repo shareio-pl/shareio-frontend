@@ -143,6 +143,12 @@ export default {
   font-weight: bold;
 }
 
+@media screen and (min-width: 1200px) {
+  .menu-items>span {
+    font-size: v-bind('FONT_SIZES.PRIMARY');
+  }
+}
+
 .menu-items>span:hover {
   text-decoration: underline;
 }
@@ -195,6 +201,4 @@ hr {
   }
 }
 </style>
-
-
 

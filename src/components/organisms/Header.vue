@@ -4,7 +4,7 @@
       <div id="header_wrapper">
         <img src="../../assets/logo.png" alt="" @click="onLogoClick" class="logo">
         <div id="buttons">
-          <ButtonPrimary class="button" button-text="Oferty" @click="onOffersClick"/>
+          <ButtonPrimary class="button" button-text="Ogłoszenia" @click="onOffersClick"/>
           <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick"/>
           <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
           <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick"/>
@@ -27,6 +27,7 @@ import {COLORS} from "../../../public/Consts";
 import {FONT_SIZES} from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import UserData from "@/components/atoms/UserData.vue";
+
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faBars} from "@fortawesome/free-solid-svg-icons";
 import {faChevronUp} from "@fortawesome/free-solid-svg-icons";
@@ -68,10 +69,10 @@ export default {
       this.$router.push('/map');
     },
     onNewOfferClick() {
-      // TODO: implementation
+      this.$router.push('/newOffer');
     },
     onAboutUsClick() {
-      // TODO: implementation
+      this.$router.push('/about');
     },
     onLogoClick() {
       this.$router.push('/');

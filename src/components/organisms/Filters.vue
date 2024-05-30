@@ -9,7 +9,8 @@
     </div>
     <div id="categories">
       <Category v-for="category in categories" :key="category.name" :displayName="category.displayName"
-        :category-name="category.categoryName" :number-of-offers="category.numberOfOffers" style="width: 90%;" />
+        :category-name="category.categoryName" :number-of-offers="category.numberOfOffers" :clear="clearCounterCategories"
+        style="width: 90%;" />
     </div>
     <div id="filterName">
       <div class="filter-header-left">
@@ -53,6 +54,7 @@ export default {
     this.emitter.on('filter-open-default', this.handleFilterOpenDefault);
     this.emitter.on('filter-stars', this.handleFilterStars);
     this.emitter.on('filter-options', this.handleFilterOptions);
+    this.emitter.on('category-changed', this.handleCategoryChange);
   },
   props: {
     categories: {
@@ -69,6 +71,14 @@ export default {
       }
       //this.sendFilters(); TODO: Send filters via button in different commit
     },
+    handleCategoryChange(payload) {
+      if (payload.selected) {
+        this.categories_chosen.push(payload.categoryName);
+      } else {
+        this.categories_chosen = this.categories_chosen.filter(category => category !== payload.categoryName);
+      }
+      console.log('Categories chosen: ', this.categories_chosen);
+    },
     onFiltersClearClicked() {
       this.time_chosen = '';
       this.option_chosen = '';
@@ -77,7 +87,7 @@ export default {
       this.clearCounter++;
     },
     onCategoriesClearClicked() {
-      // TODO: Implement after categories commit is merged
+      this.clearCounterCategories++;
     },
     handleFilterStars(payload) {
       this.stars_chosen = payload.starsAmount;
@@ -110,9 +120,12 @@ export default {
       option_chosen: '',
       stars_chosen: '',
       distance_chosen: '',
+      categories_chosen: [],
       clearCounter: 0, // This needs some sort of explanation - it's used to tell the children that something has changed via props. 
       // It's int because boolean would have been... quite inelegant, although we don't care about this value - what matters is
       // that something changed.
+      clearCounterCategories: 0,
+      // See reasoning above
     }
   }
 }

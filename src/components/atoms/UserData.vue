@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import { DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
-import { FONT_SIZES, COLORS } from "../../../public/Consts";
+import {DEFAULT_USER_PROFILE_IMAGE} from "../../../public/Consts";
+import {FONT_SIZES, COLORS} from "../../../public/Consts";
 
 export default {
   name: 'UserData',
@@ -44,8 +44,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc(10px + 1.0vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
+}
+
+@media screen and (min-width: 1200px) {
+  div {
+    font-size: v-bind('FONT_SIZES.PRIMARY');
+  }
 }
 
 .user-image {

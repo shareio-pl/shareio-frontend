@@ -61,7 +61,7 @@ export default {
         return null;
       }
       await axios.put(GATEWAY_ADDRESS + '/user/changePassword/' + localStorage.getItem('userId'),
-        { userPasswordDto: { oldPassword: this.oldPassword, newPassword: this.password } },
+        { oldPassword: this.oldPassword, newPassword: this.password },
         {
           headers:
           {

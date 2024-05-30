@@ -57,7 +57,8 @@ const routes = [
   {
     path: "/changePassword",
     component: ChangePass,
-    name: "Zmiana hasła - ShareIO"
+    name: "Zmiana hasła - ShareIO",
+    meta: { requiresAuth: true },
   },
   {
     path: "/:catchAll(.*)",

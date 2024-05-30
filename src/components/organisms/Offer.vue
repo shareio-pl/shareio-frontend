@@ -26,11 +26,15 @@
       <div class="offer-right-map">
         <MapPreview v-if="mapDataLoaded" :zoom="zoom" :center="center" />
       </div>
-      <span v-if="status === 'CREATED'" class="offer-right-button">
+      <span v-if="status === 'CREATED' && userId != null" class="offer-right-button">
         <ButtonPrimary class="button" :buttonText="offerButtonName" @click="submitOffer" />
       </span>
-      <span v-if="status === 'RESERVED'" class="offer-right-button">
+      <span v-if="status === 'RESERVED' && userId != null" class="offer-right-button">
         <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved" />
+      </span>
+      <span v-if="userId == null" class="offer-right-button">
+        <ButtonPrimary disabled='true' class="button-disabled" buttonText="Zaloguj się, aby zarezerwować" />
+        <!-- przycisk rezerwacji widoczny jest też na stronie głównej-->
       </span>
     </div>
   </div>
@@ -72,7 +76,7 @@ export default {
       amountOfRatings: '',
       userFirstName: '',
       userSurname: '',
-      userId: '',
+      userId: null,
       timeUntilUnreserved: '',
       status: '',
     }
@@ -152,42 +156,22 @@ export default {
         this.emitter.emit('axiosError', { error: error.response.status });
       }
     },
-    async getUserId() {
-      // Let's pretend we have an user. TODO, get ID from session.
-
-      return axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds')
-        .then((response) => {
-          this.offersIds = response.data.offerIds;
-          console.log('Offers IDs: ', this.offersIds);
-          console.log('Offer ID: ', this.offersIds[0]);
-          return axios.get(GATEWAY_ADDRESS + `/offer/get/${this.offersIds[0]}`);
-        })
-        .then((offerResponse) => {
-          return axios.get(GATEWAY_ADDRESS + `/user/get/${offerResponse.data.ownerId}`);
-        })
-        .then((userResponse) => {
-          this.user = userResponse.data.userId.id;
-          console.log("USER ID: ", this.user);
-        })
-        .catch(error => {
-          console.error('ERROR: ', error);
-          this.emitter.emit('axiosError', { error: error.response.status });
-        });
-    },
     async prepareDataToSend() {
-
-      await this.getUserId();
       let formData = {
         offerId: this.id,
-        recieverId: this.user,
+        recieverId: this.userId
       }
-
       return formData;
     },
     async reserveOffer() {
       let data = await this.prepareDataToSend();
       console.log('Data to send: ', data);
-      axios.post(GATEWAY_ADDRESS + `/offer/reserve`, data)
+      axios.post(GATEWAY_ADDRESS + `/offer/reserve`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      })
         .then(response => {
           console.log("Response: ", response.data);
           console.log('Offer ', this.id, ' was reserved successfully.');
@@ -211,6 +195,8 @@ export default {
   },
   async mounted() {
     await this.getOfferData();
+    this.userId = localStorage.getItem('userId');
+    console.log('User ID: ', this.userId);
     this.getTimeUntilUnreserved();
     setInterval(this.getTimeUntilUnreserved, 1000);
   },

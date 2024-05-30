@@ -52,10 +52,9 @@ export default {
     },
     onHelpClick() {
       this.$router.push("/help");
-      console.log('Help clicked');
     },
     onPasswordChangeClick() {
-      // TODO: Add router push
+      this.$router.push("/changePassword");
     },
     onLogout() {
       localStorage.removeItem('token');

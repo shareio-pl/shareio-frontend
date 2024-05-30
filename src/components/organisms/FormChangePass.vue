@@ -21,6 +21,7 @@
 
 <script>
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
+import { COLORS } from "../../../public/Consts";
 import axios from 'axios';
 
 import FieldInput from "@/components/atoms/FieldInput.vue";
@@ -34,6 +35,7 @@ export default {
   components: { FieldInput, ButtonPrimary },
   data() {
     return {
+      COLORS: COLORS,
       oldPassword: "",
       password: "",
       passwordRepeat: "",
@@ -70,7 +72,7 @@ export default {
           }
         })
         .then(() => {
-          console.log('Password changed successfully');
+          this.emitter.emit('success', { message: 'Twoje hasło zostało zmienione!' });
           this.$router.push('/');
         })
         .catch(get => {

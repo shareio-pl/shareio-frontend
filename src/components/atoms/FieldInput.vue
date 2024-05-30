@@ -110,6 +110,6 @@ input:not(:placeholder-shown)+span {
 }
 
 .field-input-paragraph {
-  color: v-bind("COLORS.SECONDARY");
+  color: v-bind("COLORS.PRIMARY");
 }
 </style>

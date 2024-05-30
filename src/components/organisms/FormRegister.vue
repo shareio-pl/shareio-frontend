@@ -3,7 +3,7 @@
     <div id="register-user-data">
       <div class="input-row">
         <FieldInput v-model="email" placeholder="Email" label="Email"
-          :error="{ active: v$.email.$error, message: emailError }" />
+          :error="{ active: v$.email.$error && v$.email.$dirty, message: emailError }" />
         <FieldInput v-model="name" placeholder="Imię" label="Imię"
           :error="{ active: v$.name.$error, message: nameError }" />
       </div>
@@ -11,7 +11,8 @@
         <FieldInput v-model="surname" placeholder="Nazwisko" label="Nazwisko"
           :error="{ active: v$.surname.$error && v$.surname.$dirty, message: surnameError }" />
         <div class="date-picker-wrapper">
-          <DatePicker class="datepicker" v-model="date" placeholder="Data urodzenia" />
+          <DatePicker class="datepicker" placeholder="Data urodzenia"
+            :error="{ active: v$.dateOfBirth.$error && v$.dateOfBirth.$dirty, message: dateOfBirthError }" />
         </div>
       </div>
       <div class="input-row">
@@ -36,13 +37,13 @@
         <div class="input-row">
           <FieldInput v-model="houseNumber" placeholder="Nr. domu" label="Nr. domu"
             v-bind:style="{ fontSize: FONT_SIZES.SECONDARY }" />
-          <FieldInput v-model="flatNumber" placeholder="Nr. mieszkania" label="Nr. mieszkania"
+          <FieldInput v-model="flatNumber" placeholder="Mieszkanie" label="Mieszkanie"
             v-bind:style="{ fontSize: FONT_SIZES.SECONDARY }" />
         </div>
       </div>
     </div>
-    <p> '*' - pole wymagane </p>
-    <ButtonPrimary buttonText="Zarejestruj" @click="submitForm" style="margin-left:0;" />
+    <p :style="{ color: COLORS.PRIMARY }">'*' - pole wymagane </p>
+    <ButtonPrimary buttonText="Zarejestruj" style="margin-left:0;" />
   </form>
 </template>
 
@@ -65,19 +66,22 @@ export default {
       FONT_SIZES: FONT_SIZES,
       COLORS: COLORS,
       FONTS: FONTS,
-      email: "",
-      name: "",
-      surname: "",
-      dateOfBirth: "",
-      password: "",
-      passwordRepeat: "",
-      country: "",
-      region: "",
-      city: "",
-      street: "",
-      postCode: "",
-      houseNumber: "",
-      flatNumber: "",
+
+      name: null,
+      surname: null,
+      password: null,
+      passwordRepeat: null,
+      email: null,
+      dateOfBirth: null,
+
+      country: null,
+      region: null,
+      city: null,
+      street: null,
+      postCode: null,
+      houseNumber: null,
+      flatNumber: null,
+
       emailError: "",
       nameError: "",
       surnameError: "",
@@ -94,7 +98,7 @@ export default {
       surname: { required, minLength: minLength(3), maxLength: maxLength(20) },
       dateOfBirth: { required },
       password: { required, minLength: minLength(8), maxLength: maxLength(20) },
-      passwordRepeat: { required, sameAsPassword: sameAs('password') },
+      passwordRepeat: { required, sameAsPassword: sameAs(this.password) },
       city: { required, minLength: minLength(3), maxLength: maxLength(20) },
     }
   },
@@ -107,107 +111,110 @@ export default {
   methods: {
     prepareDataToSend() {
       let formData = {
-        email: this.email,
         name: this.name,
         surname: this.surname,
-        dateOfBirth: "2000-12-31T12:00:00", // temporary, since there's no date picker.
-        password: this.password, // TODO: yay, we're sending password as a plaintext!...
-        // fix this.
-        addressSaveDto: {
-          country: this.country,
-          region: this.region,
-          city: this.city,
-          street: this.street,
-          postCode: this.postCode,
-          houseNumber: this.houseNumber,
-          flatNumber: this.flatNumber,
-        }
+        email: this.email,
+        password: this.password,
+        dateOfBirth: this.dateOfBirth,
+
+        country: this.country,
+        region: this.region,
+        city: this.city,
+        street: this.street,
+        houseNumber: this.houseNumber,
+        flatNumber: this.flatNumber,
+        postCode: this.postCode,
+
       };
       console.log(formData);
       return formData
     },
     async submitForm() {
+      console.log("submitForm");
       this.v$.$validate();
       if (this.v$.$error) {
         return null;
       }
       let data = this.prepareDataToSend();
-      try {
-        const response = await axios.post(GATEWAY_ADDRESS + '/user/add', data);
-        console.log('User added: ', response.data);
-      } catch (error) {
-        console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', { error: error.response.status });
-      }
+      await axios.post(GATEWAY_ADDRESS + '/user/add', data)
+        .then(() => {
+          this.emitter.emit('success', { message: 'Twoje konto zostało utworzone!' });
+          this.$router.push('/login');
+        })
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
     },
   },
 
   watch: {
-    'v$.email.$model'(newVal) {
-      if (newVal) {
-        if (!this.v$.email.email.$model) {
-          this.emailError = "Niepoprawny email";
-        }
-      } else {
+    'v$.email.$model'() {
+      if (!this.v$.email.email.$model) {
+        this.emailError = "Niepoprawny email";
+      }
+      else {
         this.emailError = '';
       }
     },
-    'v$.name.$model'(newVal) {
-      if (newVal) {
-        if (!this.v$.name.required.$model || this.v$.name.minLength.$model || this.v$.name.maxLength.$model) {
-          this.nameError = "Imię musi mieć od 3 do 20 znaków";
-        }
-      } else {
+    'v$.name.$model'() {
+      if (!this.v$.name.required.$model || this.v$.name.minLength.$model || this.v$.name.maxLength.$model) {
+        this.nameError = "Imię musi mieć od 3 do 20 znaków";
+      }
+      else {
         this.nameError = '';
       }
     },
-    'v$.surname.$model'(newVal) {
-      if (newVal) {
-        if (!this.v$.surname.required.$model || this.v$.surname.minLength.$model || this.v$.surname.maxLength.$model) {
-          this.surnameError = "Nazwisko musi mieć od 3 do 20 znaków";
-        }
-      } else {
+    'v$.surname.$model'() {
+      if (!this.v$.surname.required.$model || this.v$.surname.minLength.$model || this.v$.surname.maxLength.$model) {
+        this.surnameError = "Nazwisko musi mieć od 3 do 20 znaków";
+      }
+      else {
         this.surnameError = '';
       }
     },
-    'v$.dateOfBirth.$model'(newVal) {
-      if (newVal) {
-        if (!this.v$.dateOfBirth.required.$model) {
-          this.dateOfBirthError = "Data urodzenia jest wymagana";
-        }
-      } else {
+    'v$.dateOfBirth.$model'() {
+      if (!this.v$.dateOfBirth.required.$model) {
+        this.dateOfBirthError = "Data urodzenia jest wymagana";
+      }
+      else {
         this.dateOfBirthError = '';
       }
     },
-    'v$.password.$model'(newVal) {
-      if (newVal) {
-        if (!this.v$.password.required.$model || this.v$.password.minLength.$model || this.v$.password.maxLength.$model) {
-          this.passwordError = "Hasło musi mieć od 8 do 20 znaków";
-        }
-      } else {
+    'v$.password.$model'() {
+      if (!this.v$.password.required.$model || this.v$.password.minLength.$model || this.v$.password.maxLength.$model) {
+        this.passwordError = "Hasło musi mieć od 8 do 20 znaków";
+      }
+      else {
         this.passwordError = '';
       }
     },
-    'v$.passwordRepeat.$model'(newVal) {
-      if (newVal) {
-        if (!this.v$.passwordRepeat.required.$model || this.v$.passwordRepeat.sameAsPassword.$model) {
-          this.passwordRepeatError = "Hasła muszą się zgadzać";
-        }
-      } else {
+    'v$.passwordRepeat.$model'() {
+      if (!this.v$.passwordRepeat.required.$model || this.v$.passwordRepeat.sameAsPassword.$model) {
+        this.passwordRepeatError = "Hasła muszą się zgadzać";
+      }
+      else {
         this.passwordRepeatError = '';
       }
     },
-    'v$.city.$model'(newVal) {
-      if (newVal) {
-        if (!this.v$.city.required.$model || this.v$.city.minLength.$model || this.v$.city.maxLength.$model) {
-          this.cityError = "Miasto musi mieć od 3 do 20 znaków";
-        }
-      } else {
+    'v$.city.$model'() {
+      if (!this.v$.city.required.$model || this.v$.city.minLength.$model || this.v$.city.maxLength.$model) {
+        this.cityError = "Miasto musi mieć od 3 do 20 znaków";
+      }
+      else {
         this.cityError = '';
       }
     },
+  },
+  mounted() {
+    this.emitter.on('date', (data) => {
+      console.log(data);
+      this.dateOfBirth = data.date;
+    });
+    console.log("birth date: ", this.dateOfBirth);
   }
 }
+
 </script>
 
 <style>

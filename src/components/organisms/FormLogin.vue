@@ -91,7 +91,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .input-row input[type="email"],
 .input-row input[type="password"] {
   width: 25%;

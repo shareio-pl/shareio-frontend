@@ -1,8 +1,9 @@
 <template>
   <div class="date-picker">
-    <VueDatePicker class="datepicker" v-model="date" :placeholder="placeholder" utc @update:model-value="handleDate"
-      ref="datepicker" :enable-time-picker="false" :max-date=current_date_minus_eighteen
+    <VueDatePicker :class="['datepicker', { 'error-border': error.active }]" v-model="date" :placeholder="placeholder" utc
+      @update:model-value="handleDate" ref="datepicker" :enable-time-picker="false" :max-date=current_date_minus_eighteen
       :start-date=current_date_minus_eighteen />
+    <p class="field-input-paragraph" v-if="error.active && error.message !== ''">{{ error.message }}</p>
   </div>
 </template>
 
@@ -31,6 +32,10 @@ export default {
       type: String,
       default: '',
     },
+    error: {
+      type: Object,
+      default: () => ({ active: false, message: "" }),
+    },
   },
   methods: {
     handleDate(value) {
@@ -56,6 +61,11 @@ export default {
 .dp__input_wrap {
   width: 250%;
   height: max-content;
+  border-bottom: 2px solid transparent
+}
+
+.dp__input_wrap:hover {
+  border-bottom: 2px solid v-bind("COLORS.NOTIFICATION_PRIMARY_FOCUS");
 }
 
 .dp__pointer {
@@ -63,5 +73,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.error-border .dp__input_wrap {
+  border-bottom: 2px solid v-bind("COLORS.NOTIFICATION_PRIMARY_ERROR") !important;
+  transition: border-bottom 1s ease-in-out;
+}
+
+.field-input-paragraph {
+  color: v-bind("COLORS.PRIMARY");
 }
 </style>

@@ -37,7 +37,8 @@ const routes = [
   {
     path: "/login",
     component: Login,
-    name: "Login - ShareIO"
+    name: "Login - ShareIO",
+    meta: { requiresLoggedOut: true },
   },
   {
     path: "/newOffer",
@@ -64,22 +65,8 @@ const routes = [
   {
     path: "/register",
     component: Register,
-    name: "Rejestracja - ShareIO"
-  },
-  {
-    path: "/date",
-    component: DatePicker,
-    name: "DatePicker"
-  },
-  {
-    path: "/register",
-    component: Register,
-    name: "Rejestracja - ShareIO"
-  },
-  {
-    path: "/date",
-    component: DatePicker,
-    name: "DatePicker"
+    name: "Rejestracja - ShareIO",
+    meta: { requiresLoggedOut: true },
   },
   {
     path: "/:catchAll(.*)",
@@ -98,11 +85,15 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth) && !localStorage.getItem('token')) {
     next({
       path: '/login',
-      query: { redirect: to.fullPath }
+    });
+  } else if (to.matched.some(record => record.meta.requiresLoggedOut) && localStorage.getItem('token')) {
+    next({
+      path: '/',
     });
   } else {
     next();
   }
+
 });
 
 export default router;

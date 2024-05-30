@@ -1,6 +1,7 @@
 <template>
   <div id="register-page">
     <Header />
+    <h1>Zarejestruj się</h1>
     <FormRegister />
   </div>
 </template>
@@ -25,6 +26,12 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 100vh;
+}
+
+h1 {
+  margin-top: 1%;
+  margin-bottom: 1%;
 }
 </style>
 

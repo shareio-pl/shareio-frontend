@@ -131,7 +131,7 @@ export default {
             let promises = this.offersIds.map(offerId =>
               axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
                 .then(response => {
-                  let category = this.categories.find(category => category.name === response.data.category);
+                  let category = this.categories.find(category => category.displayName === response.data.category);
                   if (category) {
                     category.numberOfOffers++;
                   }

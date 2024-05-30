@@ -1,6 +1,6 @@
 <template>
   <div id="AboutUs">
-    <Header/>
+    <Header />
     <img :src="image" alt="nasz zespół">
     <h1>{{ title }}</h1>
     <p>{{ text }}</p>
@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import {ABOUT_US_PAGE_IMAGE, ABOUT_US_PAGE_TEXT, COLORS, FONT_SIZES} from "../../../public/Consts";
+import { ABOUT_US_PAGE_IMAGE, ABOUT_US_PAGE_TEXT, COLORS, FONT_SIZES } from "../../../public/Consts";
 import Header from "@/components/organisms/Header.vue";
 
 export default {
   name: "AboutUs",
-  components: {Header},
+  components: { Header },
   data() {
     return {
       COLORS: COLORS,
@@ -34,6 +34,7 @@ export default {
   /*light-blue to COLORS.BUTTON_PRIMARY_NORMAL*/
   height: 100%;
   width: 100%;
+  min-height: 100vh;
 }
 
 img {

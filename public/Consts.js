@@ -1,4 +1,4 @@
-export const GATEWAY_ADDRESS = 'http://localhost:8080';
+export const GATEWAY_ADDRESS = 'http://shareio.local:8080';
 
 export const COLORS = {
   PRIMARY: '#F9EBE0',

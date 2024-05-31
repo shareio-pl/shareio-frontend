@@ -23,6 +23,12 @@ export default {
   components: {
     FontAwesomeIcon
   },
+  props: {
+    initial_image: {
+      type: String,
+      default: null
+    }
+  },
   data() {
     return {
       UploadIcon: UploadIcon,
@@ -48,7 +54,12 @@ export default {
         this.emitter.emit('error', { error: 'File is not a png' });
       }
     }
-  }
+  },
+  mounted() {
+    if (this.initial_image) {
+      this.image = this.initial_image;
+    }
+  },
 };
 </script>
 
@@ -63,12 +74,12 @@ export default {
 }
 
 #input-icon {
-  font-size: 15rem;
+  font-size: 2rem;
   cursor: pointer;
 }
 
 #input-icon-overlay {
-  font-size: 15rem;
+  font-size: 2rem;
   cursor: pointer;
   opacity: 0.5;
   position: absolute;

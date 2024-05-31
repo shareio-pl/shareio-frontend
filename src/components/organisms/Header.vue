@@ -4,38 +4,38 @@
       <div id="header_wrapper">
         <img src="../../assets/logo.png" alt="" @click="onLogoClick" class="logo">
         <div id="buttons">
-          <ButtonPrimary class="button" button-text="Ogłoszenia" @click="onOffersClick" />
-          <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick" />
-          <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick" />
-          <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick" />
+          <ButtonPrimary class="button" button-text="Ogłoszenia" @click="onOffersClick"/>
+          <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick"/>
+          <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
+          <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick"/>
         </div>
         <div id="user-data" @click="changeMenuState" v-if="!isSmallScreen">
-          <UserData :user-surname="surname" :user-first-name="name" :user-image="image" />
-          <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon" />
+          <UserData :user-surname="surname" :user-first-name="name" :user-image="image"/>
+          <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon"/>
         </div>
       </div>
     </div>
     <div id="header-drawer">
       <img src="../../assets/logo.png" alt="Logo" @click="onLogoClick" class="logo">
-      <font-awesome-icon :icon="iconHamburger" id="hamburger-icon" class="showMenu" @click="changeMenuState" />
+      <font-awesome-icon :icon="iconHamburger" id="hamburger-icon" class="showMenu" @click="changeMenuState"/>
     </div>
   </div>
 </template>
 
 <script>
-import { COLORS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
+import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import UserData from "@/components/atoms/UserData.vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faBars, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {faBars, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Header",
-  components: { FontAwesomeIcon, UserData, ButtonPrimary },
+  components: {FontAwesomeIcon, UserData, ButtonPrimary},
   data() {
     return {
       COLORS: COLORS,
@@ -88,17 +88,17 @@ export default {
         .catch(error => {
           console.error('ERROR: ', error);
 
-          this.emitter.emit('axiosError', { error: error.response.status });
+          this.emitter.emit('axiosError', {error: error.response.status});
         });
     },
     async getImageData(photoId) {
       console.log('PhotoId: ', photoId);
-      await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' }).then((response) => {
+      await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, {responseType: 'arraybuffer'}).then((response) => {
         let image_buffer = this.arrayBufferToBase64(response.data);
         this.image = `data:image/jpeg;base64,${image_buffer}`;
       }).catch(error => {
         console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', { error: error.response.status });
+        this.emitter.emit('axiosError', {error: error.response.status});
       });
     },
     arrayBufferToBase64(buffer) {

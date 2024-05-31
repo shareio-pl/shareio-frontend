@@ -3,6 +3,7 @@
     <AxiosError/>
     <DefaultError/>
     <Menu/>
+    <MenuGuest/>
     <RouterView/>
   </div>
 </template>
@@ -12,6 +13,7 @@ import {FONTS} from "../public/Consts";
 import AxiosError from "@/components/pages/AxiosError.vue";
 import DefaultError from "@/components/pages/DefaultError.vue";
 import Menu from "@/components/pages/Menu.vue";
+import MenuGuest from "@/components/pages/MenuGuest.vue";
 
 export default {
   name: "App",
@@ -19,6 +21,7 @@ export default {
     DefaultError,
     AxiosError,
     Menu,
+    MenuGuest,
   },
   data() {
     return {};

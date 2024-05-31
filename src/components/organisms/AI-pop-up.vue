@@ -3,7 +3,7 @@
     <div id="AI-pop-up">
       <FontAwesomeIcon :icon="XIcon" id="x" @click="close()"/>
       <h1>{{ title }}</h1>
-      <input type="text" placeholder="Wpisz dodatkowe informacje (jeśli nie chcesz nic dodać, kliknij Generuj)" v-model="additionalData">
+      <textarea placeholder="Wpisz dodatkowe informacje (jeśli nie chcesz nic dodać, kliknij Generuj)" v-model="additionalData"/>
       <ButtonPrimary button-text="Generuj" @click="generateDescription" id="button"/>
     </div>
   </div>
@@ -67,7 +67,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 60%;
-  height: 68%;
+  height: 72%;
   top: 10%;
   left: 20%;
   border-radius: 15px;
@@ -79,19 +79,18 @@ h1 {
   margin-top: -1.5%;
 }
 
-input {
+textarea {
   background-color: v-bind('COLORS.OFFER_FOREGROUND');
   color: v-bind('COLORS.SECONDARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');
   width: 90%;
   margin-left: 5%;
-  height: 70%;
   border-radius: 15px;
   padding-bottom: 35%;
   padding-left: 1%;
 }
 
-input::placeholder {
+textarea::placeholder {
   color: v-bind('COLORS.SECONDARY');
   font-size: v-bind('FONT_SIZES.PRIMARY');
 }

@@ -78,7 +78,7 @@ export default {
     async getOfferData() {
       try {
         let response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
-
+        console.log(response);
         this.userFirstName = response.data.ownerName;
         this.userLastName = response.data.ownerSurname;
         this.starsAmount = response.data.ownerRating;

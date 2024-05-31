@@ -1,16 +1,18 @@
 <template>
-  <div id="header" v-if="!showDrawer">
-    <div id="header_wrapper">
-      <img src="../../assets/logo.png" alt="" @click="onLogoClick" class="logo">
-      <div id="buttons">
-        <ButtonPrimary class="button" button-text="Ogłoszenia" @click="onOffersClick"/>
-        <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick"/>
-        <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
-        <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick"/>
-      </div>
-      <div id="user-data" @click="changeMenuState" v-if="!isSmallScreen">
-        <UserData :user-surname="this.surname" :user-first-name="this.name" :user-image="this.image"/>
-        <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon"/>
+  <div>
+    <div id="header" v-if="!showDrawer">
+      <div id="header_wrapper">
+        <img src="../../assets/logo.png" alt="" @click="onLogoClick" class="logo">
+        <div id="buttons">
+          <ButtonPrimary class="button" button-text="Ogłoszenia" @click="onOffersClick"/>
+          <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick"/>
+          <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
+          <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick"/>
+        </div>
+        <div id="user-data" @click="changeMenuState" v-if="!isSmallScreen">
+          <UserData :user-surname="surname" :user-first-name="name"/>
+          <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon"/>
+        </div>
       </div>
     </div>
     <div id="header-drawer">
@@ -21,14 +23,15 @@
 </template>
 
 <script>
-import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
+import {COLORS} from "../../../public/Consts";
+import {FONT_SIZES} from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import UserData from "@/components/atoms/UserData.vue";
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faBars, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import {jwtDecode} from "jwt-decode";
 
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {faBars} from "@fortawesome/free-solid-svg-icons";
+import {faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {faChevronDown} from "@fortawesome/free-solid-svg-icons";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -42,80 +45,41 @@ export default {
       iconChevronDown: faChevronDown,
       iconChevronUp: faChevronUp,
       menuIsShown: false,
-
-      surname: '',
-      name: '',
-      photoId: '',
-      image: null,
+      surname: 'Nazwisko',
+      name: 'Imię',
       isSmallScreen: false,
-    }
+    };
   },
-  methods:
-      {
-        onOffersClick() {
-          this.$router.push('/offers');
-        },
-        onMapClick() {
-          this.$router.push('/map');
-        },
-        onNewOfferClick() {
-          this.$router.push('/newOffer');
-        },
-        onAboutUsClick() {
-          this.$router.push('/about');
-        },
-        onLogoClick() {
-          this.$router.push("/");
-        },
-        changeMenuState() {
-          this.emitter.emit('change-menu');
-        },
-        async getUserData() {
-          let token = localStorage.getItem('token');
-          axios.get(GATEWAY_ADDRESS + `/user/get/${jwtDecode(token).id}`).then((response) => {
-            console.log('Logged User: ', response.data);
-            console.log('Logged image id: ', response.data.photoId.id);
-            this.name = response.data.name;
-            this.surname = response.data.surname;
-            this.photoId = response.data.photoId.id;
-            console.log('PhotoId: ', this.photoId);
-          })
-              .then(() => {
-                this.getImageData(this.photoId);
-              })
-              .catch(error => {
-                console.error('ERROR: ', error);
-
-                this.emitter.emit('axiosError', {error: error.response.status});
-              });
-        },
-        async getImageData(photoId) {
-          console.log('PhotoId: ', photoId);
-          await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, {responseType: 'arraybuffer'}).then((response) => {
-            let image_buffer = this.arrayBufferToBase64(response.data);
-            this.image = `data:image/jpeg;base64,${image_buffer}`;
-          }).catch(error => {
-            console.error('ERROR: ', error);
-            this.emitter.emit('axiosError', {error: error.response.status});
-          });
-        },
-        arrayBufferToBase64(buffer) {
-          return btoa(
-              new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
-          );
-        },
-      },
-  async mounted() {
-    if (localStorage.getItem('token')) {
-      await this.getUserData();
-    }
-
+  mounted() {
     this.emitter.on('menu-closed', () => {
       this.menuIsShown = false;
     });
     this.emitter.on('menu-opened', () => {
       this.menuIsShown = true;
     });
+  },
+  methods: {
+    onUserDataClick() {
+      // TODO: implementation
+    },
+    onOffersClick() {
+      this.$router.push('/offers');
+    },
+    onMapClick() {
+      this.$router.push('/map');
+    },
+    onNewOfferClick() {
+      this.$router.push('/newOffer');
+    },
+    onAboutUsClick() {
+      this.$router.push('/about');
+    },
+    onLogoClick() {
+      this.$router.push('/');
+    },
+    changeMenuState() {
+      this.emitter.emit('change-menu');
+    }
   },
 };
 </script>

@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     onButtonClick() {
-      console.log('Search button clicked!');
+      console.log('Search button clicked');
       this.emitter.emit('browser-change', { input: this.input, sorting: this.sorting });
     }
   },

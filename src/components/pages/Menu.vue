@@ -79,17 +79,17 @@ export default {
       // TODO: Add router push
     },
     onHelpClick() {
-      // TODO: Add router push
-      console.log('Help clicked');
+      this.$router.push("/help");
     },
     onPasswordChangeClick() {
-      // TODO: Add router push
+      this.$router.push("/changePassword");
     },
     onLogout() {
-      // TODO: Add router push
+      localStorage.removeItem('token');
+      this.$router.push('/');
     },
     onLogin() {
-      // TODO: Add router push
+      this.$router.push('/login');
     },
     onOffersClick() {
       this.$router.push('/offers');
@@ -120,7 +120,7 @@ export default {
   position: fixed;
   width: 100%;
   height: 100%;
-  background-color: rgba(249, 235, 224, 0.86);
+  background-color: rgba(249, 235, 224, 0.81);
   top: 100px;
   left: 0;
   z-index: 5;

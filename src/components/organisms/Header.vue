@@ -52,6 +52,7 @@ export default {
       isSmallScreen: false,
     }
   },
+  methods:
         {
         onOffersClick() {
           this.$router.push('/offers');

@@ -123,11 +123,11 @@ export default {
 #header_wrapper {
   display: flex;
   width: 96%;
+  margin: 0 auto;
   margin-right: 1%;
   height: 100%;
   align-items: center;
   justify-content: space-between;
-  margin: 0 auto;
 }
 
 img {

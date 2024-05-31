@@ -1,16 +1,18 @@
 <template>
-  <div id="header" v-if="!showDrawer">
-    <div id="header_wrapper">
-      <img src="../../assets/logo.png" alt="" @click="onLogoClick" class="logo">
-      <div id="buttons">
-        <ButtonPrimary class="button" button-text="Ogłoszenia" @click="onOffersClick"/>
-        <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick"/>
-        <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
-        <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick"/>
-      </div>
-      <div id="user-data" @click="changeMenuState" v-if="!isSmallScreen">
-        <UserData :user-surname="this.surname" :user-first-name="this.name" :user-image="this.image"/>
-        <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon"/>
+  <div>
+    <div id="header" v-if="!showDrawer">
+      <div id="header_wrapper">
+        <img src="../../assets/logo.png" alt="" @click="onLogoClick" class="logo">
+        <div id="buttons">
+          <ButtonPrimary class="button" button-text="Ogłoszenia" @click="onOffersClick"/>
+          <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick"/>
+          <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
+          <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick"/>
+        </div>
+        <div id="user-data" @click="changeMenuState" v-if="!isSmallScreen">
+          <UserData :user-surname="surname" :user-first-name="name" :user-image="image"/>
+          <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon"/>
+        </div>
       </div>
     </div>
     <div id="header-drawer">

@@ -2,43 +2,50 @@
   <form id="register-user" @submit.prevent="submitForm">
     <div id="register-user-data">
       <div class="input-row">
-        <FieldInput v-model="email" placeholder="Email" label="Email"
-          :error="{ active: v$.email.$error && v$.email.$dirty, message: emailError }" />
-        <FieldInput v-model="name" placeholder="Imię" label="Imię"
-          :error="{ active: v$.name.$error, message: nameError }" />
+        <FieldInput v-model="email" label="Email *"
+          :error="{ active: v$.email.$error && v$.email.$dirty, message: emailError }" displayBlankSpaceBelow=true />
+        <FieldInput v-model="name" label="Imię *" :error="{ active: v$.name.$error, message: nameError }"
+          displayBlankSpaceBelow=true />
       </div>
       <div class="input-row">
-        <FieldInput v-model="surname" placeholder="Nazwisko" label="Nazwisko"
-          :error="{ active: v$.surname.$error && v$.surname.$dirty, message: surnameError }" />
+        <FieldInput v-model="surname" label="Nazwisko *"
+          :error="{ active: v$.surname.$error && v$.surname.$dirty, message: surnameError }"
+          displayBlankSpaceBelow=true />
         <div class="date-picker-wrapper">
-          <DatePicker class="datepicker" placeholder="Data urodzenia"
+          <DatePicker class="datepicker" placeholder="Data urodzenia *"
             :error="{ active: v$.dateOfBirth.$error && v$.dateOfBirth.$dirty, message: dateOfBirthError }" />
         </div>
       </div>
       <div class="input-row">
-        <FieldInput v-model="password" placeholder="Hasło" label="Hasło" type="password"
-          :error="{ active: v$.password.$error && v$.password.$dirty, message: passwordError }" />
-        <FieldInput v-model="passwordRepeat" placeholder="Powtórz hasło" label="Powtórz hasło" type="password"
-          :error="{ active: v$.passwordRepeat.$error && v$.passwordRepeat.$dirty, message: passwordRepeatError }" />
+        <FieldInput v-model="password" label="Hasło *" type="password"
+          :error="{ active: v$.password.$error && v$.password.$dirty, message: passwordError }"
+          displayBlankSpaceBelow=true />
+        <FieldInput v-model="passwordRepeat" label="Powtórz hasło *" type="password"
+          :error="{ active: v$.passwordRepeat.$error && v$.passwordRepeat.$dirty, message: passwordRepeatError }"
+          displayBlankSpaceBelow=true />
       </div>
     </div>
     <div id="register-user-location">
       <div class="input-row">
-        <FieldInput v-model="country" placeholder="Kraj" label="Kraj" />
-        <FieldInput v-model="region" placeholder="Województwo" label="Województwo" />
+        <FieldInput v-model="country" label="Kraj *"
+          :error="{ active: v$.country.$error && v$.country.$dirty, message: countryError }"
+          displayBlankSpaceBelow=true />
+        <FieldInput v-model="region" label="Województwo *"
+          :error="{ active: v$.region.$error && v$.region.$dirty, message: regionError }" displayBlankSpaceBelow=true />
       </div>
       <div class="input-row">
-        <FieldInput v-model="city" placeholder="Miasto" label="Miasto"
-          :error="{ active: v$.city.$error && v$.city.$dirty, message: cityError }" />
-        <FieldInput v-model="street" placeholder="Ulica" label="Ulica" />
+        <FieldInput v-model="city" label="Miasto *"
+          :error="{ active: v$.city.$error && v$.city.$dirty, message: cityError }" displayBlankSpaceBelow=true />
+        <FieldInput v-model="street" label="Ulica *"
+          :error="{ active: v$.street.$error && v$.street.$dirty, message: streetError }" displayBlankSpaceBelow=true />
       </div>
       <div class="input-row">
-        <FieldInput v-model="postCode" placeholder="Kod pocztowy" label="Kod pocztowy" />
+        <FieldInput v-model="postCode" label="Kod pocztowy *"
+          :error="{ active: v$.postCode.$error && v$.postCode.$dirty, message: postCodeError }"
+          displayBlankSpaceBelow=true />
         <div class="input-row">
-          <FieldInput v-model="houseNumber" placeholder="Nr. domu" label="Nr. domu"
-            v-bind:style="{ fontSize: FONT_SIZES.SECONDARY }" />
-          <FieldInput v-model="flatNumber" placeholder="Mieszkanie" label="Mieszkanie"
-            v-bind:style="{ fontSize: FONT_SIZES.SECONDARY }" />
+          <FieldInput v-model="houseNumber" label="Nr. domu" displayBlankSpaceBelow=true />
+          <FieldInput v-model="flatNumber" label="Mieszkanie" displayBlankSpaceBelow=true />
         </div>
       </div>
     </div>
@@ -88,7 +95,13 @@ export default {
       dateOfBirthError: "",
       passwordError: "",
       passwordRepeatError: "",
+
+      countryError: "",
+      regionError: "",
       cityError: "",
+      streetError: "",
+      postCodeError: "",
+
     };
   },
   validations() {
@@ -99,11 +112,13 @@ export default {
       dateOfBirth: { required },
       password: { required, minLength: minLength(8), maxLength: maxLength(20) },
       passwordRepeat: { required, sameAsPassword: sameAs(this.password) },
+      country: { required },
+      region: { required },
+      street: { required },
+      postCode: { required },
       city: { required, minLength: minLength(3), maxLength: maxLength(20) },
     }
   },
-  // you might want to move it into main.js like router, I think
-  // just haven't checked it yet
   setup() {
     const v$ = useVuelidate();
     return { v$ };
@@ -205,6 +220,38 @@ export default {
         this.cityError = '';
       }
     },
+    'v$.country.$model'() {
+      if (!this.v$.country.required.$model) {
+        this.countryError = "Kraj jest wymagany";
+      }
+      else {
+        this.countryError = '';
+      }
+    },
+    'v$.region.$model'() {
+      if (!this.v$.region.required.$model) {
+        this.regionError = "Województwo jest wymagane";
+      }
+      else {
+        this.regionError = '';
+      }
+    },
+    'v$.street.$model'() {
+      if (!this.v$.street.required.$model) {
+        this.streetError = "Ulica jest wymagana";
+      }
+      else {
+        this.streetError = '';
+      }
+    },
+    'v$.postCode.$model'() {
+      if (!this.v$.postCode.required.$model) {
+        this.postCodeError = "Kod pocztowy jest wymagany";
+      }
+      else {
+        this.postCodeError = '';
+      }
+    },
   },
   mounted() {
     this.emitter.on('date', (data) => {
@@ -263,5 +310,4 @@ export default {
   --dp-background-color: v-bind("COLORS.OFFER_BACKGROUND");
   --dp-font-family: v-bind("FONTS.PRIMARY");
   --dp-common-padding: 0.75rem;
-}
-</style>
+}</style>

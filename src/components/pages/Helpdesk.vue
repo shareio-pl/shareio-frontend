@@ -5,7 +5,7 @@
     <h1>{{ title }}</h1>
     <div id="email">
       <input type="text" id="mailTopic" placeholder="Temat..." v-model="mailTopic">
-      <input type="text" id="mailText" placeholder="Treść..." v-model="mailText">
+      <textarea id="mailText" placeholder="Treść..." v-model="mailText"/>
       <ButtonPrimary button-text="Wyślij" id="button" @click="sendMail"/>
     </div>
     <p>FAQ</p>
@@ -99,7 +99,7 @@ h1 {
   margin-top: 1%;
 }
 
-input {
+input, textarea{
   background-color: v-bind('COLORS.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
   font-size: v-bind('FONT_SIZES.IMPORTANT');
@@ -108,6 +108,11 @@ input {
 }
 
 input::placeholder {
+  color: v-bind('COLORS.TEXT_SECONDARY');
+  font-size: v-bind('FONT_SIZES.IMPORTANT');
+}
+
+textarea::placeholder{
   color: v-bind('COLORS.TEXT_SECONDARY');
   font-size: v-bind('FONT_SIZES.IMPORTANT');
 }

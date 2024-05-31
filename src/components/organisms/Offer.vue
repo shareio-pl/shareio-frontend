@@ -246,6 +246,7 @@ export default {
   border-top-right-radius: 25px;
   border-bottom-left-radius: 25px;
   overflow: hidden;
+  z-index: 1;
 }
 
 .offer-right-button {
@@ -256,7 +257,6 @@ export default {
 @media screen and (max-width: 450px) {
   .offer-right-map {
     margin-right: 33%;
-    width: 75%;
   }
 }
 </style>

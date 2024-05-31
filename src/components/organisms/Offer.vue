@@ -198,10 +198,9 @@ export default {
   async mounted() {
     let token = localStorage.getItem('token');
     if (token) {
-      this.userId = jwtDecode(token).userId;
+      this.userId = jwtDecode(token).id;
     }
     await this.getOfferData();
-    console.log('User ID: ', this.userId);
     this.getTimeUntilUnreserved();
     setInterval(this.getTimeUntilUnreserved, 1000);
   },

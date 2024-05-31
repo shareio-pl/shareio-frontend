@@ -2,40 +2,40 @@
   <div v-if="showMenu" @click='changeStateOfMenu' :class="['menu-page', { sticky: isSticky }]" ref="menuPage">
     <div class="menu-items">
       <div class="pages-menu">
-        <hr class="firstLine" />
+        <hr class="firstLine"/>
         <div id="user-data">
           <UserData ref="userDataComp" class="user" :user-surname="surname" :user-first-name="name"
-            style="display: flex; flex-direction: column;" />
+                    style="display: flex; flex-direction: column;"/>
         </div>
-        <hr />
+        <hr/>
         <span @click="onOffersClick">Oferty</span>
-        <hr />
+        <hr/>
         <span @click="onMapClick">Mapa</span>
-        <hr />
+        <hr/>
         <span @click="onAddOfferClick">Nowa oferta</span>
-        <hr />
+        <hr/>
         <span @click="onAboutUsClick">O nas</span>
-        <hr />
+        <hr/>
       </div>
       <span @click="onMyAccountClick">Moje konto</span>
-      <hr class="conditionalLines" />
+      <hr class="conditionalLines"/>
       <span @click="onHelpClick">Pomoc</span>
-      <hr class="conditionalLines" />
+      <hr class="conditionalLines"/>
       <span @click="onPasswordChangeClick">Zmień hasło</span>
-      <hr />
+      <hr/>
       <span @click="onLogout">Wyloguj się</span>
     </div>
   </div>
 </template>
 
 <script>
-import { FONT_SIZES, COLORS } from "../../../public/Consts";
+import {FONT_SIZES, COLORS} from "../../../public/Consts";
 import UserData from "@/components/atoms/UserData.vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Menu",
-  components: { UserData },
+  components: {UserData},
   data() {
     return {
       FONT_SIZES: FONT_SIZES,
@@ -86,7 +86,12 @@ export default {
     },
     onLogout() {
       localStorage.removeItem('token');
-      this.$router.push('/');
+
+      if (this.$route.path === '/') {
+        window.location.reload();
+      } else {
+        this.$router.push('/');
+      }
     },
     onLogin() {
       this.$router.push('/login');
@@ -136,7 +141,7 @@ export default {
   white-space: nowrap;
 }
 
-.menu-items>span {
+.menu-items > span {
   display: flex;
   flex-direction: column;
   align-self: flex-end;
@@ -147,12 +152,12 @@ export default {
 }
 
 @media screen and (min-width: 1200px) {
-  .menu-items>span {
+  .menu-items > span {
     font-size: v-bind('FONT_SIZES.PRIMARY');
   }
 }
 
-.menu-items>span:hover {
+.menu-items > span:hover {
   text-decoration: underline;
 }
 
@@ -163,7 +168,7 @@ hr {
   border-width: 2px;
 }
 
-.pages-menu>span {
+.pages-menu > span {
   display: flex;
   flex-direction: column;
   color: v-bind('COLORS.TEXT_SECONDARY');
@@ -172,7 +177,7 @@ hr {
   font-weight: bold;
 }
 
-.pages-menu>span:hover {
+.pages-menu > span:hover {
   text-decoration: underline;
 }
 
@@ -203,7 +208,7 @@ hr {
     margin-left: 0;
   }
 
-  .menu-items>span {
+  .menu-items > span {
     align-self: auto;
   }
 

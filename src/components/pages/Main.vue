@@ -2,10 +2,12 @@
   <div id="main-page">
     <Header/>
     <div id="closest-offer" v-if="closestOffer">
-      <p>OFERTA NAJBLIŻEJ CIEBIE</p>
+      <p v-if="token">OFERTA NAJBLIŻEJ CIEBIE</p>
+      <p v-else>REKOMENDOWANA OFERTA</p>
       <Offer :id="closestOffer"/>
     </div>
-    <h1>Najnowsze w Twojej okolicy</h1>
+    <h1 v-if="token">Najnowsze w Twojej okolicy</h1>
+    <h1 v-else>Najnowsze oferty</h1>
     <div id="newest-offers">
       <span v-for="pair in offerPairs" :key="pair">
         <OfferPreview :is-new="true" :id="pair[0]" class="bigPreview"/>
@@ -33,36 +35,72 @@ export default {
       closestOffer: '',
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
+      token: '',
+    }
+  },
+  methods: {
+    getClosestOffer() {
+      axios.get(GATEWAY_ADDRESS + `/offer/getClosestOfferForUser/${localStorage.getItem('userId')}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.token
+        }
+      }).then((response) => {
+        console.log('Closest offer id: ', response.data);
+        this.closestOffer = response.data;
+      }).catch((error) => {
+        console.error('ERROR: ', error);
+
+        this.emitter.emit('axiosError', {error: error.response.status});
+      });
+    },
+    getNewestOffers() { //TODO: check if it works after backend fix
+      axios.get(GATEWAY_ADDRESS + '/offer/getNewest').then((response) => {
+        console.log('Newest offers: ', response.data);
+        this.offersIds = response.data;
+
+        let closestOfferIndex = this.offersIds.indexOf(this.closestOffer);
+        if (closestOfferIndex > -1) {
+          this.offersIds.splice(closestOfferIndex, 1);
+        }
+
+        let numberOfOffers;
+        if (this.offersIds.length % 2 === 0) {
+          numberOfOffers = this.offersIds.length;
+        } else {
+          numberOfOffers = this.offersIds.length - 1;
+        }
+
+        for (let offerId = 0; offerId < numberOfOffers; offerId += 2) {
+          this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
+        }
+      }).catch(error => {
+        console.error('ERROR: ', error);
+
+        this.emitter.emit('axiosError', {error: error.response.status});
+      });
+    },
+    getRecommendedOffer() {
+      axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers').then((response) => {
+        this.closestOffer = response.data[0];
+      }).catch(error => {
+        console.error('ERROR: ', error);
+
+        this.emitter.emit('axiosError', {error: error.response.status});
+      });
     }
   },
   mounted() {
-    axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds').then((response) => {
-      console.log('Offers: ', response.data.offerIds);
-      this.offersIds = response.data.offerIds;
-      this.closestOffer = this.offersIds[1]; //TODO: Change to endpoint call
+    if (localStorage.getItem('token')) {
+      this.token = localStorage.getItem('token');
 
-      let closestOfferIndex = this.offersIds.indexOf(this.closestOffer);
-      if (closestOfferIndex > -1) {
-        this.offersIds.splice(closestOfferIndex, 1);
-      }
-
-      let numberOfOffers;
-      if (this.offersIds.length % 2 === 0) {
-        numberOfOffers = this.offersIds.length;
-      } else {
-        numberOfOffers = this.offersIds.length - 1;
-      }
-
-      for (let offerId = 0; offerId < numberOfOffers; offerId += 2) {
-        this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
-      }
-
-    }).catch(error => {
-      console.error('ERROR: ', error);
-
-      this.emitter.emit('axiosError', {error: error.response.status});
-    });
-  }
+      this.getClosestOffer();
+      this.getNewestOffers();
+    } else {
+      this.getRecommendedOffer();
+      this.getNewestOffers();
+    }
+  },
 }
 </script>
 

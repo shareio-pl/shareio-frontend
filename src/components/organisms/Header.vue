@@ -23,6 +23,7 @@ import UserData from "@/components/atoms/UserData.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -37,6 +38,7 @@ export default {
       menuIsShown: false,
       surname: '',
       name: '',
+      photoId: '',
       image: null,
     };
   },
@@ -60,25 +62,32 @@ export default {
         changeMenuState() {
           this.emitter.emit('change-menu');
         },
-        getUserData() {
-          axios.get(GATEWAY_ADDRESS + `/user/get/${localStorage.getItem('userId')}`).then((response) => {
+        async getUserData() {
+          let token = localStorage.getItem('token');
+          axios.get(GATEWAY_ADDRESS + `/user/get/${jwtDecode(token).id}`).then((response) => {
             console.log('Logged User: ', response.data);
+            console.log('Logged image id: ', response.data.photoId.id);
             this.name = response.data.name;
             this.surname = response.data.surname;
-
-            return response.data.photoId;
-          }).then((imageId) => {
-            // TODO: fix CORS
-            axios.get(GATEWAY_ADDRESS + `/image/get/${imageId}`, {responseType: 'arraybuffer'}).then((response) => {
-              this.image = this.arrayBufferToBase64(response.data);
-            }).catch(error => {
-              console.error('ERROR: ', error);
-
-              this.emitter.emit('axiosError', {error: error.response.status});
-            })
-          }).catch(error => {
+            this.photoId = response.data.photoId.id;
+            console.log('PhotoId: ', this.photoId);          
+          })
+          .then(() => {
+            this.getImageData(this.photoId);
+          })
+          .catch(error => {
             console.error('ERROR: ', error);
 
+            this.emitter.emit('axiosError', {error: error.response.status});
+          });
+        },
+        async getImageData(photoId) {
+          console.log('PhotoId: ', photoId);
+          await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, {responseType: 'arraybuffer'}).then((response) => {
+            let image_buffer = this.arrayBufferToBase64(response.data);
+            this.image = `data:image/jpeg;base64,${image_buffer}`;
+          }).catch(error => {
+            console.error('ERROR: ', error);
             this.emitter.emit('axiosError', {error: error.response.status});
           });
         },
@@ -88,9 +97,9 @@ export default {
           );
         },
       },
-  mounted() {
+  async mounted() {
     if (localStorage.getItem('token')) {
-      this.getUserData();
+      await this.getUserData();
     }
 
     this.emitter.on('menu-closed', () => {

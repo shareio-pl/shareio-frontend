@@ -122,7 +122,7 @@ p {
   font-size: calc(2px + 1.6vw);
   color: v-bind('COLORS.TEXT_PRIMARY');
   width: 18%;
-  margin: -1% 5%;
+  margin: -1.5% 3.5%;
   border-radius: 25px;
   padding: 5px;
   z-index: 2;

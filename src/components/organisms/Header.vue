@@ -3,32 +3,31 @@
     <div id="header_wrapper">
       <img src="../../assets/logo.png" @click="onLogoClick">
       <div id="buttons">
-        <ButtonPrimary class="button" button-text="Ogłoszenia" @click="onOffersClick" />
-        <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick" />
-        <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick" />
-        <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick" />
+        <ButtonPrimary class="button" button-text="Ogłoszenia" @click="onOffersClick"/>
+        <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick"/>
+        <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
+        <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick"/>
       </div>
       <div id="user-data" @click="changeMenuState">
-        <UserData :user-surname="this.surname" :user-first-name="this.name" />
-        <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon" />
+        <UserData :user-surname="this.surname" :user-first-name="this.name" :user-image="image"/>
+        <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { COLORS } from "../../../public/Consts";
-import { FONT_SIZES } from "../../../public/Consts";
+import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import UserData from "@/components/atoms/UserData.vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Header",
-  components: { FontAwesomeIcon, UserData, ButtonPrimary },
+  components: {FontAwesomeIcon, UserData, ButtonPrimary},
   data() {
     return {
       COLORS: COLORS,
@@ -36,35 +35,64 @@ export default {
       iconChevronDown: faChevronDown,
       iconChevronUp: faChevronUp,
       menuIsShown: false,
-      surname: 'Nazwisko',
-      name: 'Imię',
+      surname: '',
+      name: '',
+      image: null,
     };
   },
   methods:
-  {
-    onUserDataClick() {
-      // TODO: implementation
-    },
-    onOffersClick() {
-      this.$router.push('/offers');
-    },
-    onMapClick() {
-      this.$router.push('/map');
-    },
-    onNewOfferClick() {
-      this.$router.push('/newOffer');
-    },
-    onAboutUsClick() {
-      this.$router.push('/about');
-    },
-    onLogoClick() {
-      this.$router.push("/");
-    },
-    changeMenuState() {
-      this.emitter.emit('change-menu');
-    }
-  },
+      {
+        onOffersClick() {
+          this.$router.push('/offers');
+        },
+        onMapClick() {
+          this.$router.push('/map');
+        },
+        onNewOfferClick() {
+          this.$router.push('/newOffer');
+        },
+        onAboutUsClick() {
+          this.$router.push('/about');
+        },
+        onLogoClick() {
+          this.$router.push("/");
+        },
+        changeMenuState() {
+          this.emitter.emit('change-menu');
+        },
+        getUserData() {
+          axios.get(GATEWAY_ADDRESS + `/user/get/${localStorage.getItem('userId')}`).then((response) => {
+            console.log('Logged User: ', response.data);
+            this.name = response.data.name;
+            this.surname = response.data.surname;
+
+            return response.data.photoId;
+          }).then((imageId) => {
+            // TODO: fix CORS
+            axios.get(GATEWAY_ADDRESS + `/image/get/${imageId}`, {responseType: 'arraybuffer'}).then((response) => {
+              this.image = this.arrayBufferToBase64(response.data);
+            }).catch(error => {
+              console.error('ERROR: ', error);
+
+              this.emitter.emit('axiosError', {error: error.response.status});
+            })
+          }).catch(error => {
+            console.error('ERROR: ', error);
+
+            this.emitter.emit('axiosError', {error: error.response.status});
+          });
+        },
+        arrayBufferToBase64(buffer) {
+          return btoa(
+              new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+          );
+        },
+      },
   mounted() {
+    if (localStorage.getItem('token')) {
+      this.getUserData();
+    }
+
     this.emitter.on('menu-closed', () => {
       this.menuIsShown = false;
     });

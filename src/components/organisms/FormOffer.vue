@@ -93,7 +93,7 @@ export default {
   validations() {
     return {
       offerTitle: {required, minLength: minLength(5)},
-      offerDescription: {required, minLength: minLength(20), maxLength: maxLength(255)},
+      offerDescription: {required, minLength: minLength(20), maxLength: maxLength(425)},
       offerCity: {required, minLength: minLength(3)},
       offerStreet: {required, minLength: minLength(3)},
       offerHomeNumber: {required, minLength: minLength(1)},

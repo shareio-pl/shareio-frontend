@@ -46,8 +46,10 @@ import Stars from "@/components/atoms/Stars.vue";
 import MapPreview from "@/components/atoms/MapPreview.vue";
 import ImageLoadingAnimation from "@/components/atoms/ImageLoadingAnimation.vue";
 
-import axios from 'axios'
-import "leaflet/dist/leaflet.css"
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+import "leaflet/dist/leaflet.css";
+
 import { COLORS } from "../../../public/Consts";
 import { FONT_SIZES } from "../../../public/Consts";
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
@@ -194,8 +196,11 @@ export default {
     },
   },
   async mounted() {
+    let token = localStorage.getItem('token');
+    if (token) {
+      this.userId = jwtDecode(token).userId;
+    }
     await this.getOfferData();
-    this.userId = localStorage.getItem('userId');
     console.log('User ID: ', this.userId);
     this.getTimeUntilUnreserved();
     setInterval(this.getTimeUntilUnreserved, 1000);

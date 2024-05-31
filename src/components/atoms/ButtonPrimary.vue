@@ -25,13 +25,14 @@ export default {
 
 <style scoped>
 .button-primary {
-  width: 10%;
+  width: calc(15% + 0.4vw);
   height: 45px;
   margin-left: 2%;
   border-radius: 20px;
   background-color: v-bind('COLORS.BUTTON_PRIMARY_NORMAL');
   color: v-bind('COLORS.TEXT_PRIMARY');
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc( 7px + 1.1vw );
+  line-height: 14px;
 }
 
 .button-primary:hover {

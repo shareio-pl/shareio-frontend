@@ -135,6 +135,11 @@ export default {
         } else if (this.v$.offerHomeNumber.$error) {
           errorMessage += this.offerHomeNumberError + ', ';
         } else if (this.v$.offerDescription.$error) {
+          if (this.offerDescription.length < this.v$.offerDescription.minLength.$params.min) {
+            this.offerDescriptionError = `Opis musi mieć co najmniej ${this.v$.offerDescription.minLength.$params.min} znaków`;
+          } else if (this.offerDescription.length > this.v$.offerDescription.maxLength.$params.max) {
+            this.offerDescriptionError = `Opis musi mieć co najwyżej ${this.v$.offerDescription.maxLength.$params.max} znaków`;
+          }
           errorMessage += this.offerDescriptionError + ', ';
         } else if (this.category === '') {
           errorMessage += 'Kategoria jest obowiązkowa, ';

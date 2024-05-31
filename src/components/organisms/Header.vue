@@ -53,7 +53,7 @@ export default {
     }
   },
   methods:
-      {
+        {
         onOffersClick() {
           this.$router.push('/offers');
         },
@@ -87,7 +87,6 @@ export default {
               })
               .catch(error => {
                 console.error('ERROR: ', error);
-
                 this.emitter.emit('axiosError', {error: error.response.status});
               });
         },
@@ -129,6 +128,13 @@ export default {
     width: 100%;
     height: 100px;
     background-color: v-bind('COLORS.PRIMARY');
+  }
+
+  #arrow-icon {
+    font-size: v-bind('FONT_SIZES.IMPORTANT');
+    color: v-bind('COLORS.TEXT_SECONDARY');
+    padding-left: 1em;
+    box-sizing: border-box;
   }
 
   #header_wrapper {

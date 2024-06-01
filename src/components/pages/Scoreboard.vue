@@ -7,6 +7,7 @@
         <div class="column-title2">Wynik</div>
         <div class="column-title3">Użytkownik</div>
       </div>
+      <!-- TODO change to topUsers after tests -->
       <ScoreboardPosition
           v-for="(user, index) in topUsersMock"
           :key="user.userId"
@@ -16,23 +17,23 @@
           :name="user.name"
           :position="index + 1"
       />
-      <Dots class="middleDots"/>
-      <div v-if="currentUser && !isCurrentUserInTopUsers" class="current-user-row">
+      <Dots v-if="!isCurrentUserInTopUsers"/>
+      <div v-if="!isCurrentUserInTopUsers" class="current-user-row">
         <ScoreboardPosition
             :score="currentUser.score"
             :user-id="currentUser.userId"
             :surname="currentUser.surname"
             :name="currentUser.name"
-            :position="positionOutsideTopTen"
+            :position="positionOfUser"
         />
       </div>
-      <Dots class="endingDots"/>
+      <Dots v-if="!isCurrentUserInTopUsers & isCurrentUserLast"/>
     </div>
   </div>
 </template>
 
 <script>
-import { COLORS, FONT_SIZES } from "../../../public/Consts";
+import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
 import Header from "@/components/organisms/Header.vue";
 import ScoreboardPosition from "@/components/atoms/ScoreboardPosition.vue";
 import axios from "axios";
@@ -48,8 +49,9 @@ export default {
       FONT_SIZES: FONT_SIZES,
       topUsersMock: this.generateMockData(),
       topUsers: [],
-      currentUser: { userId: '22', score: '222', surname: 'Taylor', name: 'Sailor' }, // : null
-      positionOutsideTopTen: 0
+      currentUser: { userId: '1', score: '666', surname: 'Taylor', name: 'Sailor' }, // : null [FOR TESTING] TODO get curr user info
+      positionOfUser: 22,
+      lastPosition: 22,                                                                 // TODO get LastPosition?
     }
   },
   async created() {
@@ -59,32 +61,29 @@ export default {
   computed: {
     isCurrentUserInTopUsers() {
       return this.topUsers.some(user => user.userId === this.currentUser.userId);
+    },
+    isCurrentUserLast() {
+      return this.lastPosition - this.positionOfUser
     }
   },
   methods: {
     async fetchTopUsers() {
-      try {
-        const response = await axios.get('/offer/getTopScoreUserList');
-        this.topUsers = response.data.slice(0, 10);
-      } catch (error) {
-        console.error('Error fetching top users:', error);
-      }
+      axios.get(GATEWAY_ADDRESS + `/offer/getTopScoreUserList`).then(response => {
+            this.topUsers = response.data;
+          }).catch(error => {
+        console.error('Error fetching top users: ', error);
+        this.emitter.emit('axiosError', {error: error.response.status});
+      });
     },
     async fetchCurrentUser() {
-      try {
-        const response = await axios.get('/user/getCurrentUserScore'); // Endpoint to get current user's score
+      axios.get(GATEWAY_ADDRESS + `/offer/getScore/${this.currentUser.userId}`).then(response => {
         this.currentUser = response.data;
-
-        if (!this.isCurrentUserInTopUsers) {
-          const allUsersResponse = await axios.get('/offer/getAllScores');
-          const allUsers = allUsersResponse.data;
-          const currentUserRank = allUsers.findIndex(user => user.userId === this.currentUser.userId) + 1;
-          this.positionOutsideTopTen = currentUserRank;
-        }
-      } catch (error) {
-        console.error('Error fetching current user:', error);
-      }
+      }).catch(error => {
+        console.error('Error fetching current user: ', error);
+        this.emitter.emit('axiosError', {error: error.response.status});
+      });
     },
+    // FOR TESTING
     generateMockData() {
       return [
         { userId: '1', score: '100', surname: 'Smith', name: 'John' },

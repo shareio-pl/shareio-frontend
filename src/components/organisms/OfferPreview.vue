@@ -66,9 +66,6 @@ export default {
   },
   mounted() {
     this.getOfferData();
-    if (this.reviewId !== null) {
-      this.emitter.emit('review-not-done', { id: this.id });
-    }
   },
   methods: {
     navigateToOfferPage() {

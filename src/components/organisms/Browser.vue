@@ -34,6 +34,7 @@ export default {
 
     this.emitter.on('sortChange', (data) =>
     {
+      console.log('Sort change event received', data);
       this.sorting = data.option;
     });
   },

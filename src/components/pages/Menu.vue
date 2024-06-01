@@ -1,30 +1,32 @@
 <template>
   <div v-if="showMenu" @click='changeStateOfMenu' :class="['menu-page', { sticky: isSticky }]" ref="menuPage">
-    <div class="menu-items">
-      <div class="pages-menu">
-        <hr class="firstLine"/>
-        <div id="user-data">
-          <UserData ref="userDataComp" class="user" :user-surname="surname" :user-first-name="name"
-                    style="display: flex; flex-direction: column;"/>
+      <div class="menu-items">
+        <div class="pages-menu">
+          <hr class="firstLine"/>
+          <div v-if="isLoggedIn"> id="user-data">
+            <UserData ref="userDataComp" class="user" :user-surname="surname" :user-first-name="name"
+                      style="display: flex; flex-direction: column;"/>
+          </div>
+          <hr v-if="isLoggedIn"/>
+          <span @click="onOffersClick">Ogłoszenia</span>
+          <hr/>
+          <span @click="onMapClick">Mapa</span>
+          <hr/>
+          <span @click="onAddOfferClick">Nowa oferta</span>
+          <hr/>
+          <span @click="onAboutUsClick">O nas</span>
+          <hr/>
         </div>
+        <span v-if="isLoggedIn" @click="onMyAccountClick">Moje konto</span>
+        <hr v-if="isLoggedIn" class="conditionalLines"/>
+        <span v-if="isLoggedIn" @click="onHelpClick">Pomoc</span>
+        <hr v-if="isLoggedIn" class="conditionalLines"/>
+        <span v-if="isLoggedIn" @click="onPasswordChangeClick">Zmień hasło</span>
+        <span v-else @click="onLogin">Zaloguj się</span>
         <hr/>
-        <span @click="onOffersClick">Oferty</span>
-        <hr/>
-        <span @click="onMapClick">Mapa</span>
-        <hr/>
-        <span @click="onAddOfferClick">Nowa oferta</span>
-        <hr/>
-        <span @click="onAboutUsClick">O nas</span>
-        <hr/>
+        <span v-if="isLoggedIn" @click="onLogout">Wyloguj się</span>
+        <span v-else @click="onRegister">Zarejestruj się</span>
       </div>
-      <span @click="onMyAccountClick">Moje konto</span>
-      <hr class="conditionalLines"/>
-      <span @click="onHelpClick">Pomoc</span>
-      <hr class="conditionalLines"/>
-      <span @click="onPasswordChangeClick">Zmień hasło</span>
-      <hr/>
-      <span @click="onLogout">Wyloguj się</span>
-    </div>
   </div>
 </template>
 
@@ -96,6 +98,9 @@ export default {
     onLogin() {
       this.$router.push('/login');
     },
+    onRegister() {
+      this.$router.push('/register');
+    },
     onOffersClick() {
       this.$router.push('/offers');
     },
@@ -116,6 +121,11 @@ export default {
     this.$nextTick(() => {
       this.setupUserPictureElement();
     });
+  },
+  computed: {
+    isLoggedIn() {
+      return !!localStorage.getItem('token');
+    }
   },
 };
 </script>
@@ -213,7 +223,7 @@ hr {
   }
 
   .firstLine {
-    margin-top: 0%;
+    margin-top: 0;
   }
 }
 </style>

@@ -3,6 +3,7 @@
     <Header />
     <h1>Zaloguj się</h1>
     <FormLogin />
+    <span @click="onRegister">Nie posiadasz konta? Zarejestruj się</span>
   </div>
 </template>
 
@@ -16,8 +17,14 @@ export default {
   components: {
     Header,
     FormLogin,
+  },
+  methods: {
+    onRegister() {
+      this.$router.push('/register');
+    },
   }
 }
+
 </script>
 
 <style scoped>
@@ -30,6 +37,11 @@ export default {
 }
 h1 {
   margin-top: 1%;
+}
+
+span {
+  margin-top: 5%;
+  cursor: pointer;
 }
 
 </style>

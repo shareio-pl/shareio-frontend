@@ -27,9 +27,11 @@
     </div>
     <div id="register-user-location">
       <div class="input-row">
-        <FieldInput v-model="country" label="Kraj *"
+        <DropdownSelect :options="COUNTRIES" type="country" placeholder="Polska" isForCountries=true
+          style="width: 48%;" />
+        <!--<FieldInput v-model="country" label="Kraj *"
           :error="{ active: v$.country.$error && v$.country.$dirty, message: countryError }"
-          displayBlankSpaceBelow=true />
+          displayBlankSpaceBelow=true />-->
         <FieldInput v-model="region" label="Województwo *"
           :error="{ active: v$.region.$error && v$.region.$dirty, message: regionError }" displayBlankSpaceBelow=true />
       </div>
@@ -49,30 +51,33 @@
         </div>
       </div>
     </div>
-    <p :style="{ color: COLORS.PRIMARY }">'*' - pole wymagane </p>
+    <p class="info" :style="{ color: COLORS.PRIMARY }">'*' - pole wymagane </p>
     <ButtonPrimary buttonText="Zarejestruj" style="margin-left:0;" />
   </form>
 </template>
 
 <script>
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
-import { FONT_SIZES, COLORS, FONTS } from "../../../public/Consts";
+import { FONT_SIZES, COLORS, FONTS, COUNTRIES_LIST } from "../../../public/Consts";
 import { required, minLength, maxLength, email, sameAs } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+
 import axios from 'axios';
 
 import DatePicker from "@/components/atoms/DatePicker.vue";
 import FieldInput from "@/components/atoms/FieldInput.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
+import DropdownSelect from "@/components/atoms/DropdownSelect.vue";
 
 export default {
   name: "FormRegister",
-  components: { FieldInput, DatePicker, ButtonPrimary },
+  components: { FieldInput, DatePicker, ButtonPrimary, DropdownSelect },
   data() {
     return {
       FONT_SIZES: FONT_SIZES,
       COLORS: COLORS,
       FONTS: FONTS,
+      COUNTRIES: COUNTRIES_LIST,
 
       name: null,
       surname: null,
@@ -81,7 +86,7 @@ export default {
       email: null,
       dateOfBirth: null,
 
-      country: null,
+      country: "Polska",
       region: null,
       city: null,
       street: null,
@@ -110,7 +115,7 @@ export default {
       name: { required, minLength: minLength(3), maxLength: maxLength(20) },
       surname: { required, minLength: minLength(3), maxLength: maxLength(20) },
       dateOfBirth: { required },
-      password: { required, minLength: minLength(8), maxLength: maxLength(20) },
+      password: { required, minLength: minLength(6), maxLength: maxLength(20) },
       passwordRepeat: { required, sameAsPassword: sameAs(this.password) },
       country: { required },
       region: { required },
@@ -148,6 +153,8 @@ export default {
       console.log("submitForm");
       this.v$.$validate();
       if (this.v$.$error) {
+        console.log("Validation error");
+        console.log("Kraj: ", this.country);
         return null;
       }
       let data = this.prepareDataToSend();
@@ -258,7 +265,11 @@ export default {
       console.log(data);
       this.dateOfBirth = data.date;
     });
-    console.log("birth date: ", this.dateOfBirth);
+    this.emitter.on('dropdown-change', (data) => {
+      console.log(data);
+      this.country = data.option;
+      console.log(this.country);
+    });
   }
 }
 
@@ -302,6 +313,14 @@ export default {
   width: 48%;
 }
 
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: start;
+  margin-left: 25%;
+}
+
 .dp__theme_light {
   width: 40%;
   height: 150%;
@@ -310,4 +329,5 @@ export default {
   --dp-background-color: v-bind("COLORS.OFFER_BACKGROUND");
   --dp-font-family: v-bind("FONTS.PRIMARY");
   --dp-common-padding: 0.75rem;
-}</style>
+}
+</style>

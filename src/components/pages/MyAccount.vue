@@ -1,16 +1,16 @@
 <template>
   <div id="my-account-page">
     <Header />
-    <div id="my-account-content" v-if="id">
+    <div id="my-account-content" v-if="id" style="align-items: center;">
       <div id="my-account-owner">
         <OwnerData :id="id" displaySelector=true />
       </div>
       <div id="my-account-offers">
         <div id="my-reserved-offers">
-          <p> Zarezerwowane oferty </p>
+          <h1> Zarezerwowane oferty </h1>
           <span v-if="reservedOffers">
             <span v-for="offer in reservedOffers" :key="offer">
-              <OfferPreview :id="offer" />
+              <OfferReview :id="offer" />
             </span>
             <span v-if="reservedOffers.length === 0">
               <p> Brak zarezerwowanych ofert </p>
@@ -18,10 +18,10 @@
           </span>
         </div>
         <div id="my-created-offers">
-          <p> Stworzone oferty </p>
+          <h1> Wystawione oferty </h1>
           <span v-if="createdOffers">
             <span v-for="offer in createdOffers" :key="offer">
-              <OfferPreview :id="offer" />
+              <OfferReview :id="offer" />
             </span>
             <span v-if="createdOffers.length === 0">
               <p> Brak stworzonych ofert </p>
@@ -29,10 +29,10 @@
           </span>
         </div>
         <div id="my-ended-offers">
-          <p> Zakończone oferty </p>
+          <h1> Zakończone oferty </h1>
           <span v-if="endedOffers">
             <span v-for="offer in endedOffers" :key="offer.id">
-              <OfferPreview :id="offer" />
+              <OfferReview :id="offer" />
             </span>
             <span v-if="endedOffers.length === 0">
               <p> Brak zakończonych ofert </p>
@@ -47,7 +47,7 @@
 <script>
 import Header from "@/components/organisms/Header.vue";
 import OwnerData from "@/components/organisms/OwnerData.vue";
-import OfferPreview from "@/components/organisms/OfferPreview.vue";
+import OfferReview from "@/components/organisms/OfferReview.vue";
 
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
@@ -59,7 +59,7 @@ export default {
   components: {
     Header,
     OwnerData,
-    OfferPreview,
+    OfferReview,
   },
   data() {
     return {
@@ -131,5 +131,17 @@ export default {
 
 h1 {
   margin-top: 1%;
+}
+
+#my-account-content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2%;
+  margin-left: 10%;
+  width: 80%;
+}
+
+#my-account-offers {
+  width: 90%;
 }
 </style>

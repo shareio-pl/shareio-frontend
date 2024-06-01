@@ -133,7 +133,6 @@ export default {
 
 <style scoped>
 #owner-data {
-  width: 40%;
   height: 125px;
   display: flex;
   flex-direction: column;

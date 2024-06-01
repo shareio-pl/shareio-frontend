@@ -48,6 +48,7 @@ export default {
       city: '',
       street: '',
       title: '',
+      reviewId: null,
       imageIsLoading: true,
       offerPreviewImage: null,
       userImage: DEFAULT_USER_PROFILE_IMAGE,
@@ -65,6 +66,9 @@ export default {
   },
   mounted() {
     this.getOfferData();
+    if (this.reviewId !== null) {
+      this.emitter.emit('review-not-done', {id: this.id});
+    }
   },
   methods: {
     navigateToOfferPage() {
@@ -89,6 +93,10 @@ export default {
         this.offerPreviewImage = await this.getImageData(response.data.photoId);
         this.userImage = await this.getImageData(response.data.ownerPhotoId);
         this.imageIsLoading = false;
+        this.reviewId = response.data.reviewId;
+        if (this.reviewId !== null) {
+          this.emitter.emit('review-not-done', { id: this.id });
+        }
       } catch (error) {
         console.error('ERROR: ', error);
         this.emitter.emit('axiosError', {error: error.response.status});

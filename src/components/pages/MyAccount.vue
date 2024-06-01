@@ -21,7 +21,7 @@
           <h1> Wystawione oferty </h1>
           <span v-if="createdOffers">
             <span v-for="offer in createdOffers" :key="offer">
-              <OfferReview :id="offer" />
+              <OfferManage :id="offer" />
             </span>
             <span v-if="createdOffers.length === 0">
               <p> Brak stworzonych ofert </p>
@@ -47,7 +47,9 @@
 <script>
 import Header from "@/components/organisms/Header.vue";
 import OwnerData from "@/components/organisms/OwnerData.vue";
+
 import OfferReview from "@/components/organisms/OfferReview.vue";
+import OfferManage from "@/components/organisms/OfferManage.vue";
 
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
@@ -60,6 +62,7 @@ export default {
     Header,
     OwnerData,
     OfferReview,
+    OfferManage,
   },
   data() {
     return {

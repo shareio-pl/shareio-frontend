@@ -5,8 +5,11 @@
         <OfferPreview :id="id" style="width: 100%;" />
       </span>
       <span class="offer-review-rating" @click="handleClick">
-        <div class="offer-review-stars" ref="stars">
+        <div v-show="!isReviewDone" class="offer-review-stars" ref="stars">
           <FontAwesomeIcon v-for="index in 5" :key="index" :icon="getStarIcon(index)" class="star" />
+        </div>
+        <div v-show="isReviewDone">
+          <p class="offer-rated-description"> Oferta została już oceniona! </p>
         </div>
       </span>
     </div>
@@ -35,6 +38,7 @@ export default {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
       localFilledStars: '',
+      isReviewDone: false,
     };
   },
   props: {
@@ -45,6 +49,9 @@ export default {
   },
   methods: {
     handleClick(event) {
+      if (this.isReviewDone) {
+        return;
+      }
       let clickedStar = this.detectClickedStar(event);
       this.setStars(clickedStar);
       this.sendReview();
@@ -73,16 +80,27 @@ export default {
       this.localFilledStars = value;
     },
     sendReview() {
+      // TODO: remove
+      console.log('Sending review with score: ', this.localFilledStars);
       axios.post(GATEWAY_ADDRESS + '/offer/addReview', {
         offerId: this.id,
         reviewValue: this.localFilledStars
       }).then((response) => {
         console.log(response);
+        this.isReviewDone = true;
       })
         .catch((error) => {
-          console.log(error);
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
         });
-    }
+    },
+    setupIsReviewNotDoneListener() {
+      this.emitter.on('review-not-done', (data) => {
+        if (data.id === this.id) {
+          this.isReviewDone = false;
+        }
+      });
+    },
   },
 }
 
@@ -100,17 +118,26 @@ export default {
 
 .offer-review-rating {
   width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .offer-review-stars {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   margin-left: 2%;
   margin-bottom: 2%;
   font-size: v-bind('FONT_SIZES.TITLE');
+  color: v-bind('COLORS.OFFER_BACKGROUND');
   padding: 3%;
   padding-top: 1%;
   cursor: pointer;
+}
+
+.offer-rated-description {
+  font-size: v-bind('FONT_SIZES.PRIMARY');
+  color: v-bind('COLORS.PRIMARY');
 }
 </style>

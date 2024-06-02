@@ -31,13 +31,13 @@
 </template>
 
 <script>
-import {FONT_SIZES, COLORS} from "../../../public/Consts";
+import { FONT_SIZES, COLORS } from "../../../public/Consts";
 import UserData from "@/components/atoms/UserData.vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Menu",
-  components: {UserData},
+  components: { UserData },
   data() {
     return {
       FONT_SIZES: FONT_SIZES,
@@ -70,12 +70,6 @@ export default {
         this.isSticky = false;
         this.$refs.menuPage.style.top = (-window.scrollY + 100) + 'px';
       }
-    },
-    setupUserPictureElement() {
-      const userDataElement = this.$refs.userDataComp.$el;
-      const userPicture = userDataElement.querySelector('.user-image');
-      const userInfo = userDataElement.querySelector('.user-data');
-      userDataElement.insertBefore(userInfo, userPicture);
     },
     onMyAccountClick() {
       // TODO: Add router push
@@ -118,9 +112,6 @@ export default {
     this.emitter.on('change-menu', () => {
       this.changeStateOfMenu();
     });
-    this.$nextTick(() => {
-      this.setupUserPictureElement();
-    });
   },
   computed: {
     isLoggedIn() {
@@ -151,7 +142,7 @@ export default {
   white-space: nowrap;
 }
 
-.menu-items > span {
+.menu-items>span {
   display: flex;
   flex-direction: column;
   align-self: flex-end;
@@ -162,12 +153,12 @@ export default {
 }
 
 @media screen and (min-width: 1200px) {
-  .menu-items > span {
+  .menu-items>span {
     font-size: v-bind('FONT_SIZES.PRIMARY');
   }
 }
 
-.menu-items > span:hover {
+.menu-items>span:hover {
   text-decoration: underline;
 }
 
@@ -178,7 +169,7 @@ hr {
   border-width: 2px;
 }
 
-.pages-menu > span {
+.pages-menu>span {
   display: flex;
   flex-direction: column;
   color: v-bind('COLORS.TEXT_SECONDARY');
@@ -187,7 +178,7 @@ hr {
   font-weight: bold;
 }
 
-.pages-menu > span:hover {
+.pages-menu>span:hover {
   text-decoration: underline;
 }
 
@@ -218,7 +209,7 @@ hr {
     margin-left: 0;
   }
 
-  .menu-items > span {
+  .menu-items>span {
     align-self: auto;
   }
 

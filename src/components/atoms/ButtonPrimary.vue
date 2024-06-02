@@ -31,7 +31,7 @@ export default {
   border-radius: 20px;
   background-color: v-bind('COLORS.BUTTON_PRIMARY_NORMAL');
   color: v-bind('COLORS.TEXT_PRIMARY');
-  font-size: calc( 7px + 1.1vw );
+  font-size: min(v-bind('FONT_SIZES.PRIMARY'), calc(7px + 1.1vw));
   line-height: 14px;
 }
 

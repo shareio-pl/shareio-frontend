@@ -22,7 +22,6 @@ import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
-import { jwtDecode } from 'jwt-decode';
 import { required, minLength, maxLength } from '@vuelidate/validators';
 import { useVuelidate } from "@vuelidate/core";
 
@@ -57,12 +56,7 @@ export default {
       axios.post(GATEWAY_ADDRESS + '/login', { email: this.email, password: this.password })
         .then(response => {
           console.log(response);
-          let decodedToken = jwtDecode(response.data);
           localStorage.setItem('token', response.data);
-          localStorage.setItem('userId', decodedToken.id);
-          localStorage.setItem('userRole', decodedToken.role);
-          localStorage.setItem('iat', decodedToken.iat);
-          localStorage.setItem('exp', decodedToken.exp);
           this.$router.push('/');
         })
         .catch(error => {

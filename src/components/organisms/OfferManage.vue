@@ -6,8 +6,8 @@
           <OfferPreview :id="id" style="width: 100%;" />
         </span>
         <span class="offer-manage-options">
-          <ButtonPrimary :button-text="editText" />
-          <ButtonPrimary :button-text="closeText" @click="cancelOffer" />
+          <ButtonPrimary :button-text="editText" style="width: 60%;" />
+          <ButtonPrimary :button-text="closeText" @click="cancelOffer" style="width: 60%;" />
         </span>
       </div>
     </div>
@@ -82,14 +82,13 @@ export default {
 }
 
 .offer-manage-review {
-  width: 70%
+  width: 80%
 }
 
 .offer-manage-options {
-  width: 30%;
+  width: 20%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 

@@ -22,7 +22,9 @@ import Header from "@/components/organisms/Header.vue";
 import Offer from "@/components/organisms/Offer.vue";
 import OfferPreview from "@/components/organisms/OfferPreview.vue";
 import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
+
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -40,7 +42,9 @@ export default {
   },
   methods: {
     getClosestOffer() {
-      axios.get(GATEWAY_ADDRESS + `/offer/getClosestOfferForUser/${localStorage.getItem('userId')}`, {
+      let token = localStorage.getItem('token');
+      let id = jwtDecode(token).id;
+      axios.get(GATEWAY_ADDRESS + `/offer/getClosestOfferForUser/${id}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + this.token

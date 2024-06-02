@@ -3,9 +3,9 @@
       <div class="menu-items">
         <div class="pages-menu">
           <hr class="firstLine"/>
-          <div v-if="isLoggedIn"> id="user-data">
-            <UserData ref="userDataComp" class="user" :user-surname="surname" :user-first-name="name"
-                      style="display: flex; flex-direction: column;"/>
+          <div v-if="isLoggedIn" id="user-data">
+            <UserData ref="userDataComp" class="user" :user-surname="surname" :user-first-name="name" :user-image="image"
+                      style="display: flex; flex-direction: column; margin-left: -1.3em;"/>
           </div>
           <hr v-if="isLoggedIn"/>
           <span @click="onOffersClick">Ogłoszenia</span>
@@ -31,8 +31,10 @@
 </template>
 
 <script>
-import { FONT_SIZES, COLORS } from "../../../public/Consts";
+import {FONT_SIZES, COLORS, GATEWAY_ADDRESS} from "../../../public/Consts";
 import UserData from "@/components/atoms/UserData.vue";
+import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -44,8 +46,10 @@ export default {
       COLORS: COLORS,
       showMenu: false,
       isSticky: false,
-      surname: 'Nazwisko',
-      name: 'Imię',
+      surname: '',
+      name: '',
+      photoId: '',
+      image: null,
     };
   },
   methods: {
@@ -107,8 +111,44 @@ export default {
     onAboutUsClick() {
       this.$router.push('/about');
     },
+    async getUserData() {
+      let token = localStorage.getItem('token');
+      axios.get(GATEWAY_ADDRESS + `/user/get/${jwtDecode(token).id}`).then((response) => {
+        console.log('Logged User: ', response.data);
+        console.log('Logged image id: ', response.data.photoId.id);
+        this.name = response.data.name;
+        this.surname = response.data.surname;
+        this.photoId = response.data.photoId.id;
+        console.log('PhotoId: ', this.photoId);
+      })
+          .then(() => {
+            this.getImageData(this.photoId);
+          })
+          .catch(error => {
+            console.error('ERROR: ', error);
+            this.emitter.emit('axiosError', {error: error.response.status});
+          });
+    },
+    async getImageData(photoId) {
+      console.log('PhotoId: ', photoId);
+      await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, {responseType: 'arraybuffer'}).then((response) => {
+        let image_buffer = this.arrayBufferToBase64(response.data);
+        this.image = `data:image/jpeg;base64,${image_buffer}`;
+      }).catch(error => {
+        console.error('ERROR: ', error);
+        this.emitter.emit('axiosError', {error: error.response.status});
+      });
+    },
+    arrayBufferToBase64(buffer) {
+      return btoa(
+          new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+      );
+    },
   },
-  mounted() {
+  async mounted() {
+    if (localStorage.getItem('token')) {
+      await this.getUserData();
+    }
     this.emitter.on('change-menu', () => {
       this.changeStateOfMenu();
     });

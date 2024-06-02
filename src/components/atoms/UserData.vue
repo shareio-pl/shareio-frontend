@@ -78,4 +78,10 @@ export default {
 .user-name {
   margin-bottom: -5%;
 }
+
+@media screen and (max-width: 850px) {
+  .user-image {
+    margin-left: 15px;
+  }
+}
 </style>

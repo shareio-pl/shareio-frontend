@@ -68,7 +68,6 @@ export default {
 }
 
 .user-info {
-  margin-left: 1.3em;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -77,11 +76,5 @@ export default {
 
 .user-name {
   margin-bottom: -5%;
-}
-
-@media screen and (max-width: 850px) {
-  .user-image {
-    margin-left: 15px;
-  }
 }
 </style>

@@ -5,7 +5,7 @@
           <hr class="firstLine"/>
           <div v-if="isLoggedIn" id="user-data">
             <UserData ref="userDataComp" class="user" :user-surname="surname" :user-first-name="name" :user-image="image"
-                      style="display: flex; flex-direction: column; margin-left: -1.3em;"/>
+                      style="display: flex; flex-direction: column;"/>
           </div>
           <hr v-if="isLoggedIn"/>
           <span @click="onOffersClick">Ogłoszenia</span>

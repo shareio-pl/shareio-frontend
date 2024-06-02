@@ -1,9 +1,9 @@
 <template>
   <div id="map-page">
-    <Header id="header" />
-    <ButtonPrimary button-text="Znajdź przedmioty blisko Ciebie!" id="button" @click="centerMap(userId)" />
+    <Header id="header"/>
+    <ButtonPrimary button-text="Znajdź przedmioty blisko Ciebie!" id="button" @click="centerMap(userId)"/>
     <div id="map-initial" v-if="isFirstTime">
-      <font-awesome-icon :icon="iconArrowUp" id="arrow-icon" />
+      <font-awesome-icon :icon="iconArrowUp" id="arrow-icon"/>
       <p>Kliknij, aby wycentrować mapę na Twojej lokalizacji </p>
     </div>
     <div id="map-container">
@@ -29,13 +29,14 @@
 
 <script>
 import Header from "@/components/organisms/Header.vue";
-import { COLORS, FONTS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
+import {COLORS, FONTS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {faArrowUp} from "@fortawesome/free-solid-svg-icons";
 import "leaflet/dist/leaflet.css"
-import { LMap, LMarker, LTileLayer, LPopup } from "@vue-leaflet/vue-leaflet";
+import {LMap, LMarker, LTileLayer, LPopup} from "@vue-leaflet/vue-leaflet";
 import axios from "axios";
+import Cookies from 'js-cookie';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -58,7 +59,7 @@ export default {
       userId: '',
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
-        '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+          '&copy; <a target="_blank" href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       zoom: 6,
       minZoom: 6, // 7 zawiera całą Polskę, ale nie na każdej rozdzielczości
       center: [52.066667, 19.466667], // Środek Polski; wieś Piątek
@@ -79,67 +80,73 @@ export default {
     }
   },
   methods:
-  {
-    // TODO: Optimize this
-    async getOfferIds() {
-      try {
-        const response = await axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds');
-        this.offersIds = response.data.offerIds;
-      } catch (error) {
-        console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', { error: error.response.status });
-      }
-    },
-    async getOffer(offerId) {
-      try {
-        const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`);
-        const locationKey = `${response.data.latitude},${response.data.longitude}`;
-        if (!this.markerLatLng[locationKey]) {
-          this.markerLatLng[locationKey] = [];
-        }
-        this.markerLatLng[locationKey].push({
-          id: response.data.offerId,
-          name: response.data.title
-        });
-      } catch (error) {
-        console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', { error: error.response.status });
-      }
-    },
-    // TODO: ID of the user from getUserFromSession [look mounted comment]
-    centerMap() {
-      console.log('Map has been centred');
-      this.isFirstTime = false;
-
-      axios.get(GATEWAY_ADDRESS + `/offer/get/${this.offersIds[0]}`)
-        .then((offerResponse) => {
-          axios.get(GATEWAY_ADDRESS + `/user/get/${offerResponse.data.ownerId}`)
-            .then((userResponse) => {
-              axios.get(GATEWAY_ADDRESS + `/address/location/get/${userResponse.data.address.id}`)
-                .then((addressResponse) => {
-                  console.log('Address data: ', addressResponse.data);
-
-                  this.zoom = 15;
-                  this.center = [addressResponse.data.latitude, addressResponse.data.longitude];
-                  this.$refs.mapRef.leafletObject.setView(this.center, this.zoom);
-                })
-                .catch(error => {
-                  console.error('ERROR: ', error);
-                  this.emitter.emit('axiosError', { error: error.response.status });
-                });
-            })
-            .catch(error => {
-              console.error('ERROR: ', error);
-              this.emitter.emit('axiosError', { error: error.response.status });
+      {
+        // TODO: Optimize this
+        async getOfferIds() {
+          try {
+            const response = await axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds');
+            this.offersIds = response.data.offerIds;
+          } catch (error) {
+            console.error('ERROR: ', error);
+            this.emitter.emit('axiosError', {error: error.response.status});
+          }
+        },
+        async getOffer(offerId) {
+          try {
+            const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`);
+            const locationKey = `${response.data.latitude},${response.data.longitude}`;
+            if (!this.markerLatLng[locationKey]) {
+              this.markerLatLng[locationKey] = [];
+            }
+            this.markerLatLng[locationKey].push({
+              id: response.data.offerId,
+              name: response.data.title
             });
-        })
-        .catch(error => {
-          console.error('ERROR: ', error);
-          this.emitter.emit('axiosError', { error: error.response.status });
-        });
-    },
-  },
+          } catch (error) {
+            console.error('ERROR: ', error);
+            this.emitter.emit('axiosError', {error: error.response.status});
+          }
+        },
+        // TODO: ID of the user from getUserFromSession [look mounted comment]
+        centerMap() {
+          console.log('Map has been centred');
+          this.isFirstTime = false;
+          Cookies.set('MapCookie', 'true', {expires: 14});
+
+          axios.get(GATEWAY_ADDRESS + `/offer/get/${this.offersIds[0]}`)
+              .then((offerResponse) => {
+                axios.get(GATEWAY_ADDRESS + `/user/get/${offerResponse.data.ownerId}`)
+                    .then((userResponse) => {
+                      axios.get(GATEWAY_ADDRESS + `/address/location/get/${userResponse.data.address.id}`)
+                          .then((addressResponse) => {
+                            console.log('Address data: ', addressResponse.data);
+
+                            this.zoom = 15;
+                            this.center = [addressResponse.data.latitude, addressResponse.data.longitude];
+                            this.$refs.mapRef.leafletObject.setView(this.center, this.zoom);
+                          })
+                          .catch(error => {
+                            console.error('ERROR: ', error);
+                            this.emitter.emit('axiosError', {error: error.response.status});
+                          });
+                    })
+                    .catch(error => {
+                      console.error('ERROR: ', error);
+                      this.emitter.emit('axiosError', {error: error.response.status});
+                    });
+              })
+              .catch(error => {
+                console.error('ERROR: ', error);
+                this.emitter.emit('axiosError', {error: error.response.status});
+              });
+        },
+      },
   async mounted() {
+    if (Cookies.get('MapCookie')) {
+      this.isFirstTime = false;
+      Cookies.set('MapCookie', 'true', {expires: 14});
+    }
+
     // TODO: Get the ID of user from getUserFromSession()
     await this.getOfferIds();
 
@@ -147,10 +154,6 @@ export default {
     await Promise.all(offerPromises);
 
     this.markersAreLoaded = true;
-
-    console.log('Offers IDs: ', this.offersIds);
-    console.log('Markers: ', this.markerLatLng);
-
   },
 }
 
@@ -167,9 +170,9 @@ export default {
   width: calc(30% + 1.5vw);
   height: calc(66px + 1.9vw);
   z-index: 3;
-  font-size: calc( 7px + 1.8vw );
+  font-size: calc(7px + 1.8vw);
   margin-right: 2%;
-  line-height: calc( 17px + 2.1vw );
+  line-height: calc(17px + 2.1vw);
 }
 
 #header {
@@ -196,7 +199,7 @@ export default {
 }
 
 p {
-  font-size: calc( 7px + 1.8vw );
+  font-size: calc(7px + 1.8vw);
   background-color: v-bind('COLORS.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
   width: 30%;
@@ -221,14 +224,14 @@ p {
   cursor: pointer;
 }
 
-.map>>>.leaflet-popup-content-wrapper {
+.map >>> .leaflet-popup-content-wrapper {
   background-color: v-bind('COLORS.OFFER_FOREGROUND');
   font-size: v-bind('FONT_SIZES.PRIMARY');
   font-family: v-bind('FONTS.PRIMARY');
   /* It's necessary to use it here even if it's definied as main font for our webpage. */
 }
 
-.map>>>a {
+.map >>> a {
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
 
@@ -237,6 +240,7 @@ p {
     display: none;
   }
 }
+
 @media screen and (max-height: 420px) {
   p {
     display: none;

@@ -1,8 +1,8 @@
 <template>
   <div class="date-picker">
-    <VueDatePicker :class="['datepicker', { 'error-border': error.active }]" v-model="date" :placeholder="placeholder" utc
-      @update:model-value="handleDate" ref="datepicker" :enable-time-picker="false" :max-date=current_date_minus_eighteen
-      :start-date=current_date_minus_eighteen />
+    <VueDatePicker :class="['datepicker', { 'error-border': error.active }]" locale="pl-PL" cancelText="Anuluj"
+      selectText="Wybierz" v-model="date" :placeholder="placeholder" utc @update:model-value="handleDate" ref="datepicker"
+      :enable-time-picker="false" :max-date=current_date_minus_eighteen :start-date=current_date_minus_eighteen />
     <p class="field-input-paragraph" v-if="error.active && error.message !== ''">{{ error.message }}</p>
   </div>
 </template>

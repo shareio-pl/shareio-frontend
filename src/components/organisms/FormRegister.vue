@@ -52,7 +52,7 @@
       </div>
     </div>
     <p class="info" :style="{ color: COLORS.PRIMARY }">'*' - pole wymagane </p>
-    <ButtonPrimary buttonText="Zarejestruj" style="margin-left:0;" />
+    <ButtonPrimary buttonText="Zarejestruj" style="margin-left:0; margin-bottom:3em;" />
   </form>
 </template>
 

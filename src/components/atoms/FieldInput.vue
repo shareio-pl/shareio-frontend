@@ -6,6 +6,7 @@
       <span>{{ label }}</span>
     </label>
     <p class="field-input-paragraph" v-if="error.active && error.message !== ''">{{ error.message }}</p>
+    <p class="field-input-paragraph" v-else-if="displayBlankSpaceBelow">&nbsp;</p>
   </div>
 </template>
 
@@ -30,6 +31,10 @@ export default {
     label: {
       type: String,
       required: true,
+    },
+    displayBlankSpaceBelow: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

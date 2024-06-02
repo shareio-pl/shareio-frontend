@@ -42,8 +42,10 @@ export default {
   height: 100%;
   min-height: 100vh;
 }
+
 h1 {
   margin-top: 1%;
+  margin-bottom: 1%;
 }
 
 span {

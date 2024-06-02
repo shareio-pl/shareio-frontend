@@ -32,7 +32,7 @@
           <h1> Zakończone oferty </h1>
           <span v-if="endedOffers">
             <span v-for="offer in endedOffers" :key="offer.id">
-              <OfferReview :id="offer" />
+              <OfferPreview :id="offer" />
             </span>
             <span v-if="endedOffers.length === 0">
               <p> Brak zakończonych ofert </p>
@@ -50,6 +50,7 @@ import OwnerData from "@/components/organisms/OwnerData.vue";
 
 import OfferReview from "@/components/organisms/OfferReview.vue";
 import OfferManage from "@/components/organisms/OfferManage.vue";
+import OfferPreview from "@/components/organisms/OfferPreview.vue";
 
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
@@ -63,6 +64,7 @@ export default {
     OwnerData,
     OfferReview,
     OfferManage,
+    OfferPreview,
   },
   data() {
     return {

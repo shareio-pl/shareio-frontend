@@ -26,7 +26,17 @@
       <div class="offer-right-map">
         <MapPreview v-if="mapDataLoaded" :zoom="zoom" :center="center" />
       </div>
-      <ButtonPrimary class="offer-right-button" :buttonText="offerButtonName" @click="submitOffer" />
+      <span v-if="status === 'CREATED' && userId != null" class="offer-right-button">
+        <ButtonPrimary class="button" :buttonText="offerButtonName" @click="submitOffer" />
+      </span>
+      <span v-if="status === 'RESERVED' && userId != null" class="offer-right-button">
+        <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved" />
+      </span>
+      <span v-if="userId == null" class="offer-right-button">
+        <ButtonPrimary class="button-disabled" style="{cursor: pointer;}" 
+        buttonText="Zaloguj się, aby zarezerwować" @click="this.$router.push('/login')"/>
+        <!-- przycisk rezerwacji widoczny jest też na stronie głównej-->
+      </span>
     </div>
   </div>
 </template>
@@ -37,8 +47,10 @@ import Stars from "@/components/atoms/Stars.vue";
 import MapPreview from "@/components/atoms/MapPreview.vue";
 import ImageLoadingAnimation from "@/components/atoms/ImageLoadingAnimation.vue";
 
-import axios from 'axios'
-import "leaflet/dist/leaflet.css"
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+import "leaflet/dist/leaflet.css";
+
 import { COLORS } from "../../../public/Consts";
 import { FONT_SIZES } from "../../../public/Consts";
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
@@ -54,6 +66,7 @@ export default {
       center: [0, 0],
       mapDataLoaded: false,
       imageIsLoading: true,
+      offersIds: [], // TODO: Remove once get ID from session
       offerImage: '',
       offerMapImage: '',
       userImage: '',
@@ -66,6 +79,9 @@ export default {
       amountOfRatings: '',
       userFirstName: '',
       userSurname: '',
+      userId: null,
+      timeUntilUnreserved: '',
+      status: '',
     }
   },
   props: {
@@ -87,13 +103,23 @@ export default {
   },
   methods: {
     submitOffer() {
-      //TODO
-      console.log('Button on Offer was clicked.');
+      this.reserveOffer();
     },
     arrayBufferToBase64(buffer) {
       return btoa(
         new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
       );
+    },
+    getTimeUntilUnreserved() {
+      if (this.unreservationDate) {
+        const now = new Date();
+        const unreservationDate = new Date(this.unreservationDate);
+        const diffTime = Math.abs(unreservationDate - now);
+        const hours = Math.floor(diffTime / (1000 * 60 * 60)).toString().padStart(2, '0');
+        const minutes = Math.floor((diffTime / (1000 * 60)) % 60).toString().padStart(2, '0');
+        const seconds = Math.floor((diffTime / 1000) % 60).toString().padStart(2, '0');
+        this.timeUntilUnreserved = `Czas do odbioru: ${hours}:${minutes}:${seconds}`;
+      }
     },
     // These methods are async, because otherwise they'd return undefined in getImageData.
     // Alternatively another option would be to pass the variable for image data in here
@@ -105,7 +131,12 @@ export default {
         this.offerTitle = response.data.title;
         this.offerDescription = response.data.description;
         this.submittedOn = response.data.creationDate.substring(0, 10);
-        this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' od Ciebie)';
+        if (localStorage.getItem('token') === null) {
+          this.location = response.data.city + ', ' + response.data.street;
+        }
+        else {
+          this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' od Ciebie)';
+        }
         this.condition = response.data.condition;
         this.amountOfStars = response.data.ownerRating;
         this.amountOfRatings = response.data.ownerReviewCount;
@@ -113,6 +144,8 @@ export default {
         this.userSurname = response.data.ownerSurname;
         this.center = [response.data.latitude, response.data.longitude];
         this.mapDataLoaded = true;
+        this.status = response.data.status;
+        this.unreservationDate = response.data.unreservationDate;
         this.offerImage = await this.getImageData(response.data.photoId);
         this.userImage = await this.getImageData(response.data.ownerPhotoId);
         this.imageIsLoading = false;
@@ -131,9 +164,51 @@ export default {
         this.emitter.emit('axiosError', { error: error.response.status });
       }
     },
+    async prepareDataToSend() {
+      let formData = {
+        offerId: this.id,
+        recieverId: this.userId
+      }
+      return formData;
+    },
+    async reserveOffer() {
+      let data = await this.prepareDataToSend();
+      console.log('Data to send: ', data);
+      axios.post(GATEWAY_ADDRESS + `/offer/reserve`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      })
+        .then(response => {
+          console.log("Response: ", response.data);
+          console.log('Offer ', this.id, ' was reserved successfully.');
+          axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`)
+            .then(response => {
+              this.unreservationDate = response.data.unreservationDate;
+              console.log('Status: ', response.data.status);
+              this.status = 'RESERVED';
+              console.log('Unreservation date: ', this.unreservationDate);
+            })
+            .catch(error => {
+              console.error('ERROR: ', error);
+              this.emitter.emit('axiosError', { error: error.response.status });
+            });
+        })
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
+    },
   },
-  mounted() {
-    this.getOfferData();
+  async mounted() {
+    let token = localStorage.getItem('token');
+    if (token) {
+      this.userId = jwtDecode(token).id;
+    }
+    await this.getOfferData();
+    this.getTimeUntilUnreserved();
+    setInterval(this.getTimeUntilUnreserved, 1000);
   },
 }
 </script>
@@ -249,9 +324,26 @@ export default {
   height: 15%;
   margin-bottom: 15%;
 }
+
 @media screen and (max-width: 450px) {
   .offer-right-map {
     margin-right: 33%;
   }
+}
+
+.button {
+  width: 100%;
+  height: 100%;
+}
+
+.button-disabled {
+  width: 100%;
+  height: 100%;
+  background-color: v-bind('COLORS.BUTTON_DISABLED');
+  border: none;
+}
+
+.button-disabled:hover {
+  background-color: v-bind('COLORS.BUTTON_DISABLED');
 }
 </style>

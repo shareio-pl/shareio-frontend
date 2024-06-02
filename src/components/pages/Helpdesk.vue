@@ -24,8 +24,9 @@ import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
 import FAQDropdown from "@/components/atoms/FAQDropdown.vue";
 import Header from "@/components/organisms/Header.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
-import axios from "axios";
 import DefaultSuccess from "@/components/pages/DefaultSuccess.vue";
+
+import axios from "axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -36,8 +37,8 @@ export default {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
       title: 'Opisz swój problem, a przyjdzie on na naszą skrzynkę mailową!',
-      question1: '1. Czy na stronie mogę wystawić cokolwiek?',
-      answer1: 'Tak, na stronie można wystawić cokolwiek, co tylko chce się oddać i co inny użytkownik może odebrać.',
+      question1: '1. Ile czasu mam na odebranie przedmiotu?',
+      answer1: 'Na odebranie przedmiotu użytkownik ma 24 godziny.',
       question2: '2. Czy muszę używać AI do generowania opisów?',
       answer2: 'Nie, nasz model językowy ma jedynie to ułatwiać, nic nie stoi na przeszkodzie aby samemu uzupełnić opis.',
       question3: '3. Czy mogę usunąć swoje konto?',
@@ -55,12 +56,13 @@ export default {
       console.log('Topic: ', this.mailTopic);
       console.log('Text: ', this.mailText);
 
-      //TODO: change the authorization token to the one from local storage
+      let token = localStorage.getItem('token');
+
       axios.post(GATEWAY_ADDRESS + '/email/send', {"messageTitle": this.mailTopic, "messageBody": this.mailText},
           {
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjcyMDQ1OGI5LWM5N2QtNDU5Ny1hNzg5LWVlZTQ5YTRlN2U0ZCIsInJvbGUiOiJVU0VSIiwic3ViIjoiU0hBUkVJTyIsImlhdCI6MTcxNzA3MDY4MCwiZXhwIjoxNzE3MDcxNTgwfQ.QB1GYjL2uvlbpIwW6BVvsN30WtLOBQ3CnDFJtUilWZI'
+              'Authorization': 'Bearer ' + token,
             }
           }).then((response) => {
         console.log('Sent mail: ', response.data);

@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import {DEFAULT_USER_PROFILE_IMAGE} from "../../../public/Consts";
-import {FONT_SIZES, COLORS} from "../../../public/Consts";
+import { DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
+import { FONT_SIZES, COLORS } from "../../../public/Consts";
 
 export default {
   name: 'UserData',
@@ -68,7 +68,7 @@ export default {
 }
 
 .user-info {
-  margin-left: 5px;
+  margin-left: 1.3em;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -1,18 +1,18 @@
 <template>
   <div class="select-wrapper">
-    <select  v-model="selectedOption" @change="onSortChange(selectedOption)">
+    <select v-model="selectedOption" @change="onSortChange(selectedOption)">
       <option v-for="(option, index) in options" :key="index" :value="option">
-        Sortuj: {{ option }}
+        &nbsp; Sortuj: {{ option }}
       </option>
     </select>
-    <font-awesome-icon :icon="iconChevronDown" class="arrow-icon" />
+    <font-awesome-icon :icon="iconChevronDown" class="arrow-icon"/>
   </div>
 </template>
 
 <script>
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { COLORS } from '../../../public/Consts';
+import {faChevronDown} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import {COLORS} from '../../../public/Consts';
 
 export default {
   name: "SortDropdown",
@@ -27,9 +27,8 @@ export default {
       selectedOption: "Najbliższe",
     };
   },
-  methods:{
-    onSortChange(option)
-    {
+  methods: {
+    onSortChange(option) {
       console.log('Sorting changed to: ', option);
       this.emitter.emit('sortChange', {option: option});
     }
@@ -55,9 +54,13 @@ export default {
 
 .arrow-icon {
   position: absolute;
-  right: 1%;
+  right: 3%;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
+}
+
+option {
+
 }
 </style>

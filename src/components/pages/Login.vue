@@ -53,4 +53,8 @@ span {
   cursor: pointer;
 }
 
+span:hover {
+  text-decoration: underline;
+}
+
 </style>

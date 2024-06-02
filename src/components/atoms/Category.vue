@@ -57,11 +57,14 @@ export default {
 
 <style scoped>
 .category {
+  display: flex;
+  align-items: center;
   height: 30px;
   margin-left: min(5%, 10px);
   width: 100%;
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc(9px + 0.7vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
+  overflow: hidden;
 }
 
 .category.bold {
@@ -76,15 +79,23 @@ export default {
 
 .dot {
   margin-right: 10px;
-  float: left;
 }
 
 .category-display {
-  float: left;
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .number {
-  float: right;
+  margin-left: auto;
   margin-right: min(10%, 20px);
+}
+
+@media screen and (max-width: 1000px) {
+  .number {
+    display: none;
+  }
 }
 </style>

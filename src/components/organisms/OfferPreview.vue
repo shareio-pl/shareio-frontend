@@ -167,12 +167,14 @@ export default {
   display: flex;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
+  text-align: left;
 }
 
 .offer-preview-location {
   margin-top: 2%;
   font-size: v-bind('FONT_SIZES.STARS');
   color: v-bind('COLORS.TEXT_SECONDARY');
+  text-align: left;
 }
 
 .offer-preview-action {

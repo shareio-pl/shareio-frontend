@@ -54,4 +54,9 @@ export default {
   width: 100%;
   height: 45px;
 }
+@media screen and (max-width: 500px) {
+  .search-icon {
+    display: none;
+  }
+}
 </style>

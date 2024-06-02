@@ -7,10 +7,15 @@
         <FontAwesomeIcon :icon="XIcon" class="clear-icon" @click="onCategoriesClearClicked" />
       </div>
     </div>
-    <div id="categories">
+    <div v-if="bigWidth" id="categories">
       <Category v-for="category in categories" :key="category.name" :displayName="category.displayName"
         :category-name="category.categoryName" :number-of-offers="category.numberOfOffers" :clear="clearCounterCategories"
-        style="width: 90%;" />
+        style="width: 90%;"  />
+    </div>
+    <div v-else id="categories">
+      <Category v-for="category in categories" :key="category.name" :displayName="category.displayName"
+                :category-name="category.categoryName" :clear="clearCounterCategories"
+                style="width: 90%;"  />
     </div>
     <div id="filterName">
       <div class="filter-header-left">
@@ -55,11 +60,20 @@ export default {
     this.emitter.on('filter-stars', this.handleFilterStars);
     this.emitter.on('filter-options', this.handleFilterOptions);
     this.emitter.on('category-changed', this.handleCategoryChange);
+    window.addEventListener('resize', this.updateWindowWidth);
+  },
+  beforeUmount() {
+    window.removeEventListener('resize', this.updateWindowWidth);
   },
   props: {
     categories: {
       type: Array,
       required: true
+    }
+  },
+  computed: {
+    bigWidth() {
+      return this.windowWidth > 1000;
     }
   },
   methods: {
@@ -104,6 +118,9 @@ export default {
       });
       console.log('Filters sent: ', this.time_chosen, this.option_chosen, this.stars_chosen, this.distance_chosen);
     },
+    updateWindowWidth() {
+      this.windowWidth = window.innerWidth;
+    }
   },
   data() {
     return {
@@ -126,6 +143,7 @@ export default {
       // that something changed.
       clearCounterCategories: 0,
       // See reasoning above
+      windowWidth: window.innerWidth
     }
   }
 }
@@ -148,7 +166,7 @@ export default {
   width: 90%;
   margin-left: 5%;
   margin-top: 4%;
-  font-size: v-bind('FONT_SIZES.IMPORTANT');
+  font-size: calc(12px + 0.9vw);
   color: v-bind('COLORS.SECONDARY');
 }
 

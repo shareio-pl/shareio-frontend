@@ -2,15 +2,15 @@
   <div class="offer-card">
     <div class="offer-left">
       <div v-if="imageIsLoading" class="offer-left-image">
-        <ImageLoadingAnimation />
+        <ImageLoadingAnimation/>
       </div>
       <div v-else class="offer-left-image">
         <img class="offer-left-image" :src="offerImage" alt="Offer image">
       </div>
       <p class="offer-left-giver"> Oddająca osoba: </p>
       <div class="offer-left-data">
-        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" :userImage="userImage" />
-        <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings" />
+        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" :userImage="userImage"/>
+        <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings"/>
       </div>
     </div>
     <div class="offer-content">
@@ -24,16 +24,17 @@
     </div>
     <div class="offer-right">
       <div class="offer-right-map">
-        <MapPreview v-if="mapDataLoaded" :zoom="zoom" :center="center" />
+        <MapPreview v-if="mapDataLoaded" :zoom="zoom" :center="center"/>
       </div>
       <span v-if="status === 'CREATED' && userId != null" class="offer-right-button">
-        <ButtonPrimary class="button" :buttonText="offerButtonName" @click="submitOffer" />
+        <ButtonPrimary class="button" :buttonText="offerButtonName" @click="submitOffer"/>
       </span>
       <span v-if="status === 'RESERVED' && userId != null" class="offer-right-button">
-        <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved" />
+        <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved"/>
       </span>
       <span v-if="userId == null" class="offer-right-button">
-        <ButtonPrimary disabled='true' class="button-disabled" buttonText="Zaloguj się, aby zarezerwować" />
+        <ButtonPrimary disabled='true' class="button-disabled" buttonText="Zaloguj się, aby zarezerwować"
+                       style="line-height: calc(11px + 0.6vw);"/>
         <!-- przycisk rezerwacji widoczny jest też na stronie głównej-->
       </span>
     </div>
@@ -47,12 +48,12 @@ import MapPreview from "@/components/atoms/MapPreview.vue";
 import ImageLoadingAnimation from "@/components/atoms/ImageLoadingAnimation.vue";
 
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import "leaflet/dist/leaflet.css";
 
-import { COLORS } from "../../../public/Consts";
-import { FONT_SIZES } from "../../../public/Consts";
-import { GATEWAY_ADDRESS } from "../../../public/Consts";
+import {COLORS} from "../../../public/Consts";
+import {FONT_SIZES} from "../../../public/Consts";
+import {GATEWAY_ADDRESS} from "../../../public/Consts";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -106,7 +107,7 @@ export default {
     },
     arrayBufferToBase64(buffer) {
       return btoa(
-        new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+          new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
       );
     },
     getTimeUntilUnreserved() {
@@ -132,8 +133,7 @@ export default {
         this.submittedOn = response.data.creationDate.substring(0, 10);
         if (localStorage.getItem('token') === null) {
           this.location = response.data.city + ', ' + response.data.street;
-        }
-        else {
+        } else {
           this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' od Ciebie)';
         }
         this.condition = response.data.condition;
@@ -150,17 +150,17 @@ export default {
         this.imageIsLoading = false;
       } catch (error) {
         console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', { error: error.response.status });
+        this.emitter.emit('axiosError', {error: error.response.status});
       }
     },
     async getImageData(photoId) {
       try {
-        const response = await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' });
+        const response = await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, {responseType: 'arraybuffer'});
         let image = this.arrayBufferToBase64(response.data);
         return `data:image/jpeg;base64,${image}`;
       } catch (error) {
         console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', { error: error.response.status });
+        this.emitter.emit('axiosError', {error: error.response.status});
       }
     },
     async prepareDataToSend() {
@@ -179,25 +179,25 @@ export default {
           'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
       })
-        .then(response => {
-          console.log("Response: ", response.data);
-          console.log('Offer ', this.id, ' was reserved successfully.');
-          axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`)
-            .then(response => {
-              this.unreservationDate = response.data.unreservationDate;
-              console.log('Status: ', response.data.status);
-              this.status = 'RESERVED';
-              console.log('Unreservation date: ', this.unreservationDate);
-            })
-            .catch(error => {
-              console.error('ERROR: ', error);
-              this.emitter.emit('axiosError', { error: error.response.status });
-            });
-        })
-        .catch(error => {
-          console.error('ERROR: ', error);
-          this.emitter.emit('axiosError', { error: error.response.status });
-        });
+          .then(response => {
+            console.log("Response: ", response.data);
+            console.log('Offer ', this.id, ' was reserved successfully.');
+            axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`)
+                .then(response => {
+                  this.unreservationDate = response.data.unreservationDate;
+                  console.log('Status: ', response.data.status);
+                  this.status = 'RESERVED';
+                  console.log('Unreservation date: ', this.unreservationDate);
+                })
+                .catch(error => {
+                  console.error('ERROR: ', error);
+                  this.emitter.emit('axiosError', {error: error.response.status});
+                });
+          })
+          .catch(error => {
+            console.error('ERROR: ', error);
+            this.emitter.emit('axiosError', {error: error.response.status});
+          });
     },
   },
   async mounted() {

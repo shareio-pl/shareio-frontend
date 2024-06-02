@@ -90,7 +90,12 @@ export default {
       if (this.$route.path === '/') {
         window.location.reload();
       } else {
-        this.$router.push('/');
+        this.$router.push('/').then(() => {
+          window.location.reload();
+        })
+            .catch(error => {
+              console.error(error);
+            })
       }
     },
     onLogin() {

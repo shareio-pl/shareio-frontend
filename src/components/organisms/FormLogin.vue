@@ -57,7 +57,12 @@ export default {
         .then(response => {
           console.log(response);
           localStorage.setItem('token', response.data);
-          this.$router.push('/');
+          this.$router.push('/').then(() => {
+            window.location.reload();
+          })
+        .catch(error => {
+            console.error(error);
+          })
         })
         .catch(error => {
           console.error('ERROR: ', error);

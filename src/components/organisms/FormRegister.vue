@@ -158,7 +158,7 @@ export default {
         return null;
       }
       let data = this.prepareDataToSend();
-      await axios.post(GATEWAY_ADDRESS + '/user/add', data)
+      await axios.post(GATEWAY_ADDRESS + '/user/add', data, { headers: { 'Content-Type': 'application/json' } })
         .then(() => {
           this.emitter.emit('success', { message: 'Twoje konto zostało utworzone!' });
           this.$router.push('/login');

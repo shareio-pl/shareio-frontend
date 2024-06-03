@@ -51,7 +51,7 @@ h1 {
 span {
   font-size: calc(13px + 0.85vw);
   color: v-bind('COLORS.TEXT_PRIMARY');
-  margin-top: 5%;
+  margin-top: 3%;
   cursor: pointer;
 }
 

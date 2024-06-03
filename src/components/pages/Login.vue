@@ -42,8 +42,10 @@ export default {
   height: 100%;
   min-height: 100vh;
 }
+
 h1 {
   margin-top: 1%;
+  margin-bottom: 1%;
 }
 
 span {
@@ -51,6 +53,10 @@ span {
   color: v-bind('COLORS.TEXT_PRIMARY');
   margin-top: 5%;
   cursor: pointer;
+}
+
+span:hover {
+  text-decoration: underline;
 }
 
 </style>

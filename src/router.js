@@ -10,6 +10,7 @@ import NewOffer from "@/components/pages/NewOffer.vue";
 import AboutUs from "@/components/pages/AboutUs.vue";
 import Helpdesk from "@/components/pages/Helpdesk.vue";
 import MyAccount from "@/components/pages/MyAccount.vue";
+import Register from "@/components/pages/Register.vue";
 
 const routes = [
   {
@@ -37,7 +38,8 @@ const routes = [
   {
     path: "/login",
     component: Login,
-    name: "Login - ShareIO"
+    name: "Login - ShareIO",
+    meta: { requiresLoggedOut: true },
   },
   {
     path: "/newOffer",
@@ -68,6 +70,12 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/register",
+    component: Register,
+    name: "Rejestracja - ShareIO",
+    meta: { requiresLoggedOut: true },
+  },
+  {
     path: "/:catchAll(.*)",
     redirect: "/",
   },
@@ -84,11 +92,15 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth) && !localStorage.getItem('token')) {
     next({
       path: '/login',
-      query: { redirect: to.fullPath }
+    });
+  } else if (to.matched.some(record => record.meta.requiresLoggedOut) && localStorage.getItem('token')) {
+    next({
+      path: '/',
     });
   } else {
     next();
   }
+
 });
 
 export default router;

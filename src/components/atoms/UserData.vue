@@ -68,7 +68,6 @@ export default {
 }
 
 .user-info {
-  margin-left: 1.3em;
   display: flex;
   flex-direction: column;
   justify-content: center;

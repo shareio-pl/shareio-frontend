@@ -37,6 +37,7 @@ import "leaflet/dist/leaflet.css"
 import {LMap, LMarker, LTileLayer, LPopup} from "@vue-leaflet/vue-leaflet";
 import axios from "axios";
 import Cookies from 'js-cookie';
+import {jwtDecode} from "jwt-decode";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -84,8 +85,8 @@ export default {
         // TODO: Optimize this
         async getOfferIds() {
           try {
-            const response = await axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds');
-            this.offersIds = response.data.offerIds;
+            const response = await axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers');
+            this.offersIds = response.data;
           } catch (error) {
             console.error('ERROR: ', error);
             this.emitter.emit('axiosError', {error: error.response.status});
@@ -107,38 +108,29 @@ export default {
             this.emitter.emit('axiosError', {error: error.response.status});
           }
         },
-        // TODO: ID of the user from getUserFromSession [look mounted comment]
         centerMap() {
           console.log('Map has been centred');
           this.isFirstTime = false;
           Cookies.set('MapCookie', 'true', {expires: 14});
 
-          axios.get(GATEWAY_ADDRESS + `/offer/get/${this.offersIds[0]}`)
-              .then((offerResponse) => {
-                axios.get(GATEWAY_ADDRESS + `/user/get/${offerResponse.data.ownerId}`)
-                    .then((userResponse) => {
-                      axios.get(GATEWAY_ADDRESS + `/address/location/get/${userResponse.data.address.id}`)
-                          .then((addressResponse) => {
-                            console.log('Address data: ', addressResponse.data);
+          let token = localStorage.getItem('token');
+          let id = jwtDecode(token).id;
 
-                            this.zoom = 15;
-                            this.center = [addressResponse.data.latitude, addressResponse.data.longitude];
-                            this.$refs.mapRef.leafletObject.setView(this.center, this.zoom);
-                          })
-                          .catch(error => {
-                            console.error('ERROR: ', error);
-                            this.emitter.emit('axiosError', {error: error.response.status});
-                          });
-                    })
-                    .catch(error => {
-                      console.error('ERROR: ', error);
-                      this.emitter.emit('axiosError', {error: error.response.status});
-                    });
-              })
-              .catch(error => {
-                console.error('ERROR: ', error);
-                this.emitter.emit('axiosError', {error: error.response.status});
-              });
+          axios.get(GATEWAY_ADDRESS + `/user/get/${id}`).then((response) => {
+            axios.get(GATEWAY_ADDRESS + `/address/location/get/${response.data.address.id}`).then((addressResponse) => {
+              console.log('Address data: ', addressResponse.data);
+
+              this.zoom = 15;
+              this.center = [addressResponse.data.latitude, addressResponse.data.longitude];
+              this.$refs.mapRef.leafletObject.setView(this.center, this.zoom);
+            }).catch(error => {
+              console.error('ERROR: ', error);
+              this.emitter.emit('axiosError', {error: error.response.status});
+            });
+          }).catch(error => {
+            console.error('ERROR: ', error);
+            this.emitter.emit('axiosError', {error: error.response.status});
+          });
         },
       },
   async mounted() {
@@ -147,7 +139,6 @@ export default {
       Cookies.set('MapCookie', 'true', {expires: 14});
     }
 
-    // TODO: Get the ID of user from getUserFromSession()
     await this.getOfferIds();
 
     const offerPromises = this.offersIds.map(offerId => this.getOffer(offerId));

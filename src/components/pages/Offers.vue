@@ -167,27 +167,28 @@ export default {
     },
     getOffersDataViaSearch() {
       this.categories.forEach(category => category.numberOfOffers = 0);
+      this.offersIds = [];
 
-      axios.get(GATEWAY_ADDRESS + '/offer/search', {
-        params: {
-          title: this.searched_item,
-          category: this.categories_chosen[0],
-          condition: this.option_chosen,
-          distance: this.distance_chosen,
-          score: this.stars_chosen,
-          creationDate: '', //this.time_chosen,
-          sortType: this.sorting
-        },
-        headers: {
-          'Authorization': `Bearer ` + localStorage.getItem('token'),
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(
-          response => {
+      let promises = this.categories_chosen.map(category => {
+        return axios.get(GATEWAY_ADDRESS + '/offer/search', {
+          params: {
+            title: this.searched_item,
+            category: category,
+            condition: this.option_chosen,
+            distance: this.distance_chosen,
+            score: this.stars_chosen,
+            creationDate: '', //this.time_chosen,
+            sortType: this.sorting
+          },
+          headers: {
+            'Authorization': `Bearer ` + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(response => {
             console.log('Received offers by name: ', response.data);
-            this.offersIds = response.data;
-            let promises = this.offersIds.map(offerId =>
+            this.offersIds = this.offersIds.concat(response.data);
+            let offerPromises = response.data.map(offerId =>
               axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
                 .then(response => {
                   let category = this.categories.find(category => category.displayName === response.data.category);
@@ -196,9 +197,11 @@ export default {
                   }
                 })
             );
-            return Promise.all(promises);
-          }
-        )
+            return Promise.all(offerPromises);
+          });
+      });
+
+      Promise.all(promises)
         .catch(error => {
           console.error('ERROR: ', error);
           this.emitter.emit('axiosError', { error: error.response.status });

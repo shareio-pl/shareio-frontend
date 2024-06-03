@@ -4,14 +4,21 @@
       <div id="header_wrapper">
         <img src="../../assets/logo.png" alt="" @click="onLogoClick" class="logo">
         <div id="buttons">
-          <ButtonPrimary class="button" button-text="Ogłoszenia" @click="onOffersClick"/>
+          <ButtonPrimary class="buttonLong" button-text="Ogłoszenia" @click="onOffersClick"/>
           <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick"/>
           <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
           <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick"/>
         </div>
-        <div id="user-data" @click="changeMenuState" v-if="!isSmallScreen">
-          <UserData :user-surname="surname" :user-first-name="name" :user-image="image"/>
-          <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon"/>
+        <div v-if="isLoggedIn">
+          <div id="user-data" @click="changeMenuState" v-if="!isSmallScreen">
+            <UserData :user-surname="surname" :user-first-name="name" :user-image="image"/>
+            <font-awesome-icon :icon="menuIsShown ? iconChevronUp : iconChevronDown" id="arrow-icon"/>
+          </div>
+        </div>
+        <div v-else>
+          <div id="user-data" @click="onLogin" v-if="!isSmallScreen">
+            <UserData :user-surname="`się`" :user-first-name="`Zaloguj`" />
+          </div>
         </div>
       </div>
     </div>
@@ -53,7 +60,7 @@ export default {
     }
   },
   methods:
-        {
+      {
         onOffersClick() {
           this.$router.push('/offers');
         },
@@ -71,6 +78,9 @@ export default {
         },
         changeMenuState() {
           this.emitter.emit('change-menu');
+        },
+        onLogin() {
+          this.$router.push('/login');
         },
         async getUserData() {
           let token = localStorage.getItem('token');
@@ -117,6 +127,11 @@ export default {
     this.emitter.on('menu-opened', () => {
       this.menuIsShown = true;
     });
+  },
+  computed: {
+    isLoggedIn() {
+      return !!localStorage.getItem('token');
+    }
   },
 };
 </script>
@@ -165,6 +180,11 @@ export default {
 
   .button {
     min-width: 50px;
+  }
+
+  .buttonLong {
+    min-width: 80px;
+    font-size: calc( 7px + 0.9vw );
   }
 
   #user-data {

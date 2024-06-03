@@ -111,7 +111,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .input-row input[type="password"] {
   width: 25%;
   padding: 0.5%;

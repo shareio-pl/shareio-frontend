@@ -74,7 +74,7 @@ export default {
           this.$router.push('/about');
         },
         onLogoClick() {
-          this.$router.push("/scoreboard");
+          this.$router.push("/");
         },
         changeMenuState() {
           this.emitter.emit('change-menu');

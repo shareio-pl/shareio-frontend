@@ -8,6 +8,7 @@
           <ButtonPrimary class="button" button-text="Mapa" @click="onMapClick"/>
           <ButtonPrimary class="button" button-text="Nowa oferta" @click="onNewOfferClick"/>
           <ButtonPrimary class="button" button-text="O nas" @click="onAboutUsClick"/>
+          <ButtonPrimary class="buttonLong" button-text="Ranking" @click="onScoreboardClick"/>
         </div>
         <div v-if="isLoggedIn">
           <div id="user-data" @click="changeMenuState" v-if="!isSmallScreen">
@@ -76,6 +77,9 @@ export default {
         onLogoClick() {
           this.$router.push("/");
         },
+        onScoreboardClick() {
+          this.$router.push("/scoreboard");
+        },
         changeMenuState() {
           this.emitter.emit('change-menu');
         },
@@ -137,7 +141,7 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (min-width: 850px) {
+@media screen and (min-width: 950px) {
   #header {
     display: flex;
     width: 100%;
@@ -209,7 +213,7 @@ export default {
   z-index: 4;
 }
 
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 950px) {
   #header {
     display: none;
   }

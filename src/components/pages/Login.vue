@@ -3,7 +3,7 @@
     <Header />
     <h1>Zaloguj się</h1>
     <FormLogin />
-    <span @click="onRegister">Nie posiadasz konta? Zarejestruj się!</span>
+    <span @click="onRegister">Nie posiadasz konta? <b>Zarejestruj się!</b></span>
   </div>
 </template>
 
@@ -59,4 +59,8 @@ span:hover {
   text-decoration: underline;
 }
 
+b {
+  color: v-bind('COLORS.NOTIFICATION_PRIMARY');
+  font-weight: bold;
+}
 </style>

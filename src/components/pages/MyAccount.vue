@@ -51,6 +51,18 @@
             </span>
           </span>
         </div>
+        <div id="picked-up-by-me-offers">
+          <h1 class="down-offer"> Odebrane przez ciebie oferty </h1>
+          <span v-if="pickedUpOffers">
+            <span v-for="offer in pickedUpOffers" :key="offer">
+              <OfferReview :id="offer" style="width: 100%;" />
+            </span>
+            <span v-if="pickedUpOffers.length === 0 || pickedUpOffers == null">
+              <p class="down-offer
+              "> Nie odebrano żadnych ofert - zarezerwuj coś! </p>
+            </span>
+          </span>
+        </div>
         <div id="my-ended-offers">
           <h1 class="down-offer"> Zakończone oferty </h1>
           <span v-if="endedOffers">
@@ -104,6 +116,7 @@ export default {
       reservedOffers: null,
       createdOffers: null,
       myReservedOffers: null,
+      pickedUpOffers: null,
       endedOffers: null,
     }
   },
@@ -117,6 +130,7 @@ export default {
     this.getCreatedOffers();
     this.getEndedOffers();
     this.getOffersReservedByMe();
+    this.getPickedUpOffers();
   },
   methods: {
     setupImageSelectedListener() {
@@ -160,6 +174,16 @@ export default {
         .then(response => {
           console.log(response.data.offerIds);
           this.endedOffers = response.data.offerIds;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getPickedUpOffers() {
+      axios.get(GATEWAY_ADDRESS + '/offer/getFinishedOffersByReciever/' + this.id)
+        .then(response => {
+          console.log("Oferty, które odebrałem i muszę ocenić: ", response.data);
+          this.pickedUpOffers = response.data;
         })
         .catch(error => {
           console.log(error);

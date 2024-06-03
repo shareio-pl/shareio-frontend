@@ -1,10 +1,10 @@
 <template>
   <div v-if="imageIsLoading" class="offer-preview-card">
-    <ImageLoadingAnimation/>
+    <ImageLoadingAnimation />
   </div>
   <div v-else class="offer-preview-card" @click="navigateToOfferPage">
     <div class="offer-preview-image">
-      <img :src="offerPreviewImage" alt="Offer image"/>
+      <img :src="offerPreviewImage" alt="Offer image" />
     </div>
     <div class="offer-preview-content">
       <h2 class="offer-preview-title">{{ title }}</h2>
@@ -14,8 +14,8 @@
     </div>
     <div class="offer-preview-action">
       <UserData class="offer-preview-user" :userFirstName="userFirstName" :userSurname="userLastName"
-                :userImage="userImage"/>
-      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount"/>
+        :userImage="userImage" />
+      <Stars class="offer-preview-stars" :filledStars="starsAmount" :ratingsAmount="ratingsAmount" />
     </div>
   </div>
 </template>
@@ -25,9 +25,9 @@ import Stars from '../atoms/Stars.vue';
 import UserData from '../atoms/UserData.vue';
 import ImageLoadingAnimation from '../atoms/ImageLoadingAnimation.vue';
 
-import {COLORS, FONT_SIZES} from "../../../public/Consts";
-import {DEFAULT_USER_PROFILE_IMAGE} from '../../../public/Consts';
-import {GATEWAY_ADDRESS} from "../../../public/Consts";
+import { COLORS, FONT_SIZES } from "../../../public/Consts";
+import { DEFAULT_USER_PROFILE_IMAGE } from '../../../public/Consts';
+import { GATEWAY_ADDRESS } from "../../../public/Consts";
 import axios from "axios";
 
 export default {
@@ -67,7 +67,7 @@ export default {
   mounted() {
     this.getOfferData();
     if (this.reviewId !== null) {
-      this.emitter.emit('review-not-done', {id: this.id});
+      this.emitter.emit('review-not-done', { id: this.id });
     }
   },
   methods: {
@@ -76,7 +76,7 @@ export default {
     },
     arrayBufferToBase64(buffer) {
       return btoa(
-          new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+        new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
       );
     },
     async getOfferData() {
@@ -94,22 +94,24 @@ export default {
         this.userImage = await this.getImageData(response.data.ownerPhotoId);
         this.imageIsLoading = false;
         this.reviewId = response.data.reviewId;
-        if (this.reviewId !== null) {
+        if (this.reviewId === null) {
           this.emitter.emit('review-not-done', { id: this.id });
+          console.log('Review not done');
         }
+        console.log("REVIEW ID:", this.reviewId);
       } catch (error) {
         console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', {error: error.response.status});
+        this.emitter.emit('axiosError', { error: error.response.status });
       }
     },
     async getImageData(photoId) {
       try {
-        const response = await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, {responseType: 'arraybuffer'});
+        const response = await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' });
         let image = this.arrayBufferToBase64(response.data);
         return `data:image/jpeg;base64,${image}`;
       } catch (error) {
         console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', {error: error.response.status});
+        this.emitter.emit('axiosError', { error: error.response.status });
       }
     },
   },

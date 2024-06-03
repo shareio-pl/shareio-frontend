@@ -1,38 +1,38 @@
 <template>
   <form id="form-offer" @submit.prevent="submitForm">
-    <AIPopUp/>
+    <AIPopUp />
     <div id="form-offer-title">
       <FieldInput v-model="offerTitle" placeholder="Tytuł" label="Tytuł"
-                  :error="{ active: v$.offerTitle.$error && v$.offerTitle.$dirty, message: '' }"/>
+        :error="{ active: v$.offerTitle.$error && v$.offerTitle.$dirty, message: '' }" />
     </div>
     <div class="form-offer-flex">
       <div id="form-offer-location">
         <FieldInput v-model="offerCity" placeholder="Miasto" label="Miasto"
-                    :error="{ active: v$.offerCity.$error && v$.offerCity.$dirty, message: '' }"/>
+          :error="{ active: v$.offerCity.$error && v$.offerCity.$dirty, message: '' }" />
         <FieldInput v-model="offerStreet" placeholder="Ulica" label="Ulica"
-                    :error="{ active: v$.offerStreet.$error && v$.offerStreet.$dirty, message: '' }"/>
+          :error="{ active: v$.offerStreet.$error && v$.offerStreet.$dirty, message: '' }" />
         <FieldInput v-model="offerHomeNumber" placeholder="Numer domu" label="Numer domu"
-                    :error="{ active: v$.offerHomeNumber.$error && v$.offerHomeNumber.$dirty, message: '' }"/>
+          :error="{ active: v$.offerHomeNumber.$error && v$.offerHomeNumber.$dirty, message: '' }" />
       </div>
       <div id="form-offer-options">
-        <DropdownSelect :options="categories" type="Category" placeholder="Wybierz kategorię"/>
-        <DropdownSelect :options="states" type="State" placeholder="Wybierz stan"/>
+        <DropdownSelect :options="categories" type="Category" placeholder="Wybierz kategorię" />
+        <DropdownSelect :options="states" type="State" placeholder="Wybierz stan" />
       </div>
     </div>
     <div id="form-offer-description" class="position-relative">
       <FieldTextBox v-model="offerDescription" placeholder="Opis" label="Opis przedmiotu" style="width:200%;"
-                    :disabled="isAIDescriptionLoading"
-                    :error="{ active: v$.offerDescription.$error && v$.offerDescription.$dirty, message: '' }"/>
+        :disabled="isAIDescriptionLoading"
+        :error="{ active: v$.offerDescription.$error && v$.offerDescription.$dirty, message: '' }" />
       <div class="spinner" v-if="isAIDescriptionLoading"></div>
     </div>
   </form>
 </template>
 
 <script>
-import {GATEWAY_ADDRESS} from "../../../public/Consts";
+import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
-import {required, minLength, maxLength} from '@vuelidate/validators'
-import {useVuelidate} from '@vuelidate/core';
+import { required, minLength, maxLength } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core';
 
 import axios from 'axios';
 
@@ -92,18 +92,18 @@ export default {
   },
   validations() {
     return {
-      offerTitle: {required, minLength: minLength(5)},
-      offerDescription: {required, minLength: minLength(20), maxLength: maxLength(425)},
-      offerCity: {required, minLength: minLength(3)},
-      offerStreet: {required, minLength: minLength(3)},
-      offerHomeNumber: {required, minLength: minLength(1)},
-      category: {required},
-      condition: {required},
+      offerTitle: { required, minLength: minLength(5) },
+      offerDescription: { required, minLength: minLength(20), maxLength: maxLength(425) },
+      offerCity: { required, minLength: minLength(3) },
+      offerStreet: { required, minLength: minLength(3) },
+      offerHomeNumber: { required, minLength: minLength(1) },
+      category: { required },
+      condition: { required },
     }
   },
   setup() {
     const v$ = useVuelidate()
-    return {v$}
+    return { v$ }
   },
   methods: {
     submitForm() {
@@ -115,7 +115,7 @@ export default {
     async checkIfCanGenerate() {
       if (this.offerTitle === '' || this.condition === '' || this.category === '') {
         console.log("Offer title, condition or category is empty");
-        this.emitter.emit('error', {error: 'Tytuł, stan lub kategoria jest pusta!'});
+        this.emitter.emit('error', { error: 'Tytuł, stan lub kategoria jest pusta!' });
       } else {
         this.emitter.emit('generateDescription');
       }
@@ -147,7 +147,7 @@ export default {
           errorMessage += 'Stan jest obowiązkowy, ';
         }
         errorMessage = errorMessage.slice(0, -2);
-        this.emitter.emit('error', {error: errorMessage});
+        this.emitter.emit('error', { error: errorMessage });
         console.log("Error w walidacji: ", errorMessage);
         return null;
       } else {
@@ -176,7 +176,8 @@ export default {
       this.isAIDescriptionLoading = true;
       axios.get(GATEWAY_ADDRESS + `/offer/generateDescription`, {
         params: {
-          title: this.offerTitle, condition: this.conditionDisplayName,
+          title: this.offerTitle,
+          condition: this.conditionDisplayName,
           category: this.categoryDisplayName
         }
       }).then((response) => {
@@ -185,7 +186,7 @@ export default {
         this.isAIDescriptionLoading = false;
       }).catch((error) => {
         console.log(error);
-        this.emitter.emit('axiosError', {error: error.response.status});
+        this.emitter.emit('axiosError', { error: error.response.status });
         this.isAIDescriptionLoading = false;
       })
     },
@@ -204,7 +205,7 @@ export default {
         this.isAIDescriptionLoading = false;
       }).catch((error) => {
         console.log(error);
-        this.emitter.emit('axiosError', {error: error.response.status});
+        this.emitter.emit('axiosError', { error: error.response.status });
         this.isAIDescriptionLoading = false;
       })
     },

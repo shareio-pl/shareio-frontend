@@ -166,14 +166,15 @@ export default {
     },
     getOffersDataViaSearch() {
       this.categories.forEach(category => category.numberOfOffers = 0);
+
       axios.get(GATEWAY_ADDRESS + '/offer/search', {
         params: {
           title: this.searched_item,
-          category: this.categories_chosen,
+          category: this.categories_chosen[0],
           condition: this.option_chosen,
           distance: this.distance_chosen,
           score: this.stars_chosen,
-          creationDate: this.time_chosen,
+          creationDate: '', //this.time_chosen,
           sortType: this.sorting
         },
         headers: {

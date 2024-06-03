@@ -96,11 +96,15 @@ export default {
     },
     setupIsReviewNotDoneListener() {
       this.emitter.on('review-not-done', (data) => {
-        if (data.id === this.id) {
+        console.log('Received review-not-done event with data: ', data);
+        if (data.offerId === this.id) {
           this.isReviewDone = false;
         }
       });
     },
+    mounted() {
+      this.setupIsReviewNotDoneListener();
+    }
   },
 }
 

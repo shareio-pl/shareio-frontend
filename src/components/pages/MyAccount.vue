@@ -191,15 +191,8 @@ export default {
     },
     deleteAccount() {
       if (confirm("Czy na pewno chcesz usunąć konto? Operacja jest nieodwracalna.")) {
-        axios.delete(GATEWAY_ADDRESS + '/user/deleteUser/' + this.id)
-          .then(response => {
-            console.log(response);
-            localStorage.removeItem('token');
-            this.$router.push('/');
-          })
-          .catch(error => {
-            console.log(error);
-          });
+        // TODO REMOVE
+        alert("Twoje konto zostało by usunięte, ale wiemy, że chcesz pozostać tutaj!");
       }
     }
   }

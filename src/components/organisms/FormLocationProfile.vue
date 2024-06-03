@@ -114,9 +114,11 @@ export default {
       })
         .then(response => {
           console.log(response);
+          this.emitter.emit('success', { message: 'Dane zostały zmienione' });
         })
         .catch(error => {
           console.error(error);
+          this.emitter.emit('axiosError', { error: error.response.status });
         });
     },
     async getOwnerData() {

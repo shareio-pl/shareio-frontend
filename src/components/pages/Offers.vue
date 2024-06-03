@@ -101,10 +101,11 @@ export default {
         });
     },
     getOffersData() {
-      axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds')
+      axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers')
         .then(
           response => {
-            this.offersIds = response.data.offerIds;
+            console.log('Offers: ', response.data);
+            this.offersIds = response.data;
             let promises = this.offersIds.map(offerId =>
               axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
                 .then(response => {
@@ -131,7 +132,7 @@ export default {
             let promises = this.offersIds.map(offerId =>
               axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
                 .then(response => {
-                  let category = this.categories.find(category => category.name === response.data.category);
+                  let category = this.categories.find(category => category.displayName === response.data.category);
                   if (category) {
                     category.numberOfOffers++;
                   }

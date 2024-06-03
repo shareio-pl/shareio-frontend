@@ -11,8 +11,7 @@
 import Header from "@/components/organisms/Header.vue";
 import AddOffer from "@/components/organisms/AddOffer.vue";
 
-import axios from "axios";
-import { GATEWAY_ADDRESS } from "../../../public/Consts";
+import { jwtDecode } from "jwt-decode";
 
 export default {
   name: "NewOffer",
@@ -22,26 +21,10 @@ export default {
       userId: '',
     }
   },
-  async mounted() {
-    // TODO: get user from session
-
-    let ids = await axios.get(GATEWAY_ADDRESS + '/debug/getOfferIds').then((response) => {
-      console.log('Offers: ', response.data.offerIds);
-      return response.data.offerIds;
-    }).catch(error => {
-      console.error('ERROR: ', error);
-      this.emitter.emit('axiosError', { error: error.response.status });
-    });
-
-    console.log('userId: ', ids);
-    await axios.get(GATEWAY_ADDRESS + `/offer/get/${ids[0]}`)
-      .then((offerResponse) => {
-        this.userId = offerResponse.data.ownerId;
-      })
-      .catch(error => {
-        console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', { error: error.response.status });
-      });
+  mounted() {
+    let token = localStorage.getItem('token');
+    this.userId = jwtDecode(token).id;
+    console.log("NewOfferID", this.userId);
   },
 }
 </script>
@@ -57,6 +40,6 @@ export default {
 }
 
 #new-offer-container {
-  margin-top: 2%;
+  margin-top: 1%;
 }
 </style>

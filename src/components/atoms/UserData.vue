@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import {DEFAULT_USER_PROFILE_IMAGE} from "../../../public/Consts";
-import {FONT_SIZES, COLORS} from "../../../public/Consts";
+import { DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
+import { FONT_SIZES, COLORS } from "../../../public/Consts";
 
 export default {
   name: 'UserData',
@@ -59,7 +59,6 @@ export default {
   height: calc(20px + 2vw);
   border-radius: 50%;
   overflow: hidden;
-  align-self: flex-start;
 }
 
 .user-image img {
@@ -69,10 +68,6 @@ export default {
 }
 
 .user-info {
-  margin-left: 0.8em;
-  /* Percentage here wouldn't be the best choice, I think.
-  Because then the margin varies too much on the width of component this atom would be in;
-  in my testing the difference was noticeable. */
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -6,6 +6,7 @@
       <span>{{ label }}</span>
     </label>
     <p class="field-input-paragraph" v-if="error.active && error.message !== ''">{{ error.message }}</p>
+    <p class="field-input-paragraph" v-else-if="displayBlankSpaceBelow">&nbsp;</p>
   </div>
 </template>
 
@@ -30,6 +31,10 @@ export default {
     label: {
       type: String,
       required: true,
+    },
+    displayBlankSpaceBelow: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -108,7 +113,8 @@ input:not(:placeholder-shown)+span {
   border-bottom: 2px solid v-bind("COLORS.NOTIFICATION_PRIMARY_ERROR") !important;
   transition: border-bottom 1s ease-in-out;
 }
+
 .field-input-paragraph {
-  color: v-bind("COLORS.SECONDARY ");
+  color: v-bind("COLORS.PRIMARY");
 }
 </style>

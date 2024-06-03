@@ -25,11 +25,12 @@ export default {
 
 <style scoped>
 .button-secondary {
-  width: 20%;
   height: 45px;
   background-color: v-bind('COLORS.BUTTON_SECONDARY_NORMAL');
   color: v-bind('COLORS.TEXT_PRIMARY');
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  width: calc(20% + 0.5vw);
+  font-size: calc( 6px + 1.1vw );
+
 }
 
 .button-secondary:hover {

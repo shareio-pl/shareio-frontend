@@ -19,13 +19,13 @@
       </div>
       <div id="my-account-offers">
         <div id="my-reserved-offers">
-          <h1> Zarezerwowane oferty </h1>
+          <h1> Wystawione, zarezerwowane oferty </h1>
           <span v-if="reservedOffers">
             <span v-for="offer in reservedOffers" :key="offer">
               <OfferReview :id="offer" style="width: 100%;" />
             </span>
             <span v-if="reservedOffers.length === 0">
-              <p> Brak zarezerwowanych ofert </p>
+              <p> Nikt jeszcze nie zarezerwował twoich ofert! </p>
             </span>
           </span>
         </div>
@@ -37,6 +37,17 @@
             </span>
             <span v-if="createdOffers.length === 0">
               <p> Brak stworzonych ofert </p>
+            </span>
+          </span>
+        </div>
+        <div id="reserved-by-me-offers" class="down-offer">
+          <h1> Twoje zarezerwowane oferty </h1>
+          <span v-if="myReservedOffers">
+            <span v-for="offer in myReservedOffers" :key="offer">
+              <OfferManage :id="offer" style="width: 100%;" />
+            </span>
+            <span v-if="myReservedOffers.length === 0">
+              <p> Nie zarezerwowano żadnych ofert - przejrzyj dostępne! </p>
             </span>
           </span>
         </div>
@@ -90,6 +101,7 @@ export default {
       changedImage: null,
       reservedOffers: null,
       createdOffers: null,
+      myReservedOffers: null,
       endedOffers: null,
     }
   },
@@ -102,6 +114,7 @@ export default {
     this.getReservedOffers();
     this.getCreatedOffers();
     this.getEndedOffers();
+    this.getOffersReservedByMe();
   },
   methods: {
     setupImageSelectedListener() {
@@ -114,6 +127,17 @@ export default {
         .then(response => {
           console.log(response.data.offerIds);
           this.reservedOffers = response.data.offerIds;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getOffersReservedByMe() {
+      axios.get(GATEWAY_ADDRESS + '/offer/getReservedOffersByReciever/' + this.id)
+        .then(response => {
+          console.log("Moje oferty które zarezerowowałem: ", response.data);
+          console.log(response.data.offerIds);
+          this.myReservedOffers = response.data.offerIds;
         })
         .catch(error => {
           console.log(error);

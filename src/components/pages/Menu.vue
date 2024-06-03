@@ -16,10 +16,10 @@
         <hr />
         <span @click="onAboutUsClick">O nas</span>
         <hr />
-        <span @click="onScoreboardClick">Ranking</span>
-        <hr />
       </div>
       <span v-if="isLoggedIn" @click="onMyAccountClick">Moje konto</span>
+      <hr v-if="isLoggedIn" class="conditionalLines" />
+      <span v-if="isLoggedIn" @click="onScoreboardClick">Ranking</span>
       <hr v-if="isLoggedIn" class="conditionalLines" />
       <span v-if="isLoggedIn" @click="onHelpClick">Pomoc</span>
       <hr v-if="isLoggedIn" class="conditionalLines" />

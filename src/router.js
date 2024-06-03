@@ -11,6 +11,7 @@ import AboutUs from "@/components/pages/AboutUs.vue";
 import Helpdesk from "@/components/pages/Helpdesk.vue";
 import MyAccount from "@/components/pages/MyAccount.vue";
 import Register from "@/components/pages/Register.vue";
+import Scoreboard from "@/components/pages/Scoreboard.vue";
 
 const routes = [
   {
@@ -74,6 +75,12 @@ const routes = [
     component: Register,
     name: "Rejestracja - ShareIO",
     meta: { requiresLoggedOut: true },
+  },
+  {
+    path: "/scoreboard",
+    component: Scoreboard,
+    name: "Ranking - ShareIO",
+    meta: { requiresAuth: true },
   },
   {
     path: "/:catchAll(.*)",

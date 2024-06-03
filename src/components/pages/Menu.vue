@@ -16,6 +16,8 @@
         <hr />
         <span @click="onAboutUsClick">O nas</span>
         <hr />
+        <span @click="onScoreboardClick">Ranking</span>
+        <hr />
       </div>
       <span v-if="isLoggedIn" @click="onMyAccountClick">Moje konto</span>
       <hr v-if="isLoggedIn" class="conditionalLines" />
@@ -115,6 +117,9 @@ export default {
     },
     onAboutUsClick() {
       this.$router.push('/about');
+    },
+    onScoreboardClick() {
+      this.$router.push('/scoreboard');
     },
     async getUserData() {
       let token = localStorage.getItem('token');

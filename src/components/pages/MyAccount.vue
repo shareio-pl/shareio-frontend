@@ -40,25 +40,25 @@
             </span>
           </span>
         </div>
-        <div id="reserved-by-me-offers" class="down-offer">
-          <h1> Twoje zarezerwowane oferty </h1>
+        <div id="reserved-by-me-offers">
+          <h1 class="down-offer"> Twoje zarezerwowane oferty </h1>
           <span v-if="myReservedOffers">
             <span v-for="offer in myReservedOffers" :key="offer">
-              <OfferManage :id="offer" style="width: 100%;" />
+              <OfferReserved :id="offer" style="width: 100%;" />
             </span>
-            <span v-if="myReservedOffers.length === 0">
-              <p> Nie zarezerwowano żadnych ofert - przejrzyj dostępne! </p>
+            <span v-if="myReservedOffers.length === 0 || myReservedOffers == null">
+              <p class="down-offer"> Nie zarezerwowano żadnych ofert - przejrzyj dostępne! </p>
             </span>
           </span>
         </div>
-        <div id="my-ended-offers" class="down-offer">
-          <h1> Zakończone oferty </h1>
+        <div id="my-ended-offers">
+          <h1 class="down-offer"> Zakończone oferty </h1>
           <span v-if="endedOffers">
             <span v-for="offer in endedOffers" :key="offer.id">
               <OfferPreview :id="offer" style="width: 80%;" />
             </span>
             <span v-if="endedOffers.length === 0">
-              <p> Brak zakończonych ofert </p>
+              <p class="down-offer"> Brak zakończonych ofert </p>
             </span>
           </span>
         </div>
@@ -75,6 +75,7 @@ import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import OfferReview from "@/components/organisms/OfferReview.vue";
 import OfferManage from "@/components/organisms/OfferManage.vue";
 import OfferPreview from "@/components/organisms/OfferPreview.vue";
+import OfferReserved from "@/components/organisms/OfferReserved.vue";
 import FormLocationProfile from "@/components/organisms/FormLocationProfile.vue";
 
 import { GATEWAY_ADDRESS, COLORS, FONT_SIZES } from "../../../public/Consts";
@@ -90,6 +91,7 @@ export default {
     OfferReview,
     OfferManage,
     OfferPreview,
+    OfferReserved,
     FormLocationProfile,
     ButtonPrimary,
   },
@@ -137,7 +139,7 @@ export default {
         .then(response => {
           console.log("Moje oferty które zarezerowowałem: ", response.data);
           console.log(response.data.offerIds);
-          this.myReservedOffers = response.data.offerIds;
+          this.myReservedOffers = response.data;
         })
         .catch(error => {
           console.log(error);

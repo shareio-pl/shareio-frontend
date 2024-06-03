@@ -1,13 +1,12 @@
 <template>
   <transition name="fade">
-    <div class="offer-manage" v-if="!isDeleted">
-      <div class="offer-manage-row">
-        <span class="offer-manage-review">
+    <div class="offer-reserve" v-if="!isDeleted">
+      <div class="offer-reserve-row">
+        <span class="offer-reserve-review">
           <OfferPreview :id="id" style="width: 100%;" />
         </span>
-        <span class="offer-manage-options">
-          <ButtonPrimary :button-text="editText" style="width: 60%;" />
-          <ButtonPrimary :button-text="closeText" @click="cancelOffer" style="width: 60%;" />
+        <span class="offer-reserve-options">
+          <ButtonPrimary :button-text="confirmText" @click="confirmPicked" style="width: 60%;" />
         </span>
       </div>
     </div>
@@ -15,17 +14,16 @@
 </template>
 
 <script>
-import { FONTS, COLORS, FONT_SIZES } from "../../../public/Consts";
-import { GATEWAY_ADDRESS } from "../../../public/Consts";
-
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import { FONTS, COLORS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
 
 import OfferPreview from "@/components/organisms/OfferPreview.vue";
 import ButtonPrimary from "../atoms/ButtonPrimary.vue";
 
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+
 export default {
-  name: "OfferManage",
+  name: "OfferReserved",
   components: {
     OfferPreview,
     ButtonPrimary
@@ -35,8 +33,7 @@ export default {
       FONTS: FONTS,
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
-      editText: 'Edytuj',
-      closeText: 'Zakończ',
+      confirmText: 'Potwierdź odbiór',
       isDeleted: false,
     };
   },
@@ -47,10 +44,10 @@ export default {
     },
   },
   methods: {
-    cancelOffer() {
-      this.closeText = 'Trwa zamykanie...';
+    confirmPicked() {
+      this.confirmText = 'Trwa potwierdzanie...';
       console.log(jwtDecode(localStorage.getItem("token")).id);
-      axios.post(GATEWAY_ADDRESS + "/offer/cancel", {
+      axios.post(GATEWAY_ADDRESS + "/offer/finish", {
         offerId: this.id,
         userId: jwtDecode(localStorage.getItem("token")).id
       }, {
@@ -58,17 +55,12 @@ export default {
           Authorization: 'Bearer ' + localStorage.getItem("token")
         }
       })
-        .then(response => {
+        .then(() => {
           this.isDeleted = true;
-          this.closeText = 'Zakończono!';
-          console.log(response);
         })
-        .catch(error => {
-          console.error(error);
+        .catch((error) => {
+          console.log(error);
         });
-    },
-    editOffer() {
-      this.$router.push('/editOffer/' + this.id);
     }
   },
 }
@@ -76,16 +68,16 @@ export default {
 </script>
 
 <style scoped>
-.offer-manage-row {
+.offer-reserve-row {
   display: flex;
   align-items: center;
 }
 
-.offer-manage-review {
+.offer-reserve-review {
   width: 80%
 }
 
-.offer-manage-options {
+.offer-reserve-options {
   width: 20%;
   display: flex;
   flex-direction: column;

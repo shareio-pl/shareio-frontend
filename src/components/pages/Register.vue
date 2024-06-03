@@ -1,6 +1,7 @@
 <template>
   <div id="register-page">
     <Header />
+    <img src="../../assets/logo.png" alt="" class="logo">
     <h1>Zarejestruj się</h1>
     <FormRegister />
   </div>
@@ -32,6 +33,18 @@ export default {
 h1 {
   margin-top: 1%;
   margin-bottom: 1%;
+}
+
+img {
+  aspect-ratio: 3.166;
+  height: 75px;
+  width: 237px;
+}
+
+.logo {
+  margin-top: 1%;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
 

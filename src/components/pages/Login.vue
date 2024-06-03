@@ -1,6 +1,7 @@
 <template>
   <div id="login-page">
     <Header />
+    <img src="../../assets/logo.png" alt="" class="logo">
     <h1>Zaloguj się</h1>
     <FormLogin />
     <span @click="onRegister">Nie posiadasz konta? Zarejestruj się!</span>
@@ -57,6 +58,18 @@ span {
 
 span:hover {
   text-decoration: underline;
+}
+
+img {
+  aspect-ratio: 3.166;
+  height: 75px;
+  width: 237px;
+}
+
+.logo {
+  margin-top: 1%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 </style>

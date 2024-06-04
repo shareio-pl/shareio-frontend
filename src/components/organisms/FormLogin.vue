@@ -12,6 +12,7 @@
       </div>
     </div>
     <ButtonPrimary type="submit" :buttonText="text" style="margin-left:0;" />
+    <span v-if="loginError">Nieprawidłowy email lub hasło!</span>
   </form>
 </template>
 
@@ -21,7 +22,7 @@ import axios from 'axios';
 import FieldInput from "@/components/atoms/FieldInput.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 
-import { GATEWAY_ADDRESS } from "../../../public/Consts";
+import {COLORS, GATEWAY_ADDRESS} from "../../../public/Consts";
 
 import { required, minLength, maxLength } from '@vuelidate/validators';
 import { useVuelidate } from "@vuelidate/core";
@@ -31,10 +32,12 @@ export default {
   components: { FieldInput, ButtonPrimary },
   data() {
     return {
+      COLORS: COLORS,
       email: "",
       password: "",
       emailError: "",
       passwordError: "",
+      loginError: "",
       text: "Zaloguj się"
     }
   },
@@ -67,8 +70,7 @@ export default {
         })
         .catch(error => {
           console.error('ERROR: ', error);
-          this.emailError = 'Invalid email or password';
-          this.passwordError = 'Invalid email or password';
+          this.loginError = 'Invalid email or password';
         });
     }
   },
@@ -82,7 +84,7 @@ export default {
     },
     'v$.password.$model'() {
       if (!this.v$.password.required.$model || this.v$.password.minLength.$model || this.v$.password.maxLength.$model) {
-        this.passwordError = "Hasło musi mieć od 8 do 20 znaków";
+        this.passwordError = "Hasło musi mieć od 6 do 20 znaków";
       } else {
         this.passwordError = '';
       }
@@ -113,5 +115,19 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
 }
+
+span {
+  font-size: calc(7px + 1.1vw);
+  color: v-bind('COLORS.TEXT_PRIMARY');
+  margin-top: 1%;
+}
+
+@media only screen and (max-width: 800px) {
+  .input-row {
+    width: 100%;
+  }
+}
+
 </style>

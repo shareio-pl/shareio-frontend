@@ -33,7 +33,7 @@
         <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved"/>
       </span>
       <span v-if="userId == null" class="offer-right-button">
-        <ButtonPrimary disabled='true' class="button-disabled" buttonText="Zaloguj się, aby zarezerwować"
+        <ButtonPrimary class="button-disabled" buttonText="Zaloguj się, aby zarezerwować"
                        style="line-height: calc(11px + 0.6vw); cursor: pointer;" @click="this.$router.push('/login')"/>
         <!-- przycisk rezerwacji widoczny jest też na stronie głównej-->
       </span>

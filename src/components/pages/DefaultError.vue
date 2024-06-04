@@ -31,7 +31,7 @@ export default {
       this.error = data.error;
       this.isShown = true;
 
-      setTimeout(this.closeError, 5000);
+      setTimeout(this.closeError, 3000);
     })
   },
 }

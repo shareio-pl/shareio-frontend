@@ -207,7 +207,7 @@ export default {
     },
     'v$.password.$model'() {
       if (!this.v$.password.required.$model || this.v$.password.minLength.$model || this.v$.password.maxLength.$model) {
-        this.passwordError = "Hasło musi mieć od 8 do 20 znaków";
+        this.passwordError = "Hasło musi mieć od 6 do 20 znaków";
       }
       else {
         this.passwordError = '';

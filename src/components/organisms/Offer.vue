@@ -26,13 +26,13 @@
       <div class="offer-right-map">
         <MapPreview v-if="mapDataLoaded" :zoom="zoom" :center="center"/>
       </div>
-      <span v-if="role === 'USER'" class="offer-right-button">        <!-- TODO Change USER to ADMIN in 3 places -->
+      <span v-if="role === 'ADMIN'" class="offer-right-button">
         <ButtonPrimary class="button deleteButton" buttonText="Skasuj" @click="deleteOffer"/>
       </span>
-      <span v-if="status === 'CREATED' && userId != null && role !== 'USER'" class="offer-right-button">
+      <span v-if="status === 'CREATED' && userId != null && role !== 'ADMIN'" class="offer-right-button">
         <ButtonPrimary class="button" :buttonText="offerButtonName" @click="submitOffer"/>
       </span>
-      <span v-if="status === 'RESERVED' && userId != null && role !== 'USER'" class="offer-right-button">
+      <span v-if="status === 'RESERVED' && userId != null && role !== 'ADMIN'" class="offer-right-button">
         <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved"/>
       </span>
       <span v-if="userId == null" class="offer-right-button">

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isShown" class="background">
+  <div v-if="isShown" class="background" v-on:click="closeError">
     <img :src="url" v-on:click="closeError" alt="Imagine a cat here">
   </div>
 </template>

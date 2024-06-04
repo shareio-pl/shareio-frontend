@@ -17,7 +17,7 @@
       <h2 class="offer-content-title">{{ offerTitle }}</h2>
       <div class="offer-content-metadata">
         <p> Wystawiono: <span style="font-weight: bold">{{ submittedOn }}</span></p>
-        <p> Lokalizacja: <span style="font-weight: bold">{{ location }}</span></p>
+        <p> Lokalizacja: <span style="font-weight: bold">{{ location }} </span></p>
         <p> Stan: <span style="font-weight: bold">{{ condition }}</span></p>
         <p class="offer-content-metadata-desc">{{ offerDescription }}</p>
       </div>
@@ -34,7 +34,7 @@
       </span>
       <span v-if="userId == null" class="offer-right-button">
         <ButtonPrimary disabled='true' class="button-disabled" buttonText="Zaloguj się, aby zarezerwować"
-                       style="line-height: calc(11px + 0.6vw);"/>
+                       style="line-height: calc(11px + 0.6vw); cursor: pointer;" @click="this.$router.push('/login')"/>
         <!-- przycisk rezerwacji widoczny jest też na stronie głównej-->
       </span>
     </div>
@@ -133,8 +133,9 @@ export default {
         this.submittedOn = response.data.creationDate.substring(0, 10);
         if (localStorage.getItem('token') === null) {
           this.location = response.data.city + ', ' + response.data.street;
-        } else {
-          this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' od Ciebie)';
+        } 
+        else {
+          this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' km od Ciebie)';
         }
         this.condition = response.data.condition;
         this.amountOfStars = response.data.ownerRating;
@@ -166,7 +167,7 @@ export default {
     async prepareDataToSend() {
       let formData = {
         offerId: this.id,
-        recieverId: this.userId
+        receiverId: this.userId
       }
       return formData;
     },

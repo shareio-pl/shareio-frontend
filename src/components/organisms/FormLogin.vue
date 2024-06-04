@@ -1,16 +1,17 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <div class="input-row">
-      <FieldInput v-model="email" placeholder="Email" label="Email" type="email"
-        :error="{ active: v$.email.$error && v$.email.$dirty, message: emailError }" />
+  <form id="login-user" @submit.prevent="submitForm">
+    <div id="login-user-data">
+      <div class="input-row">
+        <FieldInput v-model="email" placeholder="Email" label="Email" type="email"
+          :error="{ active: v$.email.$error && v$.email.$dirty, message: emailError }" displayBlankSpaceBelow=true />
+      </div>
+      <div class="input-row">
+        <FieldInput v-model="password" placeholder="Hasło" label="Hasło" type="password"
+          :error="{ active: v$.password.$error && v$.password.$dirty, message: passwordError }"
+          displayBlankSpaceBelow=true />
+      </div>
     </div>
-    <div class="input-row">
-      <FieldInput v-model="password" placeholder="Hasło" label="Hasło" type="password"
-        :error="{ active: v$.password.$error && v$.password.$dirty, message: passwordError }" />
-    </div>
-    <div class="login-submit">
-      <ButtonPrimary class="login-submit" type="submit" :buttonText="text" />
-    </div>
+    <ButtonPrimary type="submit" :buttonText="text" style="margin-left:0;" />
   </form>
 </template>
 
@@ -57,7 +58,12 @@ export default {
         .then(response => {
           console.log(response);
           localStorage.setItem('token', response.data);
-          this.$router.push('/');
+          this.$router.push('/').then(() => {
+            window.location.reload();
+          })
+        .catch(error => {
+            console.error(error);
+          })
         })
         .catch(error => {
           console.error('ERROR: ', error);
@@ -85,16 +91,27 @@ export default {
 }
 </script>
 
-<style>
-.input-row input[type="email"],
-.input-row input[type="password"] {
-  width: 25%;
-  padding: 0.5%;
-  margin-bottom: 1%;
+<style scoped>
+#login-user {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-.login-submit {
-  margin-top: 1%;
-  margin-right: 1%;
+#login-user-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.input-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 </style>

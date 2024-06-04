@@ -74,12 +74,12 @@ export default {
 }
 
 #input-icon {
-  font-size: 15rem;
+  font-size: 2rem;
   cursor: pointer;
 }
 
 #input-icon-overlay {
-  font-size: 15rem;
+  font-size: 2rem;
   cursor: pointer;
   opacity: 0.5;
   position: absolute;

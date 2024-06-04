@@ -5,13 +5,23 @@
         <FontAwesomeIcon :icon="iconChevronDown" class="arrow-icon" />
       </div>
     </div>
-    <div class="select-wrapper">
+    <div class="select-wrapper" v-if="!isForCountries">
       <select :class="{ 'selected': selectedOption !== '' }" v-model="selectedOption"
         @change="onSortChange(selectedOption)">
         <!-- TODO: Figure how to make have some color by default... -->
         <option disabled value="">{{ placeholder }}</option>
         <option v-for="(option, index) in options" :key="index" :value="option">
           {{ option.displayName }}
+        </option>
+      </select>
+      <font-awesome-icon :icon="iconChevronDown" class="arrow-icon" />
+    </div>
+    <div class="select-wrapper" v-else>
+      <select :class="{ 'selected': selectedOption !== '' }" v-model="selectedOption"
+        @change="onSortChange(selectedOption)">
+        <option :value="placeholder">{{ placeholder }}</option>
+        <option v-for="option in options" :key="option" :value="option">
+          {{ option }}
         </option>
       </select>
       <font-awesome-icon :icon="iconChevronDown" class="arrow-icon" />
@@ -41,6 +51,10 @@ export default {
     placeholder: {
       type: String,
       required: true
+    },
+    isForCountries: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -55,11 +69,17 @@ export default {
   methods: {
     onSortChange(option) {
       console.log(this.options);
-      this.emitter.emit('dropdown-change', { option: option.category, displayName: option.displayName, type: this.type });
+      if (!this.isForCountries)
+        this.emitter.emit('dropdown-change', { option: option.category, displayName: option.displayName, type: this.type });
+      else
+        this.emitter.emit('dropdown-change', { option: option, type: this.type });
+      console.log("Emitowano: ", option, this.type);
     },
   },
   mounted() {
-    console.log("Options: ", this.options);
+    if (this.isForCountries) {
+      this.selectedOption = this.placeholder;
+    }
   }
 }
 </script>

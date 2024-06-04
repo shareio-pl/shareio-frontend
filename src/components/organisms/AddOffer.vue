@@ -127,11 +127,8 @@ export default {
         city: formData.offerCity,
         street: formData.offerStreet,
         houseNumber: formData.offerHouseNumber,
-        flatNumber: this.flatNumber,
         region: this.region,
         country: this.country,
-        postCode: this.postCode,
-
       };
     },
     async submitOffer() {
@@ -203,10 +200,8 @@ export default {
           this.city = response.data.city;
           this.street = response.data.street;
           this.houseNumber = response.data.houseNumber;
-          this.flatNumber = response.data.flatNumber;
           this.region = response.data.region;
           this.country = response.data.country;
-          this.postCode = response.data.postCode;
           this.addressDataLoaded = true;
         })
         .catch((error) => {

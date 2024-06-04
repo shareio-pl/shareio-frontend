@@ -2,17 +2,17 @@
   <div class="select-wrapper">
     <select v-model="selectedOption" @change="onSortChange(selectedOption)">
       <option v-for="(option, index) in options" :key="index" :value="option">
-        &nbsp; Sortuj: {{ option }}
+        &nbsp; Sortuj: {{ option.displayName }}
       </option>
     </select>
-    <font-awesome-icon :icon="iconChevronDown" class="arrow-icon"/>
+    <font-awesome-icon :icon="iconChevronDown" class="arrow-icon" />
   </div>
 </template>
 
 <script>
-import {faChevronDown} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {COLORS} from '../../../public/Consts';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { COLORS } from '../../../public/Consts';
 
 export default {
   name: "SortDropdown",
@@ -22,15 +22,21 @@ export default {
   data() {
     return {
       COLORS: COLORS,
-      options: ["Najbliższe", "Najdalsze", "Najnowsze", "Najstarsze", "Najwyżej oceniane"],
+      options: [
+        { displayName: "Najbliższe", sortType: "CLOSEST" },
+        { displayName: "Najdalsze", sortType: "FURTHEST" },
+        { displayName: "Najnowsze", sortType: "NEWEST" },
+        { displayName: "Najstarsze", sortType: "OLDEST" },
+        { displayName: "Najwyżej oceniane", sortType: "HIGHEST_RATED" }
+      ],
       iconChevronDown: faChevronDown,
-      selectedOption: "Najbliższe",
+      selectedOption: { displayName: "Najbliższe", sortType: "CLOSEST" },
     };
   },
   methods: {
     onSortChange(option) {
       console.log('Sorting changed to: ', option);
-      this.emitter.emit('sortChange', {option: option});
+      this.emitter.emit('sortChange', { option: option.sortType });
     }
   }
 }
@@ -60,7 +66,5 @@ export default {
   pointer-events: none;
 }
 
-option {
-
-}
+option {}
 </style>

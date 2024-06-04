@@ -8,8 +8,8 @@
       <FontAwesomeIcon :icon="showOptions ? iconChevronUp : iconChevronDown" id="arrow-icon" @click="onArrowClick" />
     </div>
     <div class="filter-options-list" v-show="showOptions">
-      <div class="option" v-for="option in options" :key="option.name">
-        <Option :name="option.name" :selected-option="selectedOption" />
+      <div class="option" v-for="option in options" :key="option.optionName">
+        <Option :displayName="option.displayName" :optionName="option.optionName" :selected-option="selectedOption" />
       </div>
     </div>
   </div>
@@ -60,14 +60,18 @@ export default {
     },
     setSelectEmitter() {
       this.emitter.on('selected-option', (data) => {
+        console.log('Received selected option: ', data);
         this.selectedOption = data.optionName;
+        console.log('Selected option: ', this.selectedOption);
         this.emitter.emit('filter-options', { optionName: data.optionName });
       });
     },
     getConditions() {
       axios.get(GATEWAY_ADDRESS + `/offer/getConditions`).then((response) => {
         console.log('Received conditions: ', response.data);
-        this.options = response.data.conditions.map(condition => ({ name: condition.displayName }));
+        this.options = response.data.conditions.map(
+          condition => ({ displayName: condition.displayName, optionName: condition.condition })
+        );
       });
     },
     clearFilter() {

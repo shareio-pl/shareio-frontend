@@ -26,10 +26,13 @@
       <div class="offer-right-map">
         <MapPreview v-if="mapDataLoaded" :zoom="zoom" :center="center"/>
       </div>
-      <span v-if="status === 'CREATED' && userId != null" class="offer-right-button">
+      <span v-if="role === 'ADMIN'" class="offer-right-button">
+        <ButtonPrimary class="button deleteButton" buttonText="Skasuj" @click="deleteOffer"/>
+      </span>
+      <span v-if="status === 'CREATED' && userId != null && role !== 'ADMIN'" class="offer-right-button">
         <ButtonPrimary class="button" :buttonText="offerButtonName" @click="submitOffer"/>
       </span>
-      <span v-if="status === 'RESERVED' && userId != null" class="offer-right-button">
+      <span v-if="status === 'RESERVED' && userId != null && role !== 'ADMIN'" class="offer-right-button">
         <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved"/>
       </span>
       <span v-if="userId == null" class="offer-right-button">
@@ -80,6 +83,7 @@ export default {
       userFirstName: '',
       userSurname: '',
       userId: null,
+      role: null,
       timeUntilUnreserved: '',
       status: '',
     }
@@ -104,6 +108,26 @@ export default {
   methods: {
     submitOffer() {
       this.reserveOffer();
+    },
+    deleteOffer() {
+      axios.delete(`${GATEWAY_ADDRESS}/offer/delete/${this.id}`, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      })
+          .then(response => {
+            console.log('Offer deleted successfully', response);
+            this.$router.push('/').then(() => {
+              window.location.reload();
+            })
+                .catch(error => {
+                  console.error(error);
+                })
+          })
+          .catch(error => {
+            console.error('Error deleting offer:', error);
+            this.emitter.emit('axiosError', {error: error.response.status});
+          });
     },
     arrayBufferToBase64(buffer) {
       return btoa(
@@ -133,7 +157,7 @@ export default {
         this.submittedOn = response.data.creationDate.substring(0, 10);
         if (localStorage.getItem('token') === null) {
           this.location = response.data.city + ', ' + response.data.street;
-        } 
+        }
         else {
           this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' km od Ciebie)';
         }
@@ -205,6 +229,7 @@ export default {
     let token = localStorage.getItem('token');
     if (token) {
       this.userId = jwtDecode(token).id;
+      this.role = jwtDecode(token).role;
     }
     await this.getOfferData();
     this.getTimeUntilUnreserved();
@@ -345,5 +370,9 @@ export default {
 
 .button-disabled:hover {
   background-color: v-bind('COLORS.BUTTON_DISABLED');
+}
+
+.deleteButton {
+  background-color: v-bind('COLORS.NOTIFICATION_PRIMARY_ERROR');
 }
 </style>

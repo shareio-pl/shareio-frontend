@@ -30,7 +30,7 @@ export default {
     },
   },
   mounted() {
-    let token = localStorage.get('token');
+    let token = localStorage.getItem('token');
     if (token && jwtDecode(token).exp < Date.now() / 1000) {
       localStorage.removeItem('token');
     }

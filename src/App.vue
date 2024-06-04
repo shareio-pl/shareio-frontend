@@ -1,15 +1,16 @@
 <template>
   <div :style="{ fontFamily: FONTS.PRIMARY }">
-    <AxiosError/>
-    <DefaultError/>
-    <DefaultSuccess/>
-    <Menu/>
-    <RouterView/>
+    <AxiosError />
+    <DefaultError />
+    <DefaultSuccess />
+    <Menu />
+    <RouterView />
   </div>
 </template>
 
 <script>
-import {FONTS} from "../public/Consts";
+import { FONTS } from "../public/Consts";
+import { jwtDecode } from "jwt-decode";
 import AxiosError from "@/components/pages/AxiosError.vue";
 import DefaultError from "@/components/pages/DefaultError.vue";
 import DefaultSuccess from "@/components/pages/DefaultSuccess.vue";
@@ -28,6 +29,12 @@ export default {
       return FONTS;
     },
   },
+  mounted() {
+    let token = localStorage.get('token');
+    if (token && jwtDecode(token).exp < Date.now() / 1000) {
+      localStorage.removeItem('token');
+    }
+  }
 };
 </script>
 

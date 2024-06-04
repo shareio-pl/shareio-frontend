@@ -11,6 +11,7 @@ import AboutUs from "@/components/pages/AboutUs.vue";
 import Helpdesk from "@/components/pages/Helpdesk.vue";
 import MyAccount from "@/components/pages/MyAccount.vue";
 import Register from "@/components/pages/Register.vue";
+import MyOffers from "@/components/pages/MyOffers.vue";
 
 const routes = [
   {
@@ -67,6 +68,12 @@ const routes = [
     path: "/myAccount",
     component: MyAccount,
     name: "Moje konto - ShareIO",
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/myOffers",
+    component: MyOffers,
+    name: "Moje oferty - ShareIO",
     meta: { requiresAuth: true },
   },
   {

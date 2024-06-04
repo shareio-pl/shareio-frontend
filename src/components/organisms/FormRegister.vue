@@ -52,7 +52,7 @@
       </div>
     </div>
     <p class="info" :style="{ color: COLORS.PRIMARY }">'*' - pole wymagane </p>
-    <ButtonPrimary buttonText="Zarejestruj" style="margin-left:0; margin-bottom:3em;" />
+    <ButtonPrimary disabled="isDisabled" buttonText="Zarejestruj" style="margin-left:0; margin-bottom:3em;" />
   </form>
 </template>
 
@@ -107,6 +107,8 @@ export default {
       streetError: "",
       postCodeError: "",
 
+      isDisabled: false,
+
     };
   },
   validations() {
@@ -157,6 +159,7 @@ export default {
         console.log("Kraj: ", this.country);
         return null;
       }
+      this.isDisabled = true;
       let data = this.prepareDataToSend();
       await axios.post(GATEWAY_ADDRESS + '/user/add', data, { headers: { 'Content-Type': 'application/json' } })
         .then(() => {
@@ -166,6 +169,7 @@ export default {
         .catch(error => {
           console.error('ERROR: ', error);
           this.emitter.emit('axiosError', { error: error.response.status });
+          this.isDisabled = false;
         });
     },
   },

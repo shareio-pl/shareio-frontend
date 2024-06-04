@@ -19,6 +19,7 @@
     <div v-else>
       <ButtonPrimary type="submit" :buttonText="text" style="width: calc(30px + 14vw);  margin-left:0;" />
     </div>
+    <span v-if="loginError">Nieprawidłowy email lub hasło!</span>
   </form>
 </template>
 
@@ -31,7 +32,7 @@ import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 
-import { GATEWAY_ADDRESS } from "../../../public/Consts";
+import {COLORS, GATEWAY_ADDRESS} from "../../../public/Consts";
 
 import { required, minLength, maxLength } from '@vuelidate/validators';
 import { useVuelidate } from "@vuelidate/core";
@@ -41,6 +42,7 @@ export default {
   components: { FieldInput, ButtonPrimary, FontAwesomeIcon },
   data() {
     return {
+      COLORS: COLORS,
       email: "",
       password: "",
       emailError: "",
@@ -48,6 +50,7 @@ export default {
       text: "Zaloguj się",
       isloading: false,
       iconLoading: faSpinner,
+      loginError: "",
     }
   },
   setup() {
@@ -80,9 +83,8 @@ export default {
         })
         .catch(error => {
           console.error('ERROR: ', error);
-          this.emailError = 'Invalid email or password';
-          this.passwordError = 'Invalid email or password';
           this.isloading = false;
+          this.loginError = 'Invalid email or password';
         });
     }
   },
@@ -96,7 +98,7 @@ export default {
     },
     'v$.password.$model'() {
       if (!this.v$.password.required.$model || this.v$.password.minLength.$model || this.v$.password.maxLength.$model) {
-        this.passwordError = "Hasło musi mieć od 8 do 20 znaków";
+        this.passwordError = "Hasło musi mieć od 6 do 20 znaków";
       } else {
         this.passwordError = '';
       }
@@ -127,5 +129,19 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
 }
+
+span {
+  font-size: calc(7px + 1.1vw);
+  color: v-bind('COLORS.TEXT_PRIMARY');
+  margin-top: 1%;
+}
+
+@media only screen and (max-width: 800px) {
+  .input-row {
+    width: 100%;
+  }
+}
+
 </style>

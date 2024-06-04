@@ -11,7 +11,14 @@
           displayBlankSpaceBelow=true />
       </div>
     </div>
-    <ButtonPrimary type="submit" :buttonText="text" style="margin-left:0;" />
+    <div v-if="isloading">
+      <div class="loading-spinner">
+        <FontAwesomeIcon :icon="iconLoading" spin style="font-size: 24px; color: #666;" />
+      </div>
+    </div>
+    <div v-else>
+      <ButtonPrimary type="submit" :buttonText="text" style="width: calc(30px + 14vw);  margin-left:0;" />
+    </div>
   </form>
 </template>
 
@@ -21,6 +28,9 @@ import axios from 'axios';
 import FieldInput from "@/components/atoms/FieldInput.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import {faSpinner} from '@fortawesome/free-solid-svg-icons';
+
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
 import { required, minLength, maxLength } from '@vuelidate/validators';
@@ -28,14 +38,16 @@ import { useVuelidate } from "@vuelidate/core";
 
 export default {
   name: "FormLogin",
-  components: { FieldInput, ButtonPrimary },
+  components: { FieldInput, ButtonPrimary, FontAwesomeIcon },
   data() {
     return {
       email: "",
       password: "",
       emailError: "",
       passwordError: "",
-      text: "Zaloguj się"
+      text: "Zaloguj się",
+      isloading: false,
+      iconLoading: faSpinner,
     }
   },
   setup() {
@@ -54,6 +66,7 @@ export default {
       if (this.v$.$error) {
         return null;
       }
+      this.isloading = true;
       axios.post(GATEWAY_ADDRESS + '/login', { email: this.email, password: this.password })
         .then(response => {
           console.log(response);
@@ -69,6 +82,7 @@ export default {
           console.error('ERROR: ', error);
           this.emailError = 'Invalid email or password';
           this.passwordError = 'Invalid email or password';
+          this.isloading = false;
         });
     }
   },

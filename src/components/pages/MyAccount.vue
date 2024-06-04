@@ -11,6 +11,7 @@
               <p class="my-account-delete-header" style="margin-bottom: 1em;"> Zarządzaj kontem </p>
             </div>
             <div class="my-account-delete-content">
+              <ButtonPrimary buttonText="Zmień hasło" style="width: 50%; margin-left:0;" @click="onChangePasswordClick" />
               <ButtonPrimary buttonText="Usuń konto" style="width: 50%; margin-left:0; background-color:brown"
                 @click="deleteAccount" />
             </div>
@@ -70,6 +71,9 @@ export default {
         // TODO REMOVE
         alert("Twoje konto zostało by usunięte, ale wiemy, że chcesz pozostać tutaj!");
       }
+    },
+    onChangePasswordClick() {
+      this.$router.push('/changePassword');
     }
   }
 }
@@ -112,6 +116,13 @@ export default {
 
 .down-offer {
   color: v-bind('COLORS.PRIMARY');
+}
+
+.my-account-delete-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .my-account-delete-header {

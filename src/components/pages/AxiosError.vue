@@ -28,7 +28,7 @@ export default {
       console.log('URL: ', this.url);
       this.isShown = true;
 
-      setTimeout(this.closeError, 5000);
+      setTimeout(this.closeError, 3000);
     });
   },
 }

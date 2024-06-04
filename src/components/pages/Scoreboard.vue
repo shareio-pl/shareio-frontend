@@ -14,8 +14,9 @@
           :score="user.score"
           :nameAndSurname="user.nameAndSurname"
           :position="user.position"
+          :current-user="user.userId === this.currentUser.userId"
       />
-      <Dots v-if="!isCurrentUserInTopUsers"/>
+      <Dots/>
       <div v-if="!isCurrentUserInTopUsers" class="current-user-row">
         <ScoreboardPosition
             :userId="currentUser.userId"
@@ -146,4 +147,10 @@ export default {
 .column-title3 {
   width: 64%;
 }
+
+.current-user-row >>> .name {
+  font-weight: bold;
+}
+
+
 </style>

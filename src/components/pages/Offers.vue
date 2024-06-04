@@ -42,7 +42,7 @@ export default {
       offers: [],
       currentPage: 1,
       time_from_youngest: true,
-      time_chosen: '',
+      time_chosen: null, //new Date('2026-01-01').toISOString().slice(0, 10),
       option_chosen: '',
       stars_chosen: '',
       distance_chosen: '',
@@ -84,10 +84,13 @@ export default {
         this.distance_chosen = data.distance_chosen;
         this.categories_chosen = data.categories_chosen;
 
-        if (!this.time_chosen) {
-          let date = new Date();
-          date.setDate(date.getDate() - data.time_chosen);
-          this.time_chosen = date;
+        console.log('Received filter change: ', data);
+
+        let date = new Date();
+        if (data.time_chosen) {
+          date.setDate(date.getDate() + data.time_chosen);
+          this.time_chosen = date.toISOString().slice(0, 10);
+          console.log('Time chosen: ', this.time_chosen);
         }
 
         this.getOffersDataViaSearch();
@@ -169,7 +172,8 @@ export default {
       this.categories.forEach(category => category.numberOfOffers = 0);
       this.offersIds = [];
 
-      let promises = this.categories_chosen.map(category => {
+      let makeRequest = (category) => {
+
         return axios.get(GATEWAY_ADDRESS + '/offer/search', {
           params: {
             title: this.searched_item,
@@ -177,7 +181,7 @@ export default {
             condition: this.option_chosen,
             distance: this.distance_chosen,
             score: this.stars_chosen,
-            creationDate: '', //this.time_chosen,
+            creationDate: this.time_chosen,
             sortType: this.sorting
           },
           headers: {
@@ -199,7 +203,14 @@ export default {
             );
             return Promise.all(offerPromises);
           });
-      });
+      };
+
+      let promises;
+      if (this.categories_chosen.length > 0) {
+        promises = this.categories_chosen.map(makeRequest);
+      } else {
+        promises = [makeRequest(null)];
+      }
 
       Promise.all(promises)
         .catch(error => {

@@ -94,11 +94,11 @@ export default {
         this.userImage = await this.getImageData(response.data.ownerPhotoId);
         this.imageIsLoading = false;
         this.reviewId = response.data.reviewId;
-        if (this.reviewId === null) {
-          this.emitter.emit('review-not-done', { offerId: this.id });
-          console.log('Review not done');
-          console.log("ID Sent in event: ", this.id);
+        this.offerId = response.data.offerId;
+        if (this.reviewId !== null) {
+          this.emitter.emit('review-done', { offerId: this.id });
         }
+        this.emitter.emit('offer-loaded', { id: this.offerId });
       } catch (error) {
         console.error('ERROR: ', error);
         this.emitter.emit('axiosError', { error: error.response.status });

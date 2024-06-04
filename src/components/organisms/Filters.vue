@@ -28,7 +28,7 @@
       <FilterOpenRate class="filter" filterName="Ocena wystawiającego" :prop-icon="RatingIcon" :clear="clearCounter" />
     </div>
     <div id="filters-button">
-      <ButtonPrimary @click="sendFilters" buttonText="Filtruj" />
+      <ButtonPrimary @click="sendFilters" buttonText="Filtruj" style="width: 40%; margin-bottom: 1em;" />
     </div>
   </div>
 </template>
@@ -95,9 +95,12 @@ export default {
       this.stars_chosen = '';
       this.distance_chosen = '';
       this.clearCounter++;
+      this.sendFilters();
     },
     onCategoriesClearClicked() {
+      this.categories_chosen = [];
       this.clearCounterCategories++;
+      this.sendFilters();
     },
     handleFilterStars(payload) {
       this.stars_chosen = payload.starsAmount;

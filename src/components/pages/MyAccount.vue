@@ -126,6 +126,7 @@ export default {
       this.id = jwtDecode(token).id;
     }
     this.setupImageSelectedListener();
+    this.setupOfferPickedListener();
     this.getReservedOffers();
     this.getCreatedOffers();
     this.getEndedOffers();
@@ -136,6 +137,12 @@ export default {
     setupImageSelectedListener() {
       this.emitter.on('image-uploaded', (file) => {
         this.changedImage = file;
+      });
+    },
+    setupOfferPickedListener() {
+      this.emitter.on('offer-picked', (data) => {
+        this.myReservedOffers = this.myReservedOffers.filter(offer => offer.id !== data.id);
+        this.getPickedUpOffers();
       });
     },
     getReservedOffers() {

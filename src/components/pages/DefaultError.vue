@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isShown" class="background">
+  <div v-if="isShown" v-on:click="closeError" class="background">
     <div class="error" v-on:click="closeError">
       <p>
         {{ this.error }}
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import {COLORS} from "../../../public/Consts";
+import { COLORS } from "../../../public/Consts";
 
 export default {
   name: "DefaultError",
@@ -21,11 +21,11 @@ export default {
     }
   },
   methods:
-      {
-        closeError() {
-          this.isShown = false;
-        }
-      },
+  {
+    closeError() {
+      this.isShown = false;
+    }
+  },
   mounted() {
     this.emitter.on('error', (data) => {
       this.error = data.error;

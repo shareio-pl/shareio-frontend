@@ -19,9 +19,11 @@
       </div>
       <span v-if="isLoggedIn" @click="onMyAccountClick">Moje konto</span>
       <hr v-if="isLoggedIn" class="conditionalLines" />
-      <span v-if="isLoggedIn" @click="onHelpClick">Pomoc</span>
+      <span v-if="isLoggedIn" @click="onMyOffersClick">Moje oferty i rezerwacje</span>
       <hr v-if="isLoggedIn" class="conditionalLines" />
-      <span v-if="isLoggedIn" @click="onPasswordChangeClick">Zmień hasło</span>
+      <span v-if="isLoggedIn" @click="onScoreboardClick">Ranking</span>
+      <hr v-if="isLoggedIn" class="conditionalLines" />
+      <span v-if="isLoggedIn" @click="onHelpClick">Pomoc</span>
       <span v-else @click="onLogin">Zaloguj się</span>
       <hr />
       <span v-if="isLoggedIn" @click="onLogout">Wyloguj się</span>
@@ -81,8 +83,8 @@ export default {
     onHelpClick() {
       this.$router.push("/help");
     },
-    onPasswordChangeClick() {
-      this.$router.push("/changePassword");
+    onMyOffersClick() {
+      this.$router.push("/myOffers");
     },
     onLogout() {
       localStorage.removeItem('token');
@@ -115,6 +117,9 @@ export default {
     },
     onAboutUsClick() {
       this.$router.push('/about');
+    },
+    onScoreboardClick() {
+      this.$router.push('/scoreboard');
     },
     async getUserData() {
       let token = localStorage.getItem('token');

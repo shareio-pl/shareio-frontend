@@ -1,6 +1,6 @@
 <template>
   <div id="browser">
-    <SearchInput placeholder="Znajdź swój przedmiot..." />
+    <SearchInput @keydown.enter.prevent="onButtonClick" placeholder="Znajdź swój przedmiot..." />
     <SortDropdown />
     <ButtonSecondary button-text="Szukaj" @click="onButtonClick" />
   </div>

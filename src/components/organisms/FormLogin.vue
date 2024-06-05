@@ -11,7 +11,15 @@
           displayBlankSpaceBelow=true />
       </div>
     </div>
-    <ButtonPrimary type="submit" :buttonText="text" style="margin-left:0;" />
+    <div v-if="isloading">
+      <div class="loading-spinner">
+        <FontAwesomeIcon :icon="iconLoading" spin style="font-size: 24px; color: #666;" />
+      </div>
+    </div>
+    <div v-else>
+      <ButtonPrimary type="submit" :buttonText="text" style="width: calc(30px + 14vw);  margin-left:0;" />
+    </div>
+    <span v-if="loginError">Nieprawidłowy email lub hasło!</span>
   </form>
 </template>
 
@@ -21,21 +29,28 @@ import axios from 'axios';
 import FieldInput from "@/components/atoms/FieldInput.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 
-import { GATEWAY_ADDRESS } from "../../../public/Consts";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import {faSpinner} from '@fortawesome/free-solid-svg-icons';
+
+import {COLORS, GATEWAY_ADDRESS} from "../../../public/Consts";
 
 import { required, minLength, maxLength } from '@vuelidate/validators';
 import { useVuelidate } from "@vuelidate/core";
 
 export default {
   name: "FormLogin",
-  components: { FieldInput, ButtonPrimary },
+  components: { FieldInput, ButtonPrimary, FontAwesomeIcon },
   data() {
     return {
+      COLORS: COLORS,
       email: "",
       password: "",
       emailError: "",
       passwordError: "",
-      text: "Zaloguj się"
+      text: "Zaloguj się",
+      isloading: false,
+      iconLoading: faSpinner,
+      loginError: "",
     }
   },
   setup() {
@@ -54,6 +69,7 @@ export default {
       if (this.v$.$error) {
         return null;
       }
+      this.isloading = true;
       axios.post(GATEWAY_ADDRESS + '/login', { email: this.email, password: this.password })
         .then(response => {
           console.log(response);
@@ -67,8 +83,8 @@ export default {
         })
         .catch(error => {
           console.error('ERROR: ', error);
-          this.emailError = 'Invalid email or password';
-          this.passwordError = 'Invalid email or password';
+          this.isloading = false;
+          this.loginError = 'Invalid email or password';
         });
     }
   },
@@ -82,7 +98,7 @@ export default {
     },
     'v$.password.$model'() {
       if (!this.v$.password.required.$model || this.v$.password.minLength.$model || this.v$.password.maxLength.$model) {
-        this.passwordError = "Hasło musi mieć od 8 do 20 znaków";
+        this.passwordError = "Hasło musi mieć od 6 do 20 znaków";
       } else {
         this.passwordError = '';
       }
@@ -113,5 +129,19 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
 }
+
+span {
+  font-size: calc(7px + 1.1vw);
+  color: v-bind('COLORS.TEXT_PRIMARY');
+  margin-top: 1%;
+}
+
+@media only screen and (max-width: 800px) {
+  .input-row {
+    width: 100%;
+  }
+}
+
 </style>

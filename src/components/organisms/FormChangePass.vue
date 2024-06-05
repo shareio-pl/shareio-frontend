@@ -1,20 +1,23 @@
 <template>
-  <form @submit.prevent="submitForm">
+  <form id="change-password" @submit.prevent="submitForm">
     <div class="input-row">
       <FieldInput class="input-form" v-model="oldPassword" placeholder="Stare hasło" label="Stare hasło" type="password"
-        :error="{ active: v$.oldPassword.$error && v$.oldPassword.$dirty, message: oldPasswordError }" />
+        :error="{ active: v$.oldPassword.$error && v$.oldPassword.$dirty, message: oldPasswordError }"
+        displayBlankSpaceBelow=true />
     </div>
     <div class="input-row">
       <FieldInput class="input-form" v-model="password" placeholder="Hasło" label="Nowe hasło" type="password"
-        :error="{ active: v$.password.$error && v$.password.$dirty, message: passwordError }" />
+        :error="{ active: v$.password.$error && v$.password.$dirty, message: passwordError }"
+        displayBlankSpaceBelow=true />
     </div>
     <div class="input-row">
       <FieldInput class="input-form" v-model="passwordRepeat" placeholder="Powtórz hasło" label="Powtórz nowe hasło"
-        type="password"
+        type="password" displayBlankSpaceBelow=true
         :error="{ active: v$.passwordRepeat.$error && v$.passwordRepeat.$dirty, message: passwordRepeatError }" />
     </div>
     <div class="password-submit">
-      <ButtonPrimary class="password-submit" type="submit" :buttonText="text" />
+      <ButtonPrimary class="password-submit" type="submit" :buttonText="text"
+        style="width: calc(30px + 14vw);  margin-left:0;" />
     </div>
   </form>
 </template>
@@ -112,17 +115,18 @@ export default {
 </script>
 
 <style scoped>
-.input-row input[type="password"] {
-  width: 25%;
-  padding: 0.5%;
+#change-password {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .input-row {
-  margin-bottom: 1%;
-}
-
-.password-submit {
-  margin-top: 1%;
-  margin-right: 1%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 </style>

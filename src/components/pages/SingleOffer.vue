@@ -1,14 +1,14 @@
 <template>
   <div id="singleoffer-page">
-    <Header/>
+    <Header />
     <div id="single-offer" v-if="singleOffer">
-      <Offer :id="singleOffer"/>
+      <Offer :id="singleOffer" />
     </div>
     <h1>Inne oferty oddającego</h1>
     <div id="other-offers">
       <span v-for="pair in offerPairs" :key="pair">
-        <OfferPreview :id="pair[0]" class="bigPreview"/>
-        <OfferPreview :id="pair[1]" class="bigPreview"/>
+        <OfferPreview :id="pair[0]" class="bigPreview" />
+        <OfferPreview :id="pair[1]" class="bigPreview" />
       </span>
     </div>
   </div>
@@ -18,12 +18,12 @@
 import Header from "@/components/organisms/Header.vue";
 import Offer from "@/components/organisms/Offer.vue";
 import OfferPreview from "@/components/organisms/OfferPreview.vue";
-import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
+import { COLORS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
 import axios from "axios";
 
 export default {
   name: "SingleOffer",
-  components: {OfferPreview, Offer, Header},
+  components: { OfferPreview, Offer, Header },
   data() {
     return {
       COLORS: COLORS,
@@ -38,31 +38,31 @@ export default {
   methods: {
     async getOwnerOffers() {
       axios.get(GATEWAY_ADDRESS + `/offer/get/${this.singleOffer}`)
-          .then(response => {
-            console.log(response);
-            this.offerOwnerId = response.data.ownerId;
+        .then(response => {
+          console.log(response);
+          this.offerOwnerId = response.data.ownerId;
 
-            axios.get(GATEWAY_ADDRESS + `/offer/getCreatedOffersByUser/${this.offerOwnerId}`).then((response) => {
-              console.log('Other Owner Offers: ', response.data.offerIds);
-              this.offersIds = response.data.offerIds.filter((offerId) => offerId !== this.singleOffer);
-              let numberOfOffers;
-              if (this.offersIds.length % 2 === 0) {
-                numberOfOffers = this.offersIds.length;
-              } else {
-                numberOfOffers = this.offersIds.length - 1;
-              }
-              for (let offerId = 0; offerId < numberOfOffers; offerId += 2) {
-                this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
-              }
-            }).catch(error => {
-              console.error('ERROR: ', error);
-              this.emitter.emit('axiosError', {error: error.response.status});
-            });
-          })
-          .catch(error => {
+          axios.get(GATEWAY_ADDRESS + `/offer/getCreatedOffersByUser/${this.offerOwnerId}`).then((response) => {
+            console.log('Other Owner Offers: ', response.data.offerIds);
+            this.offersIds = response.data.offerIds.filter((offerId) => offerId !== this.singleOffer);
+            let numberOfOffers;
+            if (this.offersIds.length % 2 === 0) {
+              numberOfOffers = this.offersIds.length;
+            } else {
+              numberOfOffers = this.offersIds.length - 1;
+            }
+            for (let offerId = 0; offerId < numberOfOffers; offerId += 2) {
+              this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
+            }
+          }).catch(error => {
             console.error('ERROR: ', error);
-            this.emitter.emit('axiosError', {error: error.response.status});
+            this.emitter.emit('axiosError', { error: error.response.status });
           });
+        })
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
     }
   },
   mounted() {
@@ -78,6 +78,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 100vh;
 }
 
 #single-offer {

@@ -57,6 +57,7 @@ export default {
       })
         .then(() => {
           this.isDeleted = true;
+          this.emitter.emit('offer-picked', { id: this.id });
         })
         .catch((error) => {
           console.log(error);

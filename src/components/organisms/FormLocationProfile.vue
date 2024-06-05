@@ -6,15 +6,14 @@
       </div>
       <div id="register-user-location">
         <DropdownSelect :options="COUNTRIES" type="country" placeholder="Polska" isForCountries=true />
-        <FieldInput class="full-width" v-model="region" label="Województwo *" displayBlankSpaceBelow=true />
+        <FieldInput class="full-width" v-model="region" label="Województwo *" />
         <FieldInput class="full-width" v-model="city" label="Miasto *"
-          :error="{ active: v$.city.$error && v$.city.$dirty, message: cityError }" displayBlankSpaceBelow=true />
-        <FieldInput class="full-width" v-model="street" label="Ulica *" displayBlankSpaceBelow=true />
-
-        <FieldInput class="full-width" v-model="postCode" label="Kod pocztowy *" displayBlankSpaceBelow=true />
-        <div class="input-row">
-          <FieldInput v-model="houseNumber" label="Nr. domu" displayBlankSpaceBelow=true />
-          <FieldInput v-model="flatNumber" label="Mieszkanie" displayBlankSpaceBelow=true />
+          :error="{ active: v$.city.$error && v$.city.$dirty, message: cityError }" />
+        <FieldInput class="full-width" v-model="street" label="Ulica *" />
+        <FieldInput class="full-width" v-model="postCode" label="Kod pocztowy *" />
+        <div class="input-row" style="width: 100%;">
+          <FieldInput v-model="houseNumber" label="Nr. domu" />
+          <FieldInput v-model="flatNumber" label="Mieszkanie" />
         </div>
         <ButtonPrimary buttonText="Zapisz zmiany" style="margin-left:0; width: 50%;" />
       </div>
@@ -211,10 +210,6 @@ export default {
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
-}
-
-.input-row>* {
-  width: 48%;
 }
 
 .full-width {

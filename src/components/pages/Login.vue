@@ -45,7 +45,7 @@ export default {
 }
 
 h1 {
-  margin-top: 1%;
+  margin-top: 0;
   margin-bottom: 1%;
 }
 
@@ -66,7 +66,7 @@ img {
 }
 
 .logo {
-  margin-top: 0%;
+  margin-top: 0;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 0%;

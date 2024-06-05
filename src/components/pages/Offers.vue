@@ -114,8 +114,12 @@ export default {
         });
     },
     getOffersData() {
-      axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers')
-        .then(
+      axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }).then(
           response => {
             console.log('Offers: ', response.data);
             this.offersIds = response.data;

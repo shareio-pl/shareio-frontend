@@ -114,27 +114,59 @@ export default {
         });
     },
     getOffersData() {
-      axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers')
-        .then(
-          response => {
-            console.log('Offers: ', response.data);
-            this.offersIds = response.data;
-            let promises = this.offersIds.map(offerId =>
-              axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
-                .then(response => {
-                  let category = this.categories.find(category => category.displayName === response.data.category);
-                  if (category) {
-                    category.numberOfOffers++;
-                  }
-                })
-            );
-            return Promise.all(promises);
+      let token = localStorage.getItem('token');
+      if(token!==null){
+        axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
           }
-        )
-        .catch(error => {
-          console.error('ERROR: ', error);
-          this.emitter.emit('axiosError', { error: error.response.status });
-        });
+        })
+            .then(
+                response => {
+                  console.log('Offers: ', response.data);
+                  this.offersIds = response.data;
+                  let promises = this.offersIds.map(offerId =>
+                      axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
+                          .then(response => {
+                            let category = this.categories.find(category => category.displayName === response.data.category);
+                            if (category) {
+                              category.numberOfOffers++;
+                            }
+                          })
+                  );
+                  return Promise.all(promises);
+                }
+            )
+            .catch(error => {
+              console.error('ERROR: ', error);
+              this.emitter.emit('axiosError', { error: error.response.status });
+            });
+      }
+      else {
+        axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers')
+            .then(
+                response => {
+                  console.log('Offers: ', response.data);
+                  this.offersIds = response.data;
+                  let promises = this.offersIds.map(offerId =>
+                      axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
+                          .then(response => {
+                            let category = this.categories.find(category => category.displayName === response.data.category);
+                            if (category) {
+                              category.numberOfOffers++;
+                            }
+                          })
+                  );
+                  return Promise.all(promises);
+                }
+            )
+            .catch(error => {
+              console.error('ERROR: ', error);
+              this.emitter.emit('axiosError', { error: error.response.status });
+            });
+      }
+
     },
     getOffersDataByNameAndSorting() {
       this.categories.forEach(category => category.numberOfOffers = 0);

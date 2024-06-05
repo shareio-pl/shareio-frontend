@@ -126,7 +126,19 @@ export default {
     // as a parameter
     async getOfferData() {
       try {
-        const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
+        let token = localStorage.getItem('token');
+        let response = null
+        if(token){
+           response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            }
+          });
+        }
+        else {
+          response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
+        }
         console.log('Offer ', this.id, ': ', response.data);
         this.offerTitle = response.data.title;
         this.offerDescription = response.data.description;

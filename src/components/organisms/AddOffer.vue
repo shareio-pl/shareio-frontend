@@ -366,9 +366,12 @@ textarea {
 
 .buttonAI {
   background-color: green;
-  width: 90%;
   height: 4em;
   margin-left: 0;
+  position: absolute;
+  top: 588px;
+  right: 445px;
+  width: 37%;
 }
 
 .buttonAI:hover {

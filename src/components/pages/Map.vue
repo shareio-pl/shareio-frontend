@@ -85,7 +85,11 @@ export default {
         // TODO: Optimize this
         async getOfferIds() {
           try {
-            const response = await axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers');
+            const response = await axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers', {
+              headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+              },
+            });
             this.offersIds = response.data;
           } catch (error) {
             console.error('ERROR: ', error);
@@ -94,7 +98,11 @@ export default {
         },
         async getOffer(offerId) {
           try {
-            const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`);
+            const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`, {
+              headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+              },
+            });
             const locationKey = `${response.data.latitude},${response.data.longitude}`;
             if (!this.markerLatLng[locationKey]) {
               this.markerLatLng[locationKey] = [];

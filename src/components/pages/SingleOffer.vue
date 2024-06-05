@@ -37,7 +37,11 @@ export default {
   },
   methods: {
     async getOwnerOffers() {
-      axios.get(GATEWAY_ADDRESS + `/offer/get/${this.singleOffer}`)
+      axios.get(GATEWAY_ADDRESS + `/offer/get/${this.singleOffer}`, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token'),
+        },
+      })
         .then(response => {
           console.log(response);
           this.offerOwnerId = response.data.ownerId;

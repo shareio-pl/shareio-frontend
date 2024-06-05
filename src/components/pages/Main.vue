@@ -92,7 +92,11 @@ export default {
       }
       else
       {
-        axios.get(GATEWAY_ADDRESS + '/offer/getNewest').then((response) => {
+        axios.get(GATEWAY_ADDRESS + '/offer/getNewest', {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+          },
+        }).then((response) => {
           console.log('Newest offers: ', response.data);
           this.offersIds = response.data;
 
@@ -135,7 +139,11 @@ export default {
       }
       else
       {
-        axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers').then((response) => {
+        axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers', {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+          },
+        }).then((response) => {
           this.closestOffer = response.data[0];
         }).catch(error => {
           console.error('ERROR: ', error);

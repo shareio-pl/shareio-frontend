@@ -81,8 +81,11 @@ export default {
     },
     async getOfferData() {
       try {
-        let response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
-
+        let response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+          },
+        });
         this.userFirstName = response.data.ownerName;
         this.userLastName = response.data.ownerSurname;
         this.starsAmount = response.data.ownerRating;

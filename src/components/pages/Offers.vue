@@ -124,7 +124,11 @@ export default {
             console.log('Offers: ', response.data);
             this.offersIds = response.data;
             let promises = this.offersIds.map(offerId =>
-              axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
+              axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`, {
+                headers: {
+                  'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                },
+              })
                 .then(response => {
                   let category = this.categories.find(category => category.displayName === response.data.category);
                   if (category) {
@@ -156,7 +160,11 @@ export default {
           response => {
             this.offersIds = response.data;
             let promises = this.offersIds.map(offerId =>
-              axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
+              axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`, {
+                headers: {
+                  'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                },
+              })
                 .then(response => {
                   let category = this.categories.find(category => category.displayName === response.data.category);
                   if (category) {
@@ -197,7 +205,11 @@ export default {
             console.log('Received offers by name: ', response.data);
             this.offersIds = this.offersIds.concat(response.data);
             let offerPromises = response.data.map(offerId =>
-              axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
+              axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`, {
+                headers: {
+                  'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                },
+              })
                 .then(response => {
                   let category = this.categories.find(category => category.displayName === response.data.category);
                   if (category) {

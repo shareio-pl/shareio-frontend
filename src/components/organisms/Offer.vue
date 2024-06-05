@@ -126,7 +126,11 @@ export default {
     // as a parameter
     async getOfferData() {
       try {
-        const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
+        const response = await axios.get(`${GATEWAY_ADDRESS}/offer/get/${this.id}`, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+          },
+        });
         console.log('Offer ', this.id, ': ', response.data);
         this.offerTitle = response.data.title;
         this.offerDescription = response.data.description;
@@ -183,7 +187,11 @@ export default {
           .then(response => {
             console.log("Response: ", response.data);
             console.log('Offer ', this.id, ' was reserved successfully.');
-            axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`)
+            axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`, {
+              headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+              },
+            })
                 .then(response => {
                   this.unreservationDate = response.data.unreservationDate;
                   console.log('Status: ', response.data.status);

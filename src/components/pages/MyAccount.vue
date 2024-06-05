@@ -12,7 +12,7 @@
             </div>
             <div class="my-account-delete-content">
               <ButtonPrimary buttonText="Zmień hasło" style="width: 50%; margin-left:0;" @click="onChangePasswordClick" />
-              <ButtonPrimary buttonText="Usuń konto" style="width: 50%; margin-left:0; background-color:brown"
+              <ButtonPrimary buttonText="Usuń konto" style="width: 50%; margin-left:5%; background-color:brown"
                 @click="deleteAccount" />
             </div>
           </div>
@@ -120,9 +120,7 @@ export default {
 
 .my-account-delete-content {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
 }
 
 .my-account-delete-header {

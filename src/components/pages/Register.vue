@@ -1,7 +1,7 @@
 <template>
   <div id="register-page">
     <Header />
-    <img src="../../assets/logo.png" alt="" class="logo">
+    <img src="../../assets/favicon_big.png" alt="" class="logo">
     <h1>Zarejestruj się</h1>
     <FormRegister />
   </div>
@@ -36,15 +36,15 @@ h1 {
 }
 
 img {
-  aspect-ratio: 3.166;
-  height: 75px;
-  width: 237px;
+  width:5%;
+  height: 5%;
 }
 
 .logo {
-  margin-top: 1%;
+  margin-top: 0%;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 0%;
 }
 </style>
 

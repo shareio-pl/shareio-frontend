@@ -21,6 +21,10 @@
       <hr v-if="isLoggedIn" class="conditionalLines" />
       <span v-if="isLoggedIn" @click="onMyOffersClick">Moje oferty i rezerwacje</span>
       <hr v-if="isLoggedIn" class="conditionalLines" />
+      <span v-if="isLoggedIn" @click="onScoreboardClick">Ranking</span>
+      <hr v-if="isLoggedIn" class="conditionalLines" />
+      <span v-if="isLoggedIn" @click="onHelpClick">Pomoc</span>
+      <hr v-if="isLoggedIn" class="conditionalLines" />
       <span v-if="isLoggedIn" @click="onHelpClick">Pomoc</span>
       <span v-else @click="onLogin">Zaloguj się</span>
       <hr />
@@ -115,6 +119,9 @@ export default {
     },
     onAboutUsClick() {
       this.$router.push('/about');
+    },
+    onScoreboardClick() {
+      this.$router.push('/scoreboard');
     },
     async getUserData() {
       let token = localStorage.getItem('token');

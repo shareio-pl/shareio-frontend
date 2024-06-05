@@ -24,8 +24,6 @@
       <span v-if="isLoggedIn" @click="onScoreboardClick">Ranking</span>
       <hr v-if="isLoggedIn" class="conditionalLines" />
       <span v-if="isLoggedIn" @click="onHelpClick">Pomoc</span>
-      <hr v-if="isLoggedIn" class="conditionalLines" />
-      <span v-if="isLoggedIn" @click="onHelpClick">Pomoc</span>
       <span v-else @click="onLogin">Zaloguj się</span>
       <hr />
       <span v-if="isLoggedIn" @click="onLogout">Wyloguj się</span>

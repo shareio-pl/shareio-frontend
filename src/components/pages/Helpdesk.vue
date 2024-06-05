@@ -6,7 +6,14 @@
     <div id="email">
       <input type="text" id="mailTopic" placeholder="Temat..." v-model="mailTopic">
       <textarea id="mailText" placeholder="Treść..." v-model="mailText"/>
-      <ButtonPrimary button-text="Wyślij" id="button" @click="sendMail"/>
+      <div v-if="isloading">
+        <div class="loading-spinner">
+          <FontAwesomeIcon :icon="iconLoading" spin style="font-size: 24px; color: #666; margin-left: 84%; margin-top: 1px;" />
+        </div>
+      </div>
+      <div v-else>
+        <ButtonPrimary button-text="Wyślij" id="button" @click="sendMail" style="margin-left: 84%; margin-top: 1px;"/>
+      </div>
     </div>
     <p>FAQ</p>
     <div id="faq">
@@ -25,13 +32,15 @@ import FAQDropdown from "@/components/atoms/FAQDropdown.vue";
 import Header from "@/components/organisms/Header.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import DefaultSuccess from "@/components/pages/DefaultSuccess.vue";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 
 import axios from "axios";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Helpdesk",
-  components: {DefaultSuccess, ButtonPrimary, Header, FAQDropdown},
+  components: {DefaultSuccess, ButtonPrimary, Header, FAQDropdown, FontAwesomeIcon},
   data() {
     return {
       COLORS: COLORS,
@@ -49,6 +58,8 @@ export default {
       answer5: 'Pozycja użytkownika w rankingu wyliczana jest na podstawie liczby jego wystawionych ofert oraz jego oceny.',
       mailTopic: '',
       mailText: '',
+      isloading: false,
+      iconLoading: faSpinner,
     }
   },
   methods: {
@@ -57,6 +68,7 @@ export default {
       console.log('Text: ', this.mailText);
 
       let token = localStorage.getItem('token');
+      this.isloading = true;
 
       axios.post(GATEWAY_ADDRESS + '/email/send', {"messageTitle": this.mailTopic, "messageBody": this.mailText},
           {
@@ -66,10 +78,12 @@ export default {
             }
           }).then((response) => {
         console.log('Sent mail: ', response.data);
+        this.isloading = false;
         this.emitter.emit('success', {message: 'Twoja wiadomość została wysłana!'});
       }).catch((error) => {
         console.error('Error sending mail: ', error);
         this.emitter.emit('axiosError', {error: error.response.status});
+        this.isloading = false;
       })
     },
   },

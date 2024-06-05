@@ -4,13 +4,19 @@
       <span class="offer-preview-review">
         <OfferPreview :id="id" style="width: 100%;" />
       </span>
-      <span class="offer-review-rating" @click="handleClick">
-        <div v-show="!isReviewDone" class="offer-review-stars" ref="stars">
-          <FontAwesomeIcon v-for="index in 5" :key="index" :icon="getStarIcon(index)" class="star" />
-        </div>
-        <div v-show="isReviewDone">
-          <p class="offer-rated-description"> Oferta została już oceniona! </p>
-        </div>
+      <span class="offer-review-rating">
+        <transition-group name="fade" mode="out-in">
+          <div v-if="!isReviewDone && offerLoaded" key="stars">
+            <div class="offer-review-stars" ref="stars" @mousemove="handleMouseMove" @mouseleave="handleMouseLeave" @click="handleClick">
+              <FontAwesomeIcon v-for="index in 5" :key="index" :icon="getStarIcon(index)" class="star" />
+            </div>
+            <ButtonPrimary @click="confirmReview" class="confirm-button"
+                           :button-text="buttonText" style="width: 70%;margin-left:12%;"/>
+          </div>
+          <div v-if="isReviewDone && offerLoaded" key="message">
+            <p class="offer-rated-description"> Oferta została już oceniona! </p>
+          </div>
+        </transition-group>
       </span>
     </div>
   </div>
@@ -25,10 +31,12 @@ import { faStar as unfilledStar, faStarHalfAlt as halfFilledStar } from '@fortaw
 import { faStar as filledStar } from '@fortawesome/free-solid-svg-icons';
 
 import OfferPreview from "@/components/organisms/OfferPreview.vue";
+import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 
 export default {
   name: "OfferReview",
   components: {
+    ButtonPrimary,
     OfferPreview,
     FontAwesomeIcon
   },
@@ -39,6 +47,9 @@ export default {
       FONT_SIZES: FONT_SIZES,
       localFilledStars: '',
       isReviewDone: false,
+      offerLoaded: false,
+      buttonText: "Zatwierdź",
+      hoverRating: 0
     };
   },
   props: {
@@ -54,10 +65,8 @@ export default {
       }
       let clickedStar = this.detectClickedStar(event);
       this.setStars(clickedStar);
-      this.sendReview();
     },
     detectClickedStar(event) {
-      console.log(event);
       const starContainer = this.$refs.stars;
       const firstStar = starContainer.querySelector('svg');
       const starStart = firstStar.getBoundingClientRect().left;
@@ -66,22 +75,30 @@ export default {
       const clickedStar = Math.round(clickPosition / starWidth * 2) / 2;
       return clickedStar;
     },
+    handleMouseMove(event) {
+      let hoverStar = this.detectClickedStar(event);
+      this.hoverRating = hoverStar;
+    },
+    handleMouseLeave() {
+      this.hoverRating = 0;
+    },
     getStarIcon(index) {
-      if (index <= this.localFilledStars) {
+      let rating = this.hoverRating || this.localFilledStars;
+      if (index <= rating) {
         return filledStar;
-      } else if (index - 0.5 === this.localFilledStars) {
+      } else if (index - 0.5 === rating) {
         return halfFilledStar;
       } else {
         return unfilledStar;
       }
     },
     setStars(value) {
-      console.log(value);
       this.localFilledStars = value;
     },
+    confirmReview() {
+      this.sendReview();
+    },
     sendReview() {
-      // TODO: remove
-      console.log('Sending review with score: ', this.localFilledStars);
       axios.post(GATEWAY_ADDRESS + '/offer/addReview', {
         offerId: this.id,
         reviewValue: this.localFilledStars
@@ -89,25 +106,31 @@ export default {
         console.log(response);
         this.isReviewDone = true;
       })
-        .catch((error) => {
-          console.error('ERROR: ', error);
-          this.emitter.emit('axiosError', { error: error.response.status });
-        });
+          .catch((error) => {
+            console.error('ERROR: ', error);
+            this.emitter.emit('axiosError', { error: error.response.status });
+          });
     },
     setupIsReviewNotDoneListener() {
-      this.emitter.on('review-not-done', (data) => {
-        console.log('Received review-not-done event with data: ', data);
+      this.emitter.on('review-done', (data) => {
         if (data.offerId === this.id) {
-          this.isReviewDone = false;
+          this.isReviewDone = true;
         }
       });
     },
-    mounted() {
-      this.setupIsReviewNotDoneListener();
+    setupOfferLoadedListener() {
+      this.emitter.on('offer-loaded', (data) => {
+        if (data.id === this.id) {
+          this.offerLoaded = true;
+        }
+      });
     }
   },
+  mounted() {
+    this.setupIsReviewNotDoneListener();
+    this.setupOfferLoadedListener();
+  }
 }
-
 </script>
 
 <style scoped>
@@ -117,11 +140,11 @@ export default {
 }
 
 .offer-preview-review {
-  width: 70%
+  width: 80%
 }
 
 .offer-review-rating {
-  width: 30%;
+  width: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -131,9 +154,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 2%;
+  margin-left: 1em;
   margin-bottom: 2%;
-  font-size: v-bind('FONT_SIZES.TITLE');
+  font-size: v-bind('FONT_SIZES.IMPORTANT');
   color: v-bind('COLORS.OFFER_BACKGROUND');
   padding: 3%;
   padding-top: 1%;
@@ -141,7 +164,18 @@ export default {
 }
 
 .offer-rated-description {
+  margin-left: 1em;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.PRIMARY');
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .0s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

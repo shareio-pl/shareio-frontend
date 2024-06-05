@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isShown" class="background">
+  <div v-if="isShown" v-on:click="closeError" class="background">
     <div class="message" v-on:click="closeError">
       <p>
         {{ this.message }}
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import {COLORS} from "../../../public/Consts";
+import { COLORS } from "../../../public/Consts";
 
 export default {
   name: "DefaultSuccess",
@@ -21,17 +21,17 @@ export default {
     }
   },
   methods:
-      {
-        closeError() {
-          this.isShown = false;
-        }
-      },
+  {
+    closeError() {
+      this.isShown = false;
+    }
+  },
   mounted() {
     this.emitter.on('success', (data) => {
       this.message = data.message;
       this.isShown = true;
 
-      setTimeout(this.closeError, 5000);
+      setTimeout(this.closeError, 3000);
     })
   },
 }

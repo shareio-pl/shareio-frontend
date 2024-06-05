@@ -1,17 +1,17 @@
 <template>
   <div id="main-page">
-    <Header/>
+    <Header />
     <div id="closest-offer" v-if="closestOffer">
       <p v-if="token">OFERTA NAJBLIŻEJ CIEBIE</p>
       <p v-else>REKOMENDOWANA OFERTA</p>
-      <Offer :id="closestOffer"/>
+      <Offer :id="closestOffer" />
     </div>
     <h1 v-if="token">Najnowsze w Twojej okolicy</h1>
     <h1 v-else>Najnowsze oferty</h1>
     <div id="newest-offers">
       <span v-for="pair in offerPairs" :key="pair">
-        <OfferPreview :is-new="true" :id="pair[0]" class="bigPreview"/>
-        <OfferPreview :is-new="true" :id="pair[1]" class="bigPreview"/>
+        <OfferPreview :is-new="true" :id="pair[0]" class="bigPreview" />
+        <OfferPreview :is-new="true" :id="pair[1]" class="bigPreview" />
       </span>
     </div>
   </div>
@@ -21,7 +21,7 @@
 import Header from "@/components/organisms/Header.vue";
 import Offer from "@/components/organisms/Offer.vue";
 import OfferPreview from "@/components/organisms/OfferPreview.vue";
-import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
+import { COLORS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
 
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -29,7 +29,7 @@ import { jwtDecode } from "jwt-decode";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Main",
-  components: {OfferPreview, Offer, Header},
+  components: { OfferPreview, Offer, Header },
   data() {
     return {
       offerPairs: [],
@@ -55,7 +55,7 @@ export default {
       }).catch((error) => {
         console.error('ERROR: ', error);
 
-        this.emitter.emit('axiosError', {error: error.response.status});
+        this.emitter.emit('axiosError', { error: error.response.status });
       });
     },
     getNewestOffers() { //TODO: check if it works after backend fix
@@ -81,7 +81,7 @@ export default {
       }).catch(error => {
         console.error('ERROR: ', error);
 
-        this.emitter.emit('axiosError', {error: error.response.status});
+        this.emitter.emit('axiosError', { error: error.response.status });
       });
     },
     getRecommendedOffer() {
@@ -90,7 +90,7 @@ export default {
       }).catch(error => {
         console.error('ERROR: ', error);
 
-        this.emitter.emit('axiosError', {error: error.response.status});
+        this.emitter.emit('axiosError', { error: error.response.status });
       });
     }
   },
@@ -115,6 +115,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 100vh;
 }
 
 #closest-offer {

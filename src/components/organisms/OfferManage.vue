@@ -61,6 +61,7 @@ export default {
         .then(response => {
           this.isDeleted = true;
           this.closeText = 'Zakończono!';
+          this.emitter.emit('offer-closed', { id: this.id });
           console.log(response);
         })
         .catch(error => {

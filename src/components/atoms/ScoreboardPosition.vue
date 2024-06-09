@@ -42,8 +42,7 @@ export default {
   methods: {
     sendToProfile() {
       console.log(this.userId);
-      // TODO: Implement once there is Profile page
-      //this.$router.push(/router/:userId);
+      this.$router.push(`/user/${this.userId}`);
     }
   }
 }

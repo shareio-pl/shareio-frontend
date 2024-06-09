@@ -94,5 +94,6 @@ p {
   display: flex;
   align-items: center;
   width: 90%;
+  text-align: left;
 }
 </style>

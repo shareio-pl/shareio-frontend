@@ -12,7 +12,7 @@
         </div>
       </div>
       <div v-else>
-        <ButtonPrimary button-text="Wyślij" id="button" @click="sendMail" style="margin-left: 84%; margin-top: 1px;"/>
+        <ButtonPrimary button-text="Wyślij" id="button" @click="sendMail" style=" margin-top: 1px;"/>
       </div>
     </div>
     <p>FAQ</p>
@@ -98,10 +98,11 @@ export default {
   flex-direction: column;
   background: linear-gradient(to bottom, #F0FBFF, #0D2149);
   /*light-blue to COLORS.BUTTON_PRIMARY_NORMAL*/
+  min-height: 100vh;
 }
 
 h1 {
-  font-size: v-bind('FONT_SIZES.TITLE');
+  font-size: calc(18px + 1.3vw);
   color: v-bind('COLORS.SECONDARY');
   margin-top: 1%;
 }
@@ -125,32 +126,42 @@ input, textarea{
 
 input::placeholder {
   color: v-bind('COLORS.TEXT_SECONDARY');
-  font-size: v-bind('FONT_SIZES.IMPORTANT');
+  font-size: calc(18px + 1.3vw);
 }
 
 textarea::placeholder{
   color: v-bind('COLORS.TEXT_SECONDARY');
-  font-size: v-bind('FONT_SIZES.IMPORTANT');
+  font-size: calc(18px + 1.3vw);
 }
 
 #mailTopic {
   border-radius: 10px 10px 0 0;
   height: 50px;
+  font-size: calc(13px + 0.85vw);
 }
 
 #mailText {
   border-radius: 0 0 10px 10px;
   height: 125px;
   padding-bottom: 90px;
+  font-size: calc(13px + 0.85vw);
 }
 
 #button {
   align-self: flex-end;
+  min-width: 80px;
+  margin-left: 84%;
+}
+
+@media screen and (max-width: 650px) {
+  #button {
+    margin-left: 68%;
+  }
 }
 
 p {
   color: v-bind('COLORS.SECONDARY');
-  font-size: v-bind('FONT_SIZES.TITLE');
+  font-size: calc(18px + 1.3vw);
   text-align: start;
   margin-left: 10%;
   margin-top: 1%;

@@ -52,7 +52,7 @@
           <h1 class="down-offer"> Zakończone oferty </h1>
           <span v-if="endedOffers">
             <span v-for="offer in endedOffers" :key="offer.id">
-              <OfferPreview :id="offer" style="width: 80%;" />
+              <OfferPreview class="endOffer" :id="offer" style="width: 80%;" />
             </span>
             <span v-if="endedOffers.length === 0">
               <p class="down-offer"> Brak zakończonych ofert </p>
@@ -203,13 +203,6 @@ export default {
   margin: 0 auto;
 }
 
-#my-offers-owner {
-  margin-top: 1em;
-  width: 40%;
-  align-self: flex-start;
-  display: flex;
-  flex-direction: column;
-}
 
 #my-offers-offers {
   display: flex;
@@ -232,5 +225,16 @@ export default {
 
 .down-offer {
   color: v-bind('COLORS.PRIMARY');
+}
+@media (max-width: 1000px) {
+  .endOffer {
+    width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  #my-offers-content >>> .offer-preview-image {
+    aspect-ratio: 1/2;
+  }
 }
 </style>

@@ -6,7 +6,7 @@
           <OfferPreview :id="id" style="width: 100%;" />
         </span>
         <span class="offer-reserve-options">
-          <ButtonPrimary :button-text="confirmText" @click="confirmPicked" style="width: 60%;" />
+          <ButtonPrimary :button-text="confirmText" @click="confirmPicked" style="width: 60%; min-width: 100px;" />
         </span>
       </div>
     </div>
@@ -75,7 +75,7 @@ export default {
 }
 
 .offer-reserve-review {
-  width: 80%
+  width: 80%;
 }
 
 .offer-reserve-options {
@@ -92,5 +92,28 @@ export default {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 1000px) {
+  .offer-reserve-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .offer-reserve-review,
+  .offer-reserve-options {
+    width: 100%;
+  }
+
+  .offer-reserve-options {
+    margin-top: 1em;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .offer-reserve-options button {
+    width: 100%;
+  }
 }
 </style>

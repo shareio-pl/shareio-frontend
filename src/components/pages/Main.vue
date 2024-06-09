@@ -59,30 +59,64 @@ export default {
       });
     },
     getNewestOffers() { //TODO: check if it works after backend fix
-      axios.get(GATEWAY_ADDRESS + '/offer/getNewest').then((response) => {
-        console.log('Newest offers: ', response.data);
-        this.offersIds = response.data;
+      let token = localStorage.getItem('token');
+      if(token!==null){
+        axios.get(GATEWAY_ADDRESS + '/offer/getNewest', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          }
+        }).then((response) => {
+          console.log('Newest offers: ', response.data);
+          this.offersIds = response.data;
 
-        let closestOfferIndex = this.offersIds.indexOf(this.closestOffer);
-        if (closestOfferIndex > -1) {
-          this.offersIds.splice(closestOfferIndex, 1);
-        }
+          let closestOfferIndex = this.offersIds.indexOf(this.closestOffer);
+          if (closestOfferIndex > -1) {
+            this.offersIds.splice(closestOfferIndex, 1);
+          }
 
-        let numberOfOffers;
-        if (this.offersIds.length % 2 === 0) {
-          numberOfOffers = this.offersIds.length;
-        } else {
-          numberOfOffers = this.offersIds.length - 1;
-        }
+          let numberOfOffers;
+          if (this.offersIds.length % 2 === 0) {
+            numberOfOffers = this.offersIds.length;
+          } else {
+            numberOfOffers = this.offersIds.length - 1;
+          }
 
-        for (let offerId = 0; offerId < numberOfOffers; offerId += 2) {
-          this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
-        }
-      }).catch(error => {
-        console.error('ERROR: ', error);
+          for (let offerId = 0; offerId < numberOfOffers; offerId += 2) {
+            this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
+          }
+        }).catch(error => {
+          console.error('ERROR: ', error);
 
-        this.emitter.emit('axiosError', { error: error.response.status });
-      });
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
+      }
+      else {
+        axios.get(GATEWAY_ADDRESS + '/offer/getNewest').then((response) => {
+          console.log('Newest offers: ', response.data);
+          this.offersIds = response.data;
+
+          let closestOfferIndex = this.offersIds.indexOf(this.closestOffer);
+          if (closestOfferIndex > -1) {
+            this.offersIds.splice(closestOfferIndex, 1);
+          }
+
+          let numberOfOffers;
+          if (this.offersIds.length % 2 === 0) {
+            numberOfOffers = this.offersIds.length;
+          } else {
+            numberOfOffers = this.offersIds.length - 1;
+          }
+
+          for (let offerId = 0; offerId < numberOfOffers; offerId += 2) {
+            this.offerPairs.push([this.offersIds[offerId], this.offersIds[offerId + 1]]);
+          }
+        }).catch(error => {
+          console.error('ERROR: ', error);
+
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
+      }
     },
     getRecommendedOffer() {
       axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers').then((response) => {

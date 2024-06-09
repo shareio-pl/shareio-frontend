@@ -85,7 +85,12 @@ export default {
         // TODO: Optimize this
         async getOfferIds() {
           try {
-            const response = await axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers');
+            const response = await axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers', {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+              }
+            });
             this.offersIds = response.data;
           } catch (error) {
             console.error('ERROR: ', error);

@@ -2,15 +2,15 @@
   <div class="offer-card">
     <div class="offer-left">
       <div v-if="imageIsLoading" class="offer-left-image">
-        <ImageLoadingAnimation/>
+        <ImageLoadingAnimation />
       </div>
       <div v-else class="offer-left-image">
         <img class="offer-left-image" :src="offerImage" alt="Offer image">
       </div>
       <p class="offer-left-giver"> Oddająca osoba: </p>
       <div class="offer-left-data">
-        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" :userImage="userImage"/>
-        <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings"/>
+        <UserData class="offer-user" :userFirstName="userFirstName" :userSurname="userSurname" :userImage="userImage" />
+        <Stars class="offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings" />
       </div>
     </div>
     <div class="offer-content">
@@ -24,20 +24,20 @@
     </div>
     <div class="offer-right">
       <div class="offer-right-map">
-        <MapPreview v-if="mapDataLoaded" :zoom="zoom" :center="center"/>
+        <MapPreview v-if="mapDataLoaded" :zoom="zoom" :center="center" />
       </div>
       <span v-if="role === 'ADMIN'" class="offer-right-button">
-        <ButtonPrimary class="button deleteButton" buttonText="Skasuj" @click="deleteOffer"/>
+        <ButtonPrimary class="button deleteButton" buttonText="Skasuj" @click="deleteOffer" />
       </span>
       <span v-if="status === 'CREATED' && userId != null && role !== 'ADMIN'" class="offer-right-button">
-        <ButtonPrimary class="button" :buttonText="offerButtonName" @click="submitOffer"/>
+        <ButtonPrimary class="button" :buttonText="offerButtonName" @click="submitOffer" />
       </span>
       <span v-if="status === 'RESERVED' && userId != null && role !== 'ADMIN'" class="offer-right-button">
-        <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved"/>
+        <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved" />
       </span>
       <span v-if="userId == null" class="offer-right-button">
-        <ButtonPrimary disabled='true' class="button-disabled" buttonText="Zaloguj się, aby zarezerwować"
-                       style="line-height: calc(11px + 0.6vw); cursor: pointer;" @click="this.$router.push('/login')"/>
+        <ButtonPrimary class="button-disabled" buttonText="Zaloguj się, aby zarezerwować"
+          style="line-height: calc(11px + 0.6vw); cursor: pointer;" @click="this.$router.push('/login')" />
         <!-- przycisk rezerwacji widoczny jest też na stronie głównej-->
       </span>
     </div>
@@ -51,12 +51,12 @@ import MapPreview from "@/components/atoms/MapPreview.vue";
 import ImageLoadingAnimation from "@/components/atoms/ImageLoadingAnimation.vue";
 
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import "leaflet/dist/leaflet.css";
 
-import {COLORS} from "../../../public/Consts";
-import {FONT_SIZES} from "../../../public/Consts";
-import {GATEWAY_ADDRESS} from "../../../public/Consts";
+import { COLORS } from "../../../public/Consts";
+import { FONT_SIZES } from "../../../public/Consts";
+import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -116,23 +116,23 @@ export default {
           'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
       })
-          .then(response => {
-            console.log('Offer deleted successfully', response);
-            this.$router.push('/').then(() => {
-              window.location.reload();
-            })
-                .catch(error => {
-                  console.error(error);
-                })
+        .then(response => {
+          console.log('Offer deleted successfully', response);
+          this.$router.push('/').then(() => {
+            window.location.reload();
           })
-          .catch(error => {
-            console.error('Error deleting offer:', error);
-            this.emitter.emit('axiosError', {error: error.response.status});
-          });
+            .catch(error => {
+              console.error(error);
+            })
+        })
+        .catch(error => {
+          console.error('Error deleting offer:', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
     },
     arrayBufferToBase64(buffer) {
       return btoa(
-          new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+        new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
       );
     },
     getTimeUntilUnreserved() {
@@ -151,7 +151,19 @@ export default {
     // as a parameter
     async getOfferData() {
       try {
-        const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
+        let token = localStorage.getItem('token');
+        let response = null
+        if (token) {
+          response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            }
+          });
+        }
+        else {
+          response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
+        }
         console.log('Offer ', this.id, ': ', response.data);
         this.offerTitle = response.data.title;
         this.offerDescription = response.data.description;
@@ -159,83 +171,84 @@ export default {
         if (localStorage.getItem('token') === null) {
           this.location = response.data.city + ', ' + response.data.street;
         }
+      }
         else {
-          this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' km od Ciebie)';
-        }
+      this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' km od Ciebie)';
+    }
         this.condition = response.data.condition;
-        this.amountOfStars = response.data.ownerRating;
-        this.amountOfRatings = response.data.ownerReviewCount;
-        this.userFirstName = response.data.ownerName;
-        this.userSurname = response.data.ownerSurname;
-        this.center = [response.data.latitude, response.data.longitude];
-        this.mapDataLoaded = true;
-        this.status = response.data.status;
-        this.unreservationDate = response.data.unreservationDate;
-        this.offerImage = await this.getImageData(response.data.photoId);
-        this.userImage = await this.getImageData(response.data.ownerPhotoId);
-        this.imageIsLoading = false;
-      } catch (error) {
-        console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', {error: error.response.status});
-      }
-    },
+    this.amountOfStars = response.data.ownerRating;
+    this.amountOfRatings = response.data.ownerReviewCount;
+    this.userFirstName = response.data.ownerName;
+    this.userSurname = response.data.ownerSurname;
+    this.center = [response.data.latitude, response.data.longitude];
+    this.mapDataLoaded = true;
+    this.status = response.data.status;
+    this.unreservationDate = response.data.unreservationDate;
+    this.offerImage = await this.getImageData(response.data.photoId);
+    this.userImage = await this.getImageData(response.data.ownerPhotoId);
+    this.imageIsLoading = false;
+  } catch(error) {
+    console.error('ERROR: ', error);
+    this.emitter.emit('axiosError', { error: error.response.status });
+  }
+},
     async getImageData(photoId) {
-      try {
-        const response = await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, {responseType: 'arraybuffer'});
-        let image = this.arrayBufferToBase64(response.data);
-        return `data:image/jpeg;base64,${image}`;
-      } catch (error) {
-        console.error('ERROR: ', error);
-        this.emitter.emit('axiosError', {error: error.response.status});
-      }
-    },
+  try {
+    const response = await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' });
+    let image = this.arrayBufferToBase64(response.data);
+    return `data:image/jpeg;base64,${image}`;
+  } catch (error) {
+    console.error('ERROR: ', error);
+    this.emitter.emit('axiosError', { error: error.response.status });
+  }
+},
     async prepareDataToSend() {
-      let formData = {
-        offerId: this.id,
-        receiverId: this.userId
-      }
-      return formData;
-    },
+  let formData = {
+    offerId: this.id,
+    receiverId: this.userId
+  }
+  return formData;
+},
     async reserveOffer() {
-      let data = await this.prepareDataToSend();
-      console.log('Data to send: ', data);
-      axios.post(GATEWAY_ADDRESS + `/offer/reserve`, data, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      })
-          .then(response => {
-            console.log("Response: ", response.data);
-            console.log('Offer ', this.id, ' was reserved successfully.');
-            axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`)
-                .then(response => {
-                  this.unreservationDate = response.data.unreservationDate;
-                  console.log('Status: ', response.data.status);
-                  this.status = 'RESERVED';
-                  console.log('Unreservation date: ', this.unreservationDate);
-                })
-                .catch(error => {
-                  console.error('ERROR: ', error);
-                  this.emitter.emit('axiosError', {error: error.response.status});
-                });
-          })
-          .catch(error => {
-            console.error('ERROR: ', error);
-            this.emitter.emit('axiosError', {error: error.response.status});
-          });
-    },
+  let data = await this.prepareDataToSend();
+  console.log('Data to send: ', data);
+  axios.post(GATEWAY_ADDRESS + `/offer/reserve`, data, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    }
+  })
+    .then(response => {
+      console.log("Response: ", response.data);
+      console.log('Offer ', this.id, ' was reserved successfully.');
+      axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`)
+        .then(response => {
+          this.unreservationDate = response.data.unreservationDate;
+          console.log('Status: ', response.data.status);
+          this.status = 'RESERVED';
+          console.log('Unreservation date: ', this.unreservationDate);
+        })
+        .catch(error => {
+          console.error('ERROR: ', error);
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
+    })
+    .catch(error => {
+      console.error('ERROR: ', error);
+      this.emitter.emit('axiosError', { error: error.response.status });
+    });
+},
   },
   async mounted() {
-    let token = localStorage.getItem('token');
-    if (token) {
-      this.userId = jwtDecode(token).id;
-      this.role = jwtDecode(token).role;
-    }
-    await this.getOfferData();
-    this.getTimeUntilUnreserved();
-    setInterval(this.getTimeUntilUnreserved, 1000);
-  },
+  let token = localStorage.getItem('token');
+  if (token) {
+    this.userId = jwtDecode(token).id;
+    this.role = jwtDecode(token).role;
+  }
+  await this.getOfferData();
+  this.getTimeUntilUnreserved();
+  setInterval(this.getTimeUntilUnreserved, 1000);
+},
 }
 </script>
 <style scoped>

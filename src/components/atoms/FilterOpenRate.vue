@@ -116,10 +116,14 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-left: 2%;
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc(9px + 0.7vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
   padding: 3%;
   cursor: pointer;
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: pre-wrap;
+  text-overflow: ellipsis;
 }
 
 .filter-header-left {
@@ -134,7 +138,7 @@ export default {
   align-items: center;
   margin-left: 2%;
   margin-bottom: 2%;
-  font-size: v-bind('FONT_SIZES.IMPORTANT');
+  font-size: calc(10px + 1.05vw);
   padding: 3%;
   padding-top: 1%;
   cursor: pointer;
@@ -147,6 +151,8 @@ export default {
   margin-left: 2%;
   padding-left: 3%;
   color: v-bind('COLORS.TEXT_SECONDARY');
+  font-size: calc(8px + 0.7vw);
+
 }
 
 #arrow-icon {

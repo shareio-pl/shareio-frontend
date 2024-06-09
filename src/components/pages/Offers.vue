@@ -1,19 +1,19 @@
 <template>
   <div id="offers-page">
-    <Header />
+    <Header/>
     <div id="offers-page-main">
       <div id="offers-page-filters">
-        <Filters :categories="categories" />
+        <Filters :categories="categories"/>
       </div>
       <div id="offers-page-content">
         <div id="offers-page-content-browser">
-          <Browser style="width:90%;" />
+          <Browser style="width:90%;"/>
         </div>
         <div id="offers-page-content-offers" v-if="isMounted">
-          <OfferPreview v-for="id in paginatedOffers" :key="id" :id=id style="width:90%;" />
+          <OfferPreview v-for="id in paginatedOffers" :key="id" :id=id style="width:90%;"/>
         </div>
         <div id="offers-page-content-pagechange">
-          <ChangePage :page="currentPage" :totalPages="totalPages" rightArrow="true" @changePage="changePage" />
+          <ChangePage :page="currentPage" :totalPages="totalPages" rightArrow="true" @changePage="changePage"/>
         </div>
       </div>
     </div>
@@ -25,14 +25,14 @@ import Header from "@/components/organisms/Header.vue";
 import Filters from "@/components/organisms/Filters.vue";
 import OfferPreview from "@/components/organisms/OfferPreview.vue";
 import ChangePage from "@/components/atoms/ChangePage.vue";
-import { COLORS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
+import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
 import axios from "axios";
 import Browser from "../organisms/Browser.vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Offers",
-  components: { OfferPreview, Header, Filters, Browser, ChangePage },
+  components: {OfferPreview, Header, Filters, Browser, ChangePage},
   data() {
     return {
       COLORS: COLORS,
@@ -42,7 +42,7 @@ export default {
       offers: [],
       currentPage: 1,
       time_from_youngest: true,
-      time_chosen: '',
+      time_chosen: null, //new Date('2026-01-01').toISOString().slice(0, 10),
       option_chosen: '',
       stars_chosen: '',
       distance_chosen: '',
@@ -84,10 +84,13 @@ export default {
         this.distance_chosen = data.distance_chosen;
         this.categories_chosen = data.categories_chosen;
 
-        if (!this.time_chosen) {
-          let date = new Date();
-          date.setDate(date.getDate() - data.time_chosen);
-          this.time_chosen = date;
+        console.log('Received filter change: ', data);
+
+        let date = new Date();
+        if (data.time_chosen) {
+          date.setDate(date.getDate() + data.time_chosen);
+          this.time_chosen = date.toISOString().slice(0, 10);
+          console.log('Time chosen: ', this.time_chosen);
         }
 
         this.getOffersDataViaSearch();
@@ -98,40 +101,72 @@ export default {
     },
     getCategories() {
       axios.get(GATEWAY_ADDRESS + `/offer/getCategories`)
-        .then(response => {
-          this.categories = response.data.categories.map(category => ({
-            displayName: category.displayName,
-            categoryName: category.category,
-            numberOfOffers: 0
-          }));
-        })
-        .catch(error => {
-          console.error('ERROR: ', error);
-          this.emitter.emit('axiosError', { error: error.response.status });
-        });
+          .then(response => {
+            this.categories = response.data.categories.map(category => ({
+              displayName: category.displayName,
+              categoryName: category.category,
+              numberOfOffers: 0
+            }));
+          })
+          .catch(error => {
+            console.error('ERROR: ', error);
+            this.emitter.emit('axiosError', {error: error.response.status});
+          });
     },
     getOffersData() {
-      axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers')
-        .then(
-          response => {
-            console.log('Offers: ', response.data);
-            this.offersIds = response.data;
-            let promises = this.offersIds.map(offerId =>
-              axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
-                .then(response => {
-                  let category = this.categories.find(category => category.displayName === response.data.category);
-                  if (category) {
-                    category.numberOfOffers++;
-                  }
-                })
-            );
-            return Promise.all(promises);
+      let token = localStorage.getItem('token');
+      if(token!==null){
+        axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
           }
-        )
-        .catch(error => {
-          console.error('ERROR: ', error);
-          this.emitter.emit('axiosError', { error: error.response.status });
-        });
+        })
+            .then(
+                response => {
+                  console.log('Offers: ', response.data);
+                  this.offersIds = response.data;
+                  let promises = this.offersIds.map(offerId =>
+                      axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
+                          .then(response => {
+                            let category = this.categories.find(category => category.displayName === response.data.category);
+                            if (category) {
+                              category.numberOfOffers++;
+                            }
+                          })
+                  );
+                  return Promise.all(promises);
+                }
+            )
+            .catch(error => {
+              console.error('ERROR: ', error);
+              this.emitter.emit('axiosError', { error: error.response.status });
+            });
+      }
+      else {
+        axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers')
+            .then(
+                response => {
+                  console.log('Offers: ', response.data);
+                  this.offersIds = response.data;
+                  let promises = this.offersIds.map(offerId =>
+                      axios.get(GATEWAY_ADDRESS + `/offer/get/${offerId}`)
+                          .then(response => {
+                            let category = this.categories.find(category => category.displayName === response.data.category);
+                            if (category) {
+                              category.numberOfOffers++;
+                            }
+                          })
+                  );
+                  return Promise.all(promises);
+                }
+            )
+            .catch(error => {
+              console.error('ERROR: ', error);
+              this.emitter.emit('axiosError', { error: error.response.status });
+            });
+      }
+
     },
     getOffersDataByNameAndSorting() {
       this.categories.forEach(category => category.numberOfOffers = 0);
@@ -169,7 +204,8 @@ export default {
       this.categories.forEach(category => category.numberOfOffers = 0);
       this.offersIds = [];
 
-      let promises = this.categories_chosen.map(category => {
+      let makeRequest = (category) => {
+
         return axios.get(GATEWAY_ADDRESS + '/offer/search', {
           params: {
             title: this.searched_item,
@@ -177,7 +213,7 @@ export default {
             condition: this.option_chosen,
             distance: this.distance_chosen,
             score: this.stars_chosen,
-            creationDate: '', //this.time_chosen,
+            creationDate: this.time_chosen,
             sortType: this.sorting
           },
           headers: {
@@ -199,7 +235,14 @@ export default {
             );
             return Promise.all(offerPromises);
           });
-      });
+      };
+
+      let promises;
+      if (this.categories_chosen.length > 0) {
+        promises = this.categories_chosen.map(makeRequest);
+      } else {
+        promises = [makeRequest(null)];
+      }
 
       Promise.all(promises)
         .catch(error => {
@@ -276,8 +319,37 @@ export default {
   margin-top: 1em;
 }
 
-#offers-page-content-offers>>>.offer-preview-action {
+#offers-page-content-offers >>> .offer-preview-action {
   min-width: 200px;
+}
+
+#offers-page-content-offers >>> .offer-preview-title, #offers-page-content-offers >>> .offer-preview-location {
+  font-size: calc(13px + 0.5vw);
+  justify-content: left;
+  align-items: flex-start;
+  flex-grow: 1;
+  text-overflow: ellipsis;
+}
+
+#offers-page-content-offers >>> .offer-preview-location {
+  font-size: calc(11px + 0.5vw);
+
+}
+
+@media only screen and (max-width: 1050px) {
+  #offers-page-content-offers >>> .offer-preview-action {
+    display: none;
+  }
+
+  #offers-page-content-offers >>> .offer-preview-title, #offers-page-content-offers >>> .offer-preview-location {
+    text-align: left;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #offers-page-content-offers >>> .offer-preview-image {
+    aspect-ratio: 1/2;
+  }
 }
 
 #offers-page-content-pagechange {
@@ -296,4 +368,6 @@ p {
   z-index: 2;
   position: absolute;
 }
+
+
 </style>

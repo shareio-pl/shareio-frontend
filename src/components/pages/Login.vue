@@ -4,7 +4,7 @@
     <img src="../../assets/favicon_big.png" alt="" class="logo">
     <h1>Zaloguj się</h1>
     <FormLogin />
-    <span @click="onRegister">Nie posiadasz konta? Zarejestruj się!</span>
+    <span @click="onRegister">Nie posiadasz konta? <b>Zarejestruj się!</b></span>
   </div>
 </template>
 
@@ -52,7 +52,7 @@ h1 {
 span {
   font-size: calc(13px + 0.85vw);
   color: v-bind('COLORS.TEXT_PRIMARY');
-  margin-top: 5%;
+  margin-top: 3%;
   cursor: pointer;
 }
 
@@ -72,4 +72,8 @@ img {
   margin-bottom: 0%;
 }
 
+b {
+  color: v-bind('COLORS.NOTIFICATION_PRIMARY');
+  font-weight: bold;
+}
 </style>

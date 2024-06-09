@@ -2,7 +2,6 @@
   <div class="dropdown-select">
     <div class="dropdown-select-header">
       <div class="dropdown-select-header-left">
-        <FontAwesomeIcon :icon="iconChevronDown" class="arrow-icon" />
       </div>
     </div>
     <div class="select-wrapper" v-if="!isForCountries">

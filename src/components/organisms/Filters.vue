@@ -10,7 +10,7 @@
     <div id="categories">
       <Category v-for="category in categories" :key="category.name" :displayName="category.displayName"
         :category-name="category.categoryName" :number-of-offers="category.numberOfOffers" :clear="clearCounterCategories"
-        style="width: 90%;" />
+        style="width: 90%;"  />
     </div>
     <div id="filterName">
       <div class="filter-header-left">
@@ -28,7 +28,7 @@
       <FilterOpenRate class="filter" filterName="Ocena wystawiającego" :prop-icon="RatingIcon" :clear="clearCounter" />
     </div>
     <div id="filters-button">
-      <ButtonPrimary @click="sendFilters" buttonText="Filtruj" />
+      <ButtonPrimary @click="sendFilters" buttonText="Filtruj" style="width: 40%; margin-bottom: 1em;" />
     </div>
   </div>
 </template>
@@ -66,11 +66,20 @@ export default {
     this.emitter.on('filter-stars', this.handleFilterStars);
     this.emitter.on('filter-options', this.handleFilterOptions);
     this.emitter.on('category-changed', this.handleCategoryChange);
+    window.addEventListener('resize', this.updateWindowWidth);
+  },
+  beforeUmount() {
+    window.removeEventListener('resize', this.updateWindowWidth);
   },
   props: {
     categories: {
       type: Array,
       required: true
+    }
+  },
+  computed: {
+    bigWidth() {
+      return this.windowWidth > 1000;
     }
   },
   methods: {
@@ -95,9 +104,12 @@ export default {
       this.stars_chosen = '';
       this.distance_chosen = '';
       this.clearCounter++;
+      this.sendFilters();
     },
     onCategoriesClearClicked() {
+      this.categories_chosen = [];
       this.clearCounterCategories++;
+      this.sendFilters();
     },
     handleFilterStars(payload) {
       this.stars_chosen = payload.starsAmount;
@@ -116,6 +128,9 @@ export default {
       console.log('Filters sent: ', this.time_chosen, this.option_chosen, this.stars_chosen,
         this.distance_chosen, this.categories_chosen);
     },
+    updateWindowWidth() {
+      this.windowWidth = window.innerWidth;
+    }
   },
   data() {
     return {
@@ -138,6 +153,7 @@ export default {
       // that something changed.
       clearCounterCategories: 0,
       // See reasoning above
+      windowWidth: window.innerWidth
     }
   }
 }
@@ -160,7 +176,7 @@ export default {
   width: 90%;
   margin-left: 5%;
   margin-top: 4%;
-  font-size: v-bind('FONT_SIZES.IMPORTANT');
+  font-size: calc(12px + 0.9vw);
   color: v-bind('COLORS.SECONDARY');
 }
 

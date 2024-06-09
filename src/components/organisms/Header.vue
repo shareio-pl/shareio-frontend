@@ -244,4 +244,8 @@ export default {
     color: v-bind('COLORS.TEXT_SECONDARY');
   }
 }
+
+.user-data >>> .user-image {
+  margin-right: 8px;
+}
 </style>

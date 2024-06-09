@@ -46,13 +46,21 @@
           :error="{ active: v$.postCode.$error && v$.postCode.$dirty, message: postCodeError }"
           displayBlankSpaceBelow=true />
         <div class="input-row">
-          <FieldInput v-model="houseNumber" label="Nr. domu" displayBlankSpaceBelow=true />
+          <FieldInput v-model="houseNumber" label="Nr. domu *"
+                      :error="{ active: v$.houseNumber.$error && v$.houseNumber.$dirty, message: houseNumberError }" displayBlankSpaceBelow=true />
           <FieldInput v-model="flatNumber" label="Mieszkanie" displayBlankSpaceBelow=true />
         </div>
       </div>
     </div>
     <p class="info" :style="{ color: COLORS.PRIMARY }">'*' - pole wymagane </p>
-    <ButtonPrimary buttonText="Zarejestruj" style="margin-left:0; margin-bottom:3em;" />
+    <div v-if="isloading">
+      <div class="loading-spinner">
+        <FontAwesomeIcon :icon="iconLoading" spin style="font-size: 24px; color: #666;" />
+      </div>
+    </div>
+    <div v-else>
+      <ButtonPrimary buttonText="Zarejestruj" style="margin-left:0; margin-bottom:3em;" />
+    </div>
   </form>
 </template>
 
@@ -68,10 +76,12 @@ import DatePicker from "@/components/atoms/DatePicker.vue";
 import FieldInput from "@/components/atoms/FieldInput.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import DropdownSelect from "@/components/atoms/DropdownSelect.vue";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 
 export default {
   name: "FormRegister",
-  components: { FieldInput, DatePicker, ButtonPrimary, DropdownSelect },
+  components: { FieldInput, DatePicker, ButtonPrimary, DropdownSelect, FontAwesomeIcon },
   data() {
     return {
       FONT_SIZES: FONT_SIZES,
@@ -106,7 +116,10 @@ export default {
       cityError: "",
       streetError: "",
       postCodeError: "",
+      houseNumberError: "",
 
+      isloading: false,
+      iconLoading: faSpinner,
     };
   },
   validations() {
@@ -121,6 +134,7 @@ export default {
       region: { required },
       street: { required },
       postCode: { required },
+      houseNumber: { required },
       city: { required, minLength: minLength(3), maxLength: maxLength(20) },
     }
   },
@@ -144,7 +158,6 @@ export default {
         houseNumber: this.houseNumber,
         flatNumber: this.flatNumber,
         postCode: this.postCode,
-
       };
       console.log(formData);
       return formData
@@ -157,15 +170,23 @@ export default {
         console.log("Kraj: ", this.country);
         return null;
       }
+      this.isloading = true;
       let data = this.prepareDataToSend();
       await axios.post(GATEWAY_ADDRESS + '/user/add', data, { headers: { 'Content-Type': 'application/json' } })
         .then(() => {
           this.emitter.emit('success', { message: 'Twoje konto zostało utworzone!' });
+          this.isloading = false;
           this.$router.push('/login');
         })
         .catch(error => {
           console.error('ERROR: ', error);
-          this.emitter.emit('axiosError', { error: error.response.status });
+          if (error.response.data === 'Nie udało się ustalić adresu, spróbuj ponownie') {
+            this.emitter.emit('error', {error: error.response.data});
+          }
+          else{
+            this.emitter.emit('axiosError', { error: error.response.status });
+          }
+          this.isloading = false;
         });
     },
   },
@@ -205,7 +226,7 @@ export default {
     },
     'v$.password.$model'() {
       if (!this.v$.password.required.$model || this.v$.password.minLength.$model || this.v$.password.maxLength.$model) {
-        this.passwordError = "Hasło musi mieć od 8 do 20 znaków";
+        this.passwordError = "Hasło musi mieć od 6 do 20 znaków";
       }
       else {
         this.passwordError = '';
@@ -257,6 +278,14 @@ export default {
       }
       else {
         this.postCodeError = '';
+      }
+    },
+    'v$.houseNumber.$model'() {
+      if (!this.v$.houseNumber.required.$model) {
+        this.houseNumberError = "Nr domu jest wymagany";
+      }
+      else {
+        this.houseNumberError = '';
       }
     },
   },
@@ -329,5 +358,10 @@ export default {
   --dp-background-color: v-bind("COLORS.OFFER_BACKGROUND");
   --dp-font-family: v-bind("FONTS.PRIMARY");
   --dp-common-padding: 0.75rem;
+}
+
+.loading-spinner {
+  margin-left:0;
+  margin-bottom:3em;
 }
 </style>

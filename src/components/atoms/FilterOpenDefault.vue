@@ -101,10 +101,14 @@ export default {
   display: flex;
   height: 50%;
   margin-left: 1%;
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc(9px + 0.7vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
   padding: 3%;
   cursor: pointer;
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #arrow-icon {
@@ -129,7 +133,7 @@ input {
 
 ::placeholder {
   color: v-bind('COLORS.TEXT_SECONDARY');
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc(9px + 0.7vw);
 }
 
 .header-left {

@@ -17,7 +17,7 @@
       <h2 class="offer-content-title">{{ offerTitle }}</h2>
       <div class="offer-content-metadata">
         <p> Wystawiono: <span style="font-weight: bold">{{ submittedOn }}</span></p>
-        <p> Lokalizacja: <span style="font-weight: bold">{{ location }}</span></p>
+        <p> Lokalizacja: <span style="font-weight: bold">{{ location }} </span></p>
         <p> Stan: <span style="font-weight: bold">{{ condition }}</span></p>
         <p class="offer-content-metadata-desc">{{ offerDescription }}</p>
       </div>
@@ -33,8 +33,8 @@
         <ButtonPrimary disabled='true' class="button-disabled" :buttonText="timeUntilUnreserved" />
       </span>
       <span v-if="userId == null" class="offer-right-button">
-        <ButtonPrimary class="button-disabled" style="{cursor: pointer;}"
-        buttonText="Zaloguj się, aby zarezerwować" @click="this.$router.push('/login')"/>
+        <ButtonPrimary class="button-disabled" buttonText="Zaloguj się, aby zarezerwować"
+          style="line-height: calc(11px + 0.6vw); cursor: pointer;" @click="this.$router.push('/login')" />
         <!-- przycisk rezerwacji widoczny jest też na stronie głównej-->
       </span>
     </div>
@@ -115,7 +115,7 @@ export default {
         const now = new Date();
         const unreservationDate = new Date(this.unreservationDate);
         const diffTime = Math.abs(unreservationDate - now);
-        const hours = Math.floor(diffTime / (1000 * 60 * 60)).toString().padStart(2, '0');
+        const hours = Math.floor(diffTime / (1000 * 60 * 60) + 2).toString().padStart(2, '0');
         const minutes = Math.floor((diffTime / (1000 * 60)) % 60).toString().padStart(2, '0');
         const seconds = Math.floor((diffTime / 1000) % 60).toString().padStart(2, '0');
         this.timeUntilUnreserved = `Czas do odbioru: ${hours}:${minutes}:${seconds}`;
@@ -126,7 +126,19 @@ export default {
     // as a parameter
     async getOfferData() {
       try {
-        const response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
+        let token = localStorage.getItem('token');
+        let response = null
+        if(token){
+           response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            }
+          });
+        }
+        else {
+          response = await axios.get(GATEWAY_ADDRESS + `/offer/get/${this.id}`);
+        }
         console.log('Offer ', this.id, ': ', response.data);
         this.offerTitle = response.data.title;
         this.offerDescription = response.data.description;
@@ -135,7 +147,7 @@ export default {
           this.location = response.data.city + ', ' + response.data.street;
         }
         else {
-          this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' od Ciebie)';
+          this.location = response.data.city + ', ' + response.data.street + ' (' + response.data.distance + ' km od Ciebie)';
         }
         this.condition = response.data.condition;
         this.amountOfStars = response.data.ownerRating;

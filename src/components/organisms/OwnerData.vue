@@ -5,7 +5,10 @@
     </div>
     <div id="owner-below" class="flex-container">
       <div id="owner-image" v-if="displaySelector">
-        <ImageSelector v-if="ownerImage" :initial_image="ownerImage" />
+        <ImageSelector v-if="ownerImage" :initial_image="ownerImage" display_small_font=true />
+      </div>
+      <div id="owner-image" v-else>
+        <img v-if="ownerImage" :src="ownerImage" />
       </div>
       <div id="owner-info">
         <div id="owner-name">{{ ownerFirstName }}</div>

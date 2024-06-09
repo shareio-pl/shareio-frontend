@@ -94,11 +94,11 @@ export default {
         this.userImage = await this.getImageData(response.data.ownerPhotoId);
         this.imageIsLoading = false;
         this.reviewId = response.data.reviewId;
-        if (this.reviewId === null) {
-          this.emitter.emit('review-not-done', { offerId: this.id });
-          console.log('Review not done');
-          console.log("ID Sent in event: ", this.id);
+        this.offerId = response.data.offerId;
+        if (this.reviewId !== null) {
+          this.emitter.emit('review-done', { offerId: this.id });
         }
+        this.emitter.emit('offer-loaded', { id: this.offerId });
       } catch (error) {
         console.error('ERROR: ', error);
         this.emitter.emit('axiosError', { error: error.response.status });
@@ -177,12 +177,15 @@ export default {
   display: flex;
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
+  text-align: left;
+  font-weight: bold;
 }
 
 .offer-preview-location {
   margin-top: 2%;
-  font-size: v-bind('FONT_SIZES.STARS');
+  font-size: calc(11px + 0.5vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
+  text-align: left;
 }
 
 .offer-preview-action {
@@ -207,9 +210,17 @@ export default {
   margin-left: 4%;
 }
 
+@media (max-width: 800px) {
+  .offer-preview-location {
+    margin-bottom: -30px;
+  }
+}
 @media (max-width: 500px) {
   .offer-preview-action {
     display: none;
+  }
+  .offer-preview-location {
+    margin-bottom: -30px;
   }
 }
 </style>

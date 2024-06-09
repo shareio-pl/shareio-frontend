@@ -1,8 +1,8 @@
 <template>
-  <div class="scoreboard-position">
+  <div class="scoreboard-position" style="border-bottom: solid black 2px;">
     <div class="position" :class="{ 'current-user': currentUser }">{{ position }}</div>
     <div class="score" :class="{ 'current-user': currentUser }">{{ score }}</div>
-    <div class="name" :class="{ 'current-user': currentUser }" @click="sendToProfile">{{ name + " " + surname }}</div>
+    <div class="name" :class="{ 'current-user': currentUser }" @click="sendToProfile">{{ nameAndSurname }}</div>
   </div>
 </template>
 
@@ -22,11 +22,7 @@ export default {
       type: Number,
       required: true
     },
-    name: {
-      type: String,
-      required: true
-    },
-    surname: {
+    nameAndSurname: {
       type: String,
       required: true
     },
@@ -46,8 +42,7 @@ export default {
   methods: {
     sendToProfile() {
       console.log(this.userId);
-      // TODO: Implement once there is Profile page
-      //this.$router.push(/router/:userId);
+      this.$router.push(`/user/${this.userId}`);
     }
   }
 }
@@ -61,7 +56,7 @@ export default {
   align-items: center;
   padding: 0.2em;
   background-color: v-bind('COLORS.PRIMARY');
-  font-size: v-bind('FONT_SIZES.SECONDARY');
+  font-size: calc(9px + 0.7vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
   width: 90%;
   position: relative;
@@ -70,6 +65,7 @@ export default {
 .scoreboard-position>div {
   text-align: center;
   position: relative;
+  border-bottom: black 2px;
 }
 
 .scoreboard-position>div:not(:last-child)::after {
@@ -80,6 +76,7 @@ export default {
   bottom: -0.2em;
   width: 2px;
   background-color: #000;
+
 }
 
 .position {

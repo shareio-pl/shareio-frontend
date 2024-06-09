@@ -116,7 +116,7 @@ export default {
   justify-content: space-between;
   margin-left: 2%;
   padding: 3%;
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc(9px + 0.7vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
   cursor: pointer;
 }

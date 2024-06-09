@@ -13,6 +13,7 @@ import MyAccount from "@/components/pages/MyAccount.vue";
 import Register from "@/components/pages/Register.vue";
 import Scoreboard from "@/components/pages/Scoreboard.vue";
 import MyOffers from "@/components/pages/MyOffers.vue";
+import User from "@/components/pages/User.vue";
 
 const routes = [
   {
@@ -63,6 +64,12 @@ const routes = [
     path: "/changePassword",
     component: ChangePass,
     name: "Zmiana hasła - ShareIO",
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/user/:id",
+    component: User,
+    name: "Profil - ShareIO",
     meta: { requiresAuth: true },
   },
   {

@@ -223,6 +223,7 @@ export default {
     align-items: center;
     padding-left: 1%;
     position: relative;
+    z-index:5;
   }
 
   #header-drawer img {

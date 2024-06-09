@@ -19,7 +19,7 @@
       </div>
       <span v-if="isLoggedIn" @click="onMyAccountClick">Moje konto</span>
       <hr v-if="isLoggedIn" class="conditionalLines" />
-      <span v-if="isLoggedIn" @click="onMyOffersClick">Moje oferty i rezerwacje</span>
+      <span v-if="isLoggedIn" @click="onMyOffersClick">Moje oferty</span>
       <hr v-if="isLoggedIn" class="conditionalLines" />
       <span v-if="isLoggedIn" @click="onScoreboardClick">Ranking</span>
       <hr v-if="isLoggedIn" class="conditionalLines" />

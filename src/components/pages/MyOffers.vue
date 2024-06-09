@@ -226,6 +226,11 @@ export default {
 .down-offer {
   color: v-bind('COLORS.PRIMARY');
 }
+
+h1 {
+  margin-top: 1em;
+}
+  
 @media (max-width: 1000px) {
   .endOffer {
     width: 100% !important;

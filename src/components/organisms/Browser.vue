@@ -1,8 +1,8 @@
 <template>
   <div id="browser">
-    <SearchInput placeholder="Znajdź swój przedmiot..."/>
-    <SortDropdown/>
-    <ButtonSecondary button-text="Szukaj" @click="onButtonClick"/>
+    <SearchInput @keydown.enter.prevent="onButtonClick" placeholder="Znajdź swój przedmiot..." />
+    <SortDropdown />
+    <ButtonSecondary button-text="Szukaj" @click="onButtonClick" />
   </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       input: '',
-      sorting: 'Najbliższe',
+      sorting: 'CLOSEST',
     }
   },
   methods: {
@@ -27,17 +27,16 @@ export default {
     }
   },
   mounted() {
-    this.emitter.on('search', (data) =>
-    {
-        this.input = data.input;
+    this.emitter.on('search', (data) => {
+      this.input = data.input;
     });
 
-    this.emitter.on('sortChange', (data) =>
-    {
+    this.emitter.on('sortChange', (data) => {
+      console.log('Sort change event received', data);
       this.sorting = data.option;
     });
   },
-  components: {ButtonSecondary, SortDropdown, SearchInput},
+  components: { ButtonSecondary, SortDropdown, SearchInput },
 }
 </script>
 

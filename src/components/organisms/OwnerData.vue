@@ -1,11 +1,11 @@
 <template>
   <div id="owner-data">
     <div id="owner-header">
-      <p> Informacje o autorze </p>
+      <p> Informacje o użytkowniku </p>
     </div>
     <div id="owner-below" class="flex-container">
-      <div id="owner-image">
-        <img :src="ownerImage" alt="">
+      <div id="owner-image" v-if="displaySelector">
+        <ImageSelector v-if="ownerImage" :initial_image="ownerImage" display_small_font=true />
       </div>
       <div id="owner-info">
         <div id="owner-name">{{ ownerFirstName }}</div>
@@ -26,24 +26,29 @@
 
 <script>
 import Stars from '../atoms/Stars.vue';
+import ImageSelector from '../atoms/ImageSelector.vue';
 import axios from 'axios';
 
 import { faStar as unfilledStar, faStarHalfAlt as halfFilledStar } from '@fortawesome/free-regular-svg-icons';
 import { faStar as filledStar } from '@fortawesome/free-solid-svg-icons';
-import { DEFAULT_USER_PROFILE_IMAGE } from "../../../public/Consts";
 import { FONT_SIZES, COLORS } from "../../../public/Consts";
 import { GATEWAY_ADDRESS } from "../../../public/Consts";
 
 export default {
   name: 'OwnerData',
   components: {
-    Stars
+    Stars,
+    ImageSelector
   },
   props: {
     id: {
       type: String,
       required: true
     },
+    displaySelector: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -54,7 +59,8 @@ export default {
       ownerEmail: '',
       ownerStars: '',
       ownerRating: '',
-      ownerImage: DEFAULT_USER_PROFILE_IMAGE,
+      ownerImageId: null,
+      ownerImage: null,
     }
   },
   methods: {
@@ -78,26 +84,48 @@ export default {
       const stars = starsElement.querySelector('.stars');
       starsElement.insertBefore(stars, starRatings);
     },
-    fetchOwnerData() {
+    setupImageEmitter() {
+      this.emitter.on('image-selected', (data) => {
+        this.emitter.emit('image-selected', data);
+      });
+    },
+    async getOwnerData() {
       axios.get(GATEWAY_ADDRESS + `/user/get/${this.id}`).then((response) => {
-        console.log('Owner ', this.id, ': ', response.data);
-
+        console.log(response.data);
         this.ownerFirstName = response.data.name;
         this.ownerSurname = response.data.surname;
         this.ownerEmail = response.data.email;
+        this.ownerImageId = response.data.photoId.id;
         // TODO - temporary
         this.ownerStars = 4.5;
         this.ownerRating = 123;
+      })
+        .then(() => {
+          this.getImageData(this.ownerImageId);
+        })
+        .catch(error => {
+          console.error('ERROR: ', error);
+
+          this.emitter.emit('axiosError', { error: error.response.status });
+        });
+    },
+    async getImageData(photoId) {
+      await axios.get(GATEWAY_ADDRESS + `/image/get/${photoId}`, { responseType: 'arraybuffer' }).then((response) => {
+        let image_buffer = this.arrayBufferToBase64(response.data);
+        this.ownerImage = `data:image/jpeg;base64,${image_buffer}`;
       }).catch(error => {
         console.error('ERROR: ', error);
-
         this.emitter.emit('axiosError', { error: error.response.status });
       });
-    }
+    },
+    arrayBufferToBase64(buffer) {
+      return btoa(
+        new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+      );
+    },
   },
-  mounted() {
-    this.fetchOwnerData();
-    this.setupStarsElement();
+  async mounted() {
+    await this.getOwnerData();
   },
 }
 
@@ -105,7 +133,6 @@ export default {
 
 <style scoped>
 #owner-data {
-  width: 40%;
   height: 125px;
   display: flex;
   flex-direction: column;

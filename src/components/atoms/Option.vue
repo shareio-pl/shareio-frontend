@@ -2,9 +2,9 @@
   <div id="option">
     <div class="checkbox-and-label" @click="toggleCheck">
       <div class="checkbox-circle">
-        <div v-if="name === selectedOption" class="checked"></div>
+        <div v-if="optionName === selectedOption" class="checked"></div>
       </div>
-      <span class="checkbox-name">{{ name }}</span>
+      <span class="checkbox-name">{{ displayName }}</span>
     </div>
   </div>
 </template>
@@ -23,7 +23,11 @@ export default {
     }
   },
   props: {
-    name: {
+    displayName: {
+      type: String,
+      required: true,
+    },
+    optionName: {
       type: String,
       required: true,
     },
@@ -34,7 +38,7 @@ export default {
   },
   methods: {
     toggleCheck() {
-      this.emitter.emit('selected-option', { optionName: this.name });
+      this.emitter.emit('selected-option', { displayName: this.displayName, optionName: this.optionName });
     }
   },
 }

@@ -2,7 +2,6 @@
   <div class="dropdown-select">
     <div class="dropdown-select-header">
       <div class="dropdown-select-header-left">
-        <FontAwesomeIcon :icon="iconChevronDown" class="arrow-icon" />
       </div>
     </div>
     <div class="select-wrapper" v-if="!isForCountries">
@@ -70,7 +69,7 @@ export default {
     onSortChange(option) {
       console.log(this.options);
       if (!this.isForCountries)
-        this.emitter.emit('dropdown-change', { option: option.displayName, type: this.type });
+        this.emitter.emit('dropdown-change', { option: option.category, displayName: option.displayName, type: this.type });
       else
         this.emitter.emit('dropdown-change', { option: option, type: this.type });
       console.log("Emitowano: ", option, this.type);

@@ -9,7 +9,10 @@ import Login from "@/components/pages/Login.vue";
 import NewOffer from "@/components/pages/NewOffer.vue";
 import AboutUs from "@/components/pages/AboutUs.vue";
 import Helpdesk from "@/components/pages/Helpdesk.vue";
+import MyAccount from "@/components/pages/MyAccount.vue";
 import Register from "@/components/pages/Register.vue";
+import Scoreboard from "@/components/pages/Scoreboard.vue";
+import MyOffers from "@/components/pages/MyOffers.vue";
 
 const routes = [
   {
@@ -63,10 +66,28 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/myAccount",
+    component: MyAccount,
+    name: "Moje konto - ShareIO",
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/myOffers",
+    component: MyOffers,
+    name: "Moje oferty - ShareIO",
+    meta: { requiresAuth: true },
+  },
+  {
     path: "/register",
     component: Register,
     name: "Rejestracja - ShareIO",
     meta: { requiresLoggedOut: true },
+  },
+  {
+    path: "/scoreboard",
+    component: Scoreboard,
+    name: "Ranking - ShareIO",
+    meta: { requiresAuth: true },
   },
   {
     path: "/:catchAll(.*)",

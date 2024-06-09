@@ -1,13 +1,13 @@
 <template>
   <div id="image-adder-main">
     <div v-if="!image">
-      <font-awesome-icon id="input-icon" :icon="UploadIcon" @click="triggerFileInput" />
+      <font-awesome-icon :id="iconId" :icon="UploadIcon" @click="triggerFileInput" />
       <input type="file" ref="fileInput" :accept="file_types.join(', ')" @change="handleImageUpload"
         style="display: none;" />
     </div>
     <div v-else>
       <img :src="image" id="image-adder-image" alt="Uploaded image" />
-      <font-awesome-icon id="input-icon-overlay" :icon="UploadIcon" @click="triggerFileInput" />
+      <font-awesome-icon :id="iconOverlayId" :icon="UploadIcon" @click="triggerFileInput" />
       <input type="file" ref="fileInput" :accept="file_types.join(', ')" @change="handleImageUpload"
         style="display: none;" />
     </div>
@@ -27,6 +27,10 @@ export default {
     initial_image: {
       type: String,
       default: null
+    },
+    display_small_font: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -36,6 +40,14 @@ export default {
       //file_types: ['image/jpeg', 'image/png'],
       file_types: ['image/png'],
     };
+  },
+  computed: {
+    iconId() {
+      return this.display_small_font ? 'input-icon-small' : 'input-icon';
+    },
+    iconOverlayId() {
+      return this.display_small_font ? 'input-icon-overlay-small' : 'input-icon-overlay';
+    }
   },
   methods: {
     triggerFileInput() {
@@ -56,6 +68,9 @@ export default {
     }
   },
   mounted() {
+    console.log("Is small font displayed: ", this.display_small_font);
+    console.log("iconId: ", this.iconId);
+    console.log("iconOverlayId: ", this.iconOverlayId);
     if (this.initial_image) {
       this.image = this.initial_image;
     }
@@ -80,6 +95,21 @@ export default {
 
 #input-icon-overlay {
   font-size: 15rem;
+  cursor: pointer;
+  opacity: 0.5;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#input-icon-small {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+#input-icon-overlay-small {
+  font-size: 2rem;
   cursor: pointer;
   opacity: 0.5;
   position: absolute;

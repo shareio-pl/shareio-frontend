@@ -2,30 +2,30 @@
   <div class="add-offer-card">
     <div class="add-offer-left">
       <div id="add-offer-image">
-        <ImageAdder />
+        <ImageAdder/>
       </div>
       <p class="add-offer-left-giver"> Oddająca osoba: </p>
       <div class="add-offer-left-data">
         <UserData class="add-offer-user" :userFirstName="userFirstName" :userSurname="userSurname"
-          :userImage="userImage" />
-        <Stars class="add-offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings" />
+                  :userImage="userImage"/>
+        <Stars class="add-offer-stars" :filledStars="amountOfStars" :ratingsAmount="amountOfRatings"/>
       </div>
     </div>
     <div class="add-offer-content">
       <FormOffer v-if="addressDataLoaded" ref="formOffer" :city="city" :street="street" :houseNumber="houseNumber"
-        :flatNumber="flatNumber" :region="region" :country="country" :post-code="postCode" :categories="categories"
-        :states="states" :generateDescription="generateByAI" />
+                 :flatNumber="flatNumber" :region="region" :country="country" :post-code="postCode" :categories="categories"
+                 :states="states" :generateDescription="generateByAI"/>
     </div>
     <div class="add-offer-right">
       <div class="add-offer-right-map">
-        <MapPreview zoom=16 :address="fullAddress" />
+        <MapPreview zoom=16 :address="fullAddress"/>
       </div>
-      <ButtonPrimary v-if="!dataSending" class="add-offer-right-button" buttonText="Wystaw" @click="submitOffer" />
+      <ButtonPrimary v-if="!dataSending" class="add-offer-right-button" buttonText="Wystaw" @click="submitOffer"/>
       <div v-else class="spinner"></div>
     </div>
   </div>
   <div>
-    <ButtonPrimary class="buttonAI" buttonText="Użyj AI do wygenerowania opisu" @click="generateDescription" />
+    <ButtonPrimary class="buttonAI" buttonText="Użyj AI do wygenerowania opisu" @click="generateDescription"/>
   </div>
 </template>
 
@@ -40,9 +40,9 @@ import Stars from "@/components/atoms/Stars.vue";
 
 import axios from 'axios'
 import "leaflet/dist/leaflet.css"
-import { COLORS } from "../../../public/Consts";
-import { FONT_SIZES } from "../../../public/Consts";
-import { GATEWAY_ADDRESS } from "../../../public/Consts";
+import {COLORS} from "../../../public/Consts";
+import {FONT_SIZES} from "../../../public/Consts";
+import {GATEWAY_ADDRESS} from "../../../public/Consts";
 
 export default {
   name: "AddOffer",
@@ -98,23 +98,23 @@ export default {
   methods: {
     getCategories() {
       axios.get(GATEWAY_ADDRESS + `/offer/getCategories`)
-        .then(response => {
-          console.log('Categories response: ', response.data);
-          this.categories = response.data.categories.map(category => ({
-            displayName: category.displayName,
-            category: category.category,
-          }));
-          console.log('Categories: ', this.categories);
-        })
-        .catch(error => {
-          console.error('ERROR: ', error);
-          this.emitter.emit('axiosError', { error: error.response.status });
-        });
+          .then(response => {
+            console.log('Categories response: ', response.data);
+            this.categories = response.data.categories.map(category => ({
+              displayName: category.displayName,
+              category: category.category,
+            }));
+            console.log('Categories: ', this.categories);
+          })
+          .catch(error => {
+            console.error('ERROR: ', error);
+            this.emitter.emit('axiosError', {error: error.response.status});
+          });
     },
     getConditions() {
       axios.get(GATEWAY_ADDRESS + `/offer/getConditions`).then((response) => {
         console.log('Received conditions: ', response.data);
-        this.states = response.data.conditions.map(condition => ({ displayName: condition.displayName, category: condition.condition }));
+        this.states = response.data.conditions.map(condition => ({displayName: condition.displayName, category: condition.condition}));
       });
     },
     prepareFormData(formData) {
@@ -127,11 +127,8 @@ export default {
         city: formData.offerCity,
         street: formData.offerStreet,
         houseNumber: formData.offerHouseNumber,
-        flatNumber: this.flatNumber,
         region: this.region,
         country: this.country,
-        postCode: this.postCode,
-
       };
     },
     async submitOffer() {
@@ -144,12 +141,12 @@ export default {
       }
       if (!this.offerImage) {
         this.dataSending = false;
-        this.emitter.emit('error', { error: 'Nie wybrano zdjęcia oferty' });
+        this.emitter.emit('error', {error: 'Nie wybrano zdjęcia oferty'});
         return;
       }
 
       let dataToSend = this.prepareFormData(formData);
-      let jsonBlob = new Blob([JSON.stringify(dataToSend)], { type: 'application/json' });
+      let jsonBlob = new Blob([JSON.stringify(dataToSend)], {type: 'application/json'});
 
       let form = new FormData();
       form.append("json", jsonBlob);
@@ -160,15 +157,18 @@ export default {
           'Content-Type': 'multipart/form-data'
         }
       })
-        .then((response) => {
-          console.log('Offer added: ', response.data);
-          this.dataSending = false;
-          this.$router.push('/offer/' + response.data.offerId);
-        })
-        .catch((error) => {
-          console.error('ERROR: ', error);
-          this.dataSending = false;
-        });
+          .then((response) => {
+            console.log('Offer added: ', response.data);
+            this.dataSending = false;
+            this.$router.push('/offer/' + response.data.offerId);
+          })
+          .catch((error) => {
+            console.error('ERROR: ', error);
+            if (error.response.data === 'Nie udało się ustalić adresu, spróbuj ponownie') {
+              this.emitter.emit('error', {error: error.response.data});
+            }
+            this.dataSending = false;
+          });
     },
     setImageUploadedEmitter() {
       this.emitter.on('image-uploaded', (data) => {
@@ -178,19 +178,19 @@ export default {
     },
     async getUserData() {
       return axios.get(GATEWAY_ADDRESS + '/user/get/' + this.ownerId)
-        .then((response) => {
-          console.log('User data: ', response.data);
-          this.userFirstName = response.data.name;
-          this.userSurname = response.data.surname;
-          this.userImage = response.data.image;
-          this.addressId = response.data.address.id;
-          console.log('Address id: ', this.addressId);
-          console.log("Response data: ", response.data);
-        })
-        .catch((error) => {
-          console.error('Error getting user data: ', error);
-          this.emitter.emit('axiosError', { error: error.response.status });
-        });
+          .then((response) => {
+            console.log('User data: ', response.data);
+            this.userFirstName = response.data.name;
+            this.userSurname = response.data.surname;
+            this.userImage = response.data.image;
+            this.addressId = response.data.address.id;
+            console.log('Address id: ', this.addressId);
+            console.log("Response data: ", response.data);
+          })
+          .catch((error) => {
+            console.error('Error getting user data: ', error);
+            this.emitter.emit('axiosError', {error: error.response.status});
+          });
     },
     generateDescription() {
       console.log('Generating description');
@@ -198,21 +198,19 @@ export default {
     },
     async getAddressData() {
       return axios.get(GATEWAY_ADDRESS + '/address/get/' + this.addressId)
-        .then((response) => {
-          console.log('Address data: ', response.data);
-          this.city = response.data.city;
-          this.street = response.data.street;
-          this.houseNumber = response.data.houseNumber;
-          this.flatNumber = response.data.flatNumber;
-          this.region = response.data.region;
-          this.country = response.data.country;
-          this.postCode = response.data.postCode;
-          this.addressDataLoaded = true;
-        })
-        .catch((error) => {
-          console.error('Error getting address data: ', error);
-          this.emitter.emit('axiosError', { error: error.response.status });
-        });
+          .then((response) => {
+            console.log('Address data: ', response.data);
+            this.city = response.data.city;
+            this.street = response.data.street;
+            this.houseNumber = response.data.houseNumber;
+            this.region = response.data.region;
+            this.country = response.data.country;
+            this.addressDataLoaded = true;
+          })
+          .catch((error) => {
+            console.error('Error getting address data: ', error);
+            this.emitter.emit('axiosError', {error: error.response.status});
+          });
     }
   },
   async mounted() {

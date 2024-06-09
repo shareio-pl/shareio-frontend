@@ -27,6 +27,9 @@
       <FilterOptions class="filter" name="Stan" :prop-icon="StateIcon" :clear="clearCounter" />
       <FilterOpenRate class="filter" filterName="Ocena wystawiającego" :prop-icon="RatingIcon" :clear="clearCounter" />
     </div>
+    <div id="filters-button">
+      <ButtonPrimary @click="sendFilters" buttonText="Filtruj" style="width: 40%; margin-bottom: 1em;" />
+    </div>
   </div>
 </template>
 
@@ -35,6 +38,7 @@ import FilterOpenDefault from '../atoms/FilterOpenDefault.vue';
 import FilterOptions from '../atoms/FilterOptions.vue';
 import Category from '../atoms/Category.vue';
 import FilterOpenRate from '../atoms/FilterOpenRate.vue';
+import ButtonPrimary from '../atoms/ButtonPrimary.vue';
 
 import { COLORS, FONT_SIZES } from "../../../public/Consts";
 import { faClock as ClockIcon } from '@fortawesome/free-solid-svg-icons';
@@ -49,7 +53,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Filters",
-  components: { FilterOpenDefault, FilterOpenRate, FilterOptions, Category, FontAwesomeIcon },
+  components: {
+    FilterOpenDefault,
+    FilterOpenRate,
+    FilterOptions,
+    Category,
+    ButtonPrimary,
+    FontAwesomeIcon
+  },
   mounted() {
     this.emitter.on('filter-open-default', this.handleFilterOpenDefault);
     this.emitter.on('filter-stars', this.handleFilterStars);
@@ -78,7 +89,6 @@ export default {
       } else if (payload.identifier === 'distance') {
         this.distance_chosen = payload.input;
       }
-      //this.sendFilters(); TODO: Send filters via button in different commit
     },
     handleCategoryChange(payload) {
       if (payload.selected) {
@@ -94,9 +104,12 @@ export default {
       this.stars_chosen = '';
       this.distance_chosen = '';
       this.clearCounter++;
+      this.sendFilters();
     },
     onCategoriesClearClicked() {
+      this.categories_chosen = [];
       this.clearCounterCategories++;
+      this.sendFilters();
     },
     handleFilterStars(payload) {
       this.stars_chosen = payload.starsAmount;
@@ -109,9 +122,11 @@ export default {
         time_chosen: this.time_chosen,
         option_chosen: this.option_chosen,
         stars_chosen: this.stars_chosen,
-        distance_chosen: this.distance_chosen
+        distance_chosen: this.distance_chosen,
+        categories_chosen: this.categories_chosen
       });
-      console.log('Filters sent: ', this.time_chosen, this.option_chosen, this.stars_chosen, this.distance_chosen);
+      console.log('Filters sent: ', this.time_chosen, this.option_chosen, this.stars_chosen,
+        this.distance_chosen, this.categories_chosen);
     },
     updateWindowWidth() {
       this.windowWidth = window.innerWidth;

@@ -27,8 +27,8 @@
     </div>
     <div id="register-user-location">
       <div class="input-row">
-        <DropdownSelect :options="COUNTRIES" type="country" placeholder="Polska" isForCountries=true
-          style="width: 48%;" />
+        <DropdownSelect class="country-selector" :options="COUNTRIES" type="country" placeholder="Polska" isForCountries=true
+           />
         <!--<FieldInput v-model="country" label="Kraj *"
           :error="{ active: v$.country.$error && v$.country.$dirty, message: countryError }"
           displayBlankSpaceBelow=true />-->
@@ -59,7 +59,7 @@
       </div>
     </div>
     <div v-else>
-      <ButtonPrimary buttonText="Zarejestruj" style="margin-left:0; margin-bottom:3em;" />
+      <ButtonPrimary class="buttonRegister" buttonText="Zarejestruj" style="margin-left:0; margin-bottom:3em;" />
     </div>
   </form>
 </template>
@@ -305,7 +305,8 @@ export default {
 </script>
 
 <style>
-#register-user-data {
+#register-user-data,
+#register-user-location {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -313,12 +314,8 @@ export default {
   width: 100%;
 }
 
-#register-user-location {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+.country-selector {
+  width: 48% !important;
 }
 
 .form {
@@ -336,9 +333,10 @@ export default {
   justify-content: space-between;
   align-items: flex-start;
   width: 50%;
+  margin-bottom: 1em;
 }
 
-.input-row>* {
+.input-row > * {
   width: 48%;
 }
 
@@ -361,7 +359,33 @@ export default {
 }
 
 .loading-spinner {
-  margin-left:0;
-  margin-bottom:3em;
+  margin-left: 0;
+  margin-bottom: 3em;
+}
+
+@media screen and (max-width: 850px) {
+  .input-row {
+    flex-direction: column;
+    width: 90%;
+    margin-bottom: 0;
+  }
+
+  .input-row > * {
+    width: 100%;
+    margin-bottom: 0em;
+  }
+
+  .date-picker-wrapper {
+    margin-bottom: 50px;
+  }
+
+  .country-selector {
+    width: 100% !important;
+    margin-bottom: 50px !important;
+  }
+
+  .buttonRegister {
+    width: 100px !important;
+  }
 }
 </style>

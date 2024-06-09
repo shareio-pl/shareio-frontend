@@ -94,6 +94,7 @@ span {
   left: 50%;
   top: 25%;
   font-size: v-bind("FONT_SIZES.PRIMARY");
+  white-space: nowrap;
   color: gray;
   transform-origin: 0 0;
   transform: translate(-50%, 0);

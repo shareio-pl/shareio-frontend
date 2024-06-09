@@ -11,7 +11,8 @@
               <p class="my-account-delete-header" style="margin-bottom: 1em;"> Zarządzaj kontem </p>
             </div>
             <div class="my-account-delete-content">
-              <ButtonPrimary buttonText="Zmień hasło" style="width: 50%; margin-left:0;" @click="onChangePasswordClick" />
+              <ButtonPrimary buttonText="Zmień hasło" style="width: 50%; margin-left:0;"
+                @click="onChangePasswordClick" />
               <ButtonPrimary buttonText="Usuń konto" style="width: 50%; margin-left:5%; background-color:brown"
                 @click="deleteAccount" />
             </div>
@@ -28,9 +29,11 @@ import OwnerData from "@/components/organisms/OwnerData.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import FormLocationProfile from "@/components/organisms/FormLocationProfile.vue";
 
-import { COLORS, FONT_SIZES } from "../../../public/Consts";
+import { COLORS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
 
 import { jwtDecode } from "jwt-decode";
+
+import axios from "axios";
 
 export default {
   name: "MyAccount",
@@ -64,6 +67,27 @@ export default {
     setupImageSelectedListener() {
       this.emitter.on('image-uploaded', (file) => {
         this.changedImage = file;
+        this.changeUserImage();
+      });
+    },
+    async changeUserImage() {
+      if (!this.changedImage) {
+        return;
+      }
+      let formData = new FormData();
+      formData.append('file', ('image', this.changedImage));
+
+      axios.post(GATEWAY_ADDRESS + `/user/setPhoto/${this.id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }).then(() => {
+        this.changedImage = null;
+        this.emitter.emit('success', { message: 'Zdjęcie zostało zmienione!' });
+      }).catch((error) => {
+        console.log(error);
+        this.emitter.emit('error', { error: error.response.data });
       });
     },
     deleteAccount() {

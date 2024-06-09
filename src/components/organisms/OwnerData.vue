@@ -201,11 +201,12 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 30px;
 
 }
 
 .custom-star-card>>>.star-items {
-  font-size: v-bind('FONT_SIZES.TITLE');
+  font-size: calc(10px + 1.0vw);
 }
 
 .custom-star-card>>>.star-ratings {

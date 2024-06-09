@@ -176,6 +176,7 @@ export default {
   margin-bottom: 3%;
   display: flex;
   font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc(13px + 0.5vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
   text-align: left;
   font-weight: bold;
@@ -215,7 +216,7 @@ export default {
     margin-bottom: -30px;
   }
 }
-@media (max-width: 500px) {
+@media (max-width: 850px) {
   .offer-preview-action {
     display: none;
   }

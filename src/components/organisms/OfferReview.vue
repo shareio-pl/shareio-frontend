@@ -11,7 +11,7 @@
               <FontAwesomeIcon v-for="index in 5" :key="index" :icon="getStarIcon(index)" class="star" />
             </div>
             <ButtonPrimary @click="confirmReview" class="confirm-button"
-                           :button-text="buttonText" style="width: 70%;margin-left:12%;"/>
+                           :button-text="buttonText" style="width: 60%;margin-left:12%;"/>
           </div>
           <div v-if="isReviewDone && offerLoaded" key="message">
             <p class="offer-rated-description"> Oferta została już oceniona! </p>
@@ -132,7 +132,6 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 .offer-review-row {
   display: flex;
@@ -140,7 +139,7 @@ export default {
 }
 
 .offer-preview-review {
-  width: 80%
+  width: 80%;
 }
 
 .offer-review-rating {
@@ -154,7 +153,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 1em;
+  margin-left: 1.3em;
   margin-bottom: 2%;
   font-size: v-bind('FONT_SIZES.IMPORTANT');
   color: v-bind('COLORS.OFFER_BACKGROUND');
@@ -177,5 +176,38 @@ export default {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 1000px) {
+  .offer-review-row {
+    flex-direction: column;
+  }
+
+  .offer-preview-review,
+  .offer-review-rating {
+    width: 100%;
+    margin-bottom: 1em;
+  }
+
+  .offer-review-rating {
+    margin-left: 0;
+  }
+
+  .offer-review-stars {
+    font-size: v-bind('FONT_SIZES.PRIMARY');
+    padding: 2%;
+  }
+
+  .offer-rated-description {
+    margin-left: 0;
+    font-size: v-bind('FONT_SIZES.SECONDARY');
+    text-align: center;
+  }
+
+  .confirm-button {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 </style>

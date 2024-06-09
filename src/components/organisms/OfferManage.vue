@@ -6,8 +6,8 @@
           <OfferPreview :id="id" style="width: 100%;" />
         </span>
         <span class="offer-manage-options">
-          <ButtonPrimary :button-text="editText" style="width: 60%;" />
-          <ButtonPrimary :button-text="closeText" @click="cancelOffer" style="width: 60%;" />
+          <ButtonPrimary :button-text="editText" style="width: 60%; min-width: 50px;" />
+          <ButtonPrimary :button-text="closeText" @click="cancelOffer" style="width: 60%; min-width: 50px;" />
         </span>
       </div>
     </div>
@@ -83,7 +83,7 @@ export default {
 }
 
 .offer-manage-review {
-  width: 80%
+  width: 80%;
 }
 
 .offer-manage-options {
@@ -100,5 +100,28 @@ export default {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 850px) {
+  .offer-manage-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .offer-manage-review,
+  .offer-manage-options {
+    width: 100%;
+  }
+
+  .offer-manage-options {
+    margin-top: 1em;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .offer-manage-options button {
+    width: 48%;
+  }
 }
 </style>

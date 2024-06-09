@@ -155,4 +155,27 @@ export default {
   background-color: v-bind('COLORS.SECONDARY');
   font-size: v-bind("FONT_SIZES.PRIMARY");
 }
+
+@media (max-width: 850px) {
+  #my-account-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #my-account-owner {
+    width: 90%;
+    min-width: 0;
+    align-self: center;
+  }
+
+  .my-account-delete-content {
+    flex-direction: column;
+  }
+
+  .my-account-delete-content button {
+    width: 100%;
+    margin-top: 2%;
+    margin-left: 25% !important;
+  }
+}
 </style>

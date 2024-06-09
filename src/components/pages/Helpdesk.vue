@@ -12,7 +12,7 @@
         </div>
       </div>
       <div v-else>
-        <ButtonPrimary button-text="Wyślij" id="button" @click="sendMail" style="margin-left: 84%; margin-top: 1px;"/>
+        <ButtonPrimary button-text="Wyślij" id="button" @click="sendMail" style=" margin-top: 1px;"/>
       </div>
     </div>
     <p>FAQ</p>
@@ -98,6 +98,7 @@ export default {
   flex-direction: column;
   background: linear-gradient(to bottom, #F0FBFF, #0D2149);
   /*light-blue to COLORS.BUTTON_PRIMARY_NORMAL*/
+  min-height: 100vh;
 }
 
 h1 {
@@ -148,7 +149,14 @@ textarea::placeholder{
 
 #button {
   align-self: flex-end;
-  min-width: 60px;
+  min-width: 80px;
+  margin-left: 84%;
+}
+
+@media screen and (max-width: 650px) {
+  #button {
+    margin-left: 68%;
+  }
 }
 
 p {

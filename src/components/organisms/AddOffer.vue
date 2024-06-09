@@ -2,7 +2,7 @@
   <div class="add-offer-card">
     <div class="add-offer-left">
       <div id="add-offer-image">
-        <ImageAdder/>
+        <ImageAdder />
       </div>
       <p class="add-offer-left-giver"> Oddająca osoba: </p>
       <div class="add-offer-left-data">
@@ -391,7 +391,7 @@ textarea {
   .add-offer-left {
     flex: 0 0 auto;
     width: 100%;
-    margin-top: 20%;
+    margin-top: 0% ;
   }
 
   .add-offer-content {

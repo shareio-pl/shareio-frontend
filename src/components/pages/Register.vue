@@ -1,6 +1,7 @@
 <template>
   <div id="register-page">
     <Header />
+    <img src="../../assets/favicon_big.png" alt="" class="logo">
     <h1>Zarejestruj się</h1>
     <FormRegister />
   </div>
@@ -30,8 +31,20 @@ export default {
 }
 
 h1 {
-  margin-top: 1%;
+  margin-top: 0;
   margin-bottom: 1%;
+}
+
+img {
+  width:5%;
+  height: 5%;
+}
+
+.logo {
+  margin-top: 0%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0%;
 }
 </style>
 

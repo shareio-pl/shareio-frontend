@@ -10,7 +10,7 @@
     <div id="categories">
       <Category v-for="category in categories" :key="category.name" :displayName="category.displayName"
         :category-name="category.categoryName" :number-of-offers="category.numberOfOffers" :clear="clearCounterCategories"
-        style="width: 90%;"  />
+        style="width: 90%;" @click="sendFilters"  />
     </div>
     <div id="filterName">
       <div class="filter-header-left">

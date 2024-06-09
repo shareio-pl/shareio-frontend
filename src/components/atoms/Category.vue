@@ -86,6 +86,7 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  text-align: left;
 }
 
 .number {
@@ -95,7 +96,6 @@ export default {
 
 @media screen and (max-width: 1000px) {
   .number {
-    display: none;
   }
 }
 </style>

@@ -7,15 +7,10 @@
         <FontAwesomeIcon :icon="XIcon" class="clear-icon" @click="onCategoriesClearClicked" />
       </div>
     </div>
-    <div v-if="bigWidth" id="categories">
+    <div id="categories">
       <Category v-for="category in categories" :key="category.name" :displayName="category.displayName"
         :category-name="category.categoryName" :number-of-offers="category.numberOfOffers" :clear="clearCounterCategories"
         style="width: 90%;"  />
-    </div>
-    <div v-else id="categories">
-      <Category v-for="category in categories" :key="category.name" :displayName="category.displayName"
-                :category-name="category.categoryName" :clear="clearCounterCategories"
-                style="width: 90%;"  />
     </div>
     <div id="filterName">
       <div class="filter-header-left">

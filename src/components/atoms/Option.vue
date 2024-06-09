@@ -50,8 +50,12 @@ export default {
   flex-direction: column;
   height: 50%;
   margin-left: 2%;
-  font-size: v-bind('FONT_SIZES.PRIMARY');
+  font-size: calc(9px + 0.7vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .checkbox-and-label {
@@ -74,13 +78,22 @@ export default {
 }
 
 .checked {
-  width: 70%;
-  height: 70%;
+  width: 65%;
+  height: 65%;
   border-radius: 50%;
   background-color: v-bind('COLORS.BORDER_BLACK');
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+@media screen and (max-width: 850px) {
+  .checkbox-circle {
+    max-width: 15px;
+    max-height: 15px;
+    min-width: 15px;
+    min-height: 15px;
+  }
 }
 </style>

@@ -66,5 +66,14 @@ export default {
   pointer-events: none;
 }
 
-option {}
+option {
+
+}
+
+@media (max-width: 500px) {
+  .arrow-icon {
+    display: none;
+  }
+}
+
 </style>

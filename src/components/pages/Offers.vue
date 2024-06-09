@@ -226,6 +226,11 @@ export default {
   text-overflow: ellipsis;
 }
 
+#offers-page-content-offers >>> .offer-preview-location {
+  font-size: calc(11px + 0.5vw);
+
+}
+
 @media only screen and (max-width: 1050px) {
   #offers-page-content-offers >>> .offer-preview-action {
     display: none;

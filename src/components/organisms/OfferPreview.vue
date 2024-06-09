@@ -168,11 +168,13 @@ export default {
   font-size: v-bind('FONT_SIZES.PRIMARY');
   color: v-bind('COLORS.TEXT_SECONDARY');
   text-align: left;
+  font-weight: bold;
+
 }
 
 .offer-preview-location {
   margin-top: 2%;
-  font-size: v-bind('FONT_SIZES.STARS');
+  font-size: calc(11px + 0.5vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
   text-align: left;
 }
@@ -199,9 +201,17 @@ export default {
   margin-left: 4%;
 }
 
+@media (max-width: 800px) {
+  .offer-preview-location {
+    margin-bottom: -30px;
+  }
+}
 @media (max-width: 500px) {
   .offer-preview-action {
     display: none;
+  }
+  .offer-preview-location {
+    margin-bottom: -30px;
   }
 }
 </style>

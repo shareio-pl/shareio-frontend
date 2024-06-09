@@ -63,4 +63,11 @@ export default {
 option {
 
 }
+
+
+@media (max-width: 500px) {
+  .arrow-icon {
+    display: none;
+  }
+}
 </style>

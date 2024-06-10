@@ -7,7 +7,7 @@
           <h1> Wystawione, zarezerwowane oferty </h1>
           <span v-if="reservedOffers">
             <span v-for="offer in reservedOffers" :key="offer">
-              <OfferReview :id="offer" style="width: 100%;" />
+              <OfferPreview :id="offer" style="width: 80%;" />
             </span>
             <span v-if="reservedOffers.length === 0">
               <p> Nikt jeszcze nie zarezerwował twoich ofert! </p>

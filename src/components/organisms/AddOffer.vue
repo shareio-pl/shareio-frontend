@@ -249,6 +249,7 @@ export default {
 #add-offer-image {
   border-top-left-radius: 20%;
   border-bottom-right-radius: 20%;
+  aspect-ratio: 1/1;
   overflow: hidden;
 }
 

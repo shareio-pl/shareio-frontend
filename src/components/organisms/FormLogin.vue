@@ -140,7 +140,7 @@ span {
 
 @media only screen and (max-width: 800px) {
   .input-row {
-    width: 100%;
+    width: 85%;
   }
 }
 

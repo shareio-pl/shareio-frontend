@@ -151,4 +151,10 @@ select:disabled {
   align-items: center;
   width: 90%;
 }
+
+@media screen and (max-width: 650px) {
+  .arrow-icon {
+    display: none;
+  }
+}
 </style>

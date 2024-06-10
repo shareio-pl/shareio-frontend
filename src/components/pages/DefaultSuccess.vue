@@ -57,7 +57,7 @@ export default {
   left: 25%;
   justify-content: center;
   align-items: center;
-  font-size: 500%;
+  font-size: calc(25px + 1.9vw);
   background-color: rgba(0, 125, 0, 0.8);
   text-align: center;
   border-radius: 15px;

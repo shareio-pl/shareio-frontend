@@ -2,7 +2,7 @@
   <div class="add-offer-card">
     <div class="add-offer-left">
       <div id="add-offer-image">
-        <ImageAdder/>
+        <ImageAdder />
       </div>
       <p class="add-offer-left-giver"> Oddająca osoba: </p>
       <div class="add-offer-left-data">
@@ -26,6 +26,10 @@
   </div>
   <div>
     <ButtonPrimary class="buttonAI" buttonText="Użyj AI do wygenerowania opisu" @click="generateDescription"/>
+    <div class="buttonLowWidth">
+      <ButtonPrimary v-if="!dataSending" class="add-offer-right-button" buttonText="Wystaw" @click="submitOffer"/>
+      <div v-else class="spinner"></div>
+    </div>
   </div>
 </template>
 
@@ -265,7 +269,7 @@ export default {
 }
 
 .add-offer-left-giver {
-  font-size: v-bind('FONT_SIZES.IMPORTANT');
+  font-size: calc(13px + 0.85vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
 }
 
@@ -358,7 +362,6 @@ textarea {
   0% {
     transform: rotate(0deg);
   }
-
   100% {
     transform: rotate(360deg);
   }
@@ -373,5 +376,54 @@ textarea {
 
 .buttonAI:hover {
   background-color: green;
+}
+
+.buttonLowWidth {
+  display: none;
+}
+
+@media screen and (max-width: 850px) {
+  .add-offer-card {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
+
+  .add-offer-left {
+    flex: 0 0 auto;
+    width: 100%;
+    margin-top: 0% ;
+  }
+
+  .add-offer-content {
+    flex: 0 0 auto;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .add-offer-right {
+    display: none;
+  }
+
+  .lowWidthContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .buttonLowWidth {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .buttonLowWidth .add-offer-right-button,
+  .buttonAI {
+    width: 90%;
+    height: 4em;
+    margin: 0 auto;
+  }
 }
 </style>

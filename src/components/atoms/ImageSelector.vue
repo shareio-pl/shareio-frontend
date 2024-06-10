@@ -89,6 +89,7 @@ export default {
 }
 
 #input-icon {
+  margin-top: 50px;
   font-size: 15rem;
   cursor: pointer;
 }

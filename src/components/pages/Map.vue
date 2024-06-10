@@ -172,7 +172,12 @@ export default {
 }
 
 #header {
-  z-index: 3;
+  display: flex;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: 100px;
+  z-index: 4;
 }
 
 #map-container {

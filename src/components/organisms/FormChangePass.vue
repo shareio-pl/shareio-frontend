@@ -129,4 +129,11 @@ export default {
   align-items: center;
   justify-content: center;
 }
+
+@media only screen and (max-width: 1350px) {
+  .input-row {
+    width: 100%;
+  }
+  FieldInput {}
+}
 </style>

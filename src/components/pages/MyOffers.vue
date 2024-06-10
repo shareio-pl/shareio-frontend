@@ -176,7 +176,6 @@ export default {
     },
     deleteAccount() {
       if (confirm("Czy na pewno chcesz usunąć konto? Operacja jest nieodwracalna.")) {
-        // TODO REMOVE
         alert("Twoje konto zostało by usunięte, ale wiemy, że chcesz pozostać tutaj!");
       }
     }
@@ -211,10 +210,6 @@ export default {
   width: 60%;
 }
 
-#my-account-offers>>>OfferPreview {
-  width: 1000px;
-}
-
 #my-reserved-offers #my-created-offers #my-ended-offers {
   display: flex;
   flex-direction: column;
@@ -230,7 +225,7 @@ export default {
 h1 {
   margin-top: 1em;
 }
-  
+
 @media (max-width: 1000px) {
   .endOffer {
     width: 100% !important;
@@ -238,7 +233,7 @@ h1 {
 }
 
 @media screen and (max-width: 450px) {
-  #my-offers-content >>> .offer-preview-image {
+  #my-offers-content ::v-deep .offer-preview-image {
     aspect-ratio: 1/2;
   }
 }

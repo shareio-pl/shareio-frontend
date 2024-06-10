@@ -27,8 +27,8 @@
     </div>
     <div id="register-user-location">
       <div class="input-row">
-        <DropdownSelect class="country-selector" :options="COUNTRIES" type="country" placeholder="Polska" isForCountries=true
-           />
+        <DropdownSelect class="country-selector" :options="COUNTRIES" type="country" placeholder="Polska"
+          isForCountries=true />
         <!--<FieldInput v-model="country" label="Kraj *"
           :error="{ active: v$.country.$error && v$.country.$dirty, message: countryError }"
           displayBlankSpaceBelow=true />-->
@@ -47,7 +47,8 @@
           displayBlankSpaceBelow=true />
         <div class="input-row">
           <FieldInput v-model="houseNumber" label="Nr. domu *"
-                      :error="{ active: v$.houseNumber.$error && v$.houseNumber.$dirty, message: houseNumberError }" displayBlankSpaceBelow=true />
+            :error="{ active: v$.houseNumber.$error && v$.houseNumber.$dirty, message: houseNumberError }"
+            displayBlankSpaceBelow=true />
           <FieldInput v-model="flatNumber" label="Mieszkanie" displayBlankSpaceBelow=true />
         </div>
       </div>
@@ -77,7 +78,7 @@ import FieldInput from "@/components/atoms/FieldInput.vue";
 import ButtonPrimary from "@/components/atoms/ButtonPrimary.vue";
 import DropdownSelect from "@/components/atoms/DropdownSelect.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import {faSpinner} from "@fortawesome/free-solid-svg-icons";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   name: "FormRegister",
@@ -181,9 +182,9 @@ export default {
         .catch(error => {
           console.error('ERROR: ', error);
           if (error.response.data === 'Nie udało się ustalić adresu, spróbuj ponownie') {
-            this.emitter.emit('error', {error: error.response.data});
+            this.emitter.emit('error', { error: error.response.data });
           }
-          else{
+          else {
             this.emitter.emit('axiosError', { error: error.response.status });
           }
           this.isloading = false;
@@ -336,7 +337,7 @@ export default {
   margin-bottom: 1em;
 }
 
-.input-row > * {
+.input-row>* {
   width: 48%;
 }
 
@@ -344,7 +345,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: start;
+  align-items: flex-start;
   margin-left: 25%;
 }
 
@@ -370,7 +371,7 @@ export default {
     margin-bottom: 0;
   }
 
-  .input-row > * {
+  .input-row>* {
     width: 100%;
     margin-bottom: 0em;
   }

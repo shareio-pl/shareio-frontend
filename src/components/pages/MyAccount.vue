@@ -92,7 +92,6 @@ export default {
     },
     deleteAccount() {
       if (confirm("Czy na pewno chcesz usunąć konto? Operacja jest nieodwracalna.")) {
-        // TODO REMOVE
         alert("Twoje konto zostało by usunięte, ale wiemy, że chcesz pozostać tutaj!");
       }
     },

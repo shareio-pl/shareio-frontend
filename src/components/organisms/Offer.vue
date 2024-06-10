@@ -66,7 +66,6 @@ export default {
       center: [0, 0],
       mapDataLoaded: false,
       imageIsLoading: true,
-      offersIds: [], // TODO: Remove once get ID from session
       offerImage: '',
       offerMapImage: '',
       userImage: '',

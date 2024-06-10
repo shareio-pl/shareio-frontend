@@ -264,7 +264,6 @@ export default {
       }
     },
     'v$.offerDescription.$error'(newVal) {
-      // TODO: Fix this, rn it doesn't seem to work with ifs.
       if (newVal) {
         if (!this.v$.offerDescription.minLength.$model) {
           this.offerDescriptionError = `Opis musi mieć co najmniej ${this.v$.offerDescription.minLength.$params.min} znaków`;

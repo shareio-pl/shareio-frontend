@@ -58,9 +58,9 @@ export default {
         this.emitter.emit('axiosError', { error: error.response.status });
       });
     },
-    getNewestOffers() { //TODO: check if it works after backend fix
+    getNewestOffers() {
       let token = localStorage.getItem('token');
-      if(token!==null){
+      if (token !== null) {
         axios.get(GATEWAY_ADDRESS + '/offer/getNewest', {
           headers: {
             'Content-Type': 'application/json',

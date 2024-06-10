@@ -145,7 +145,6 @@ export default {
 
 .offer-preview-is-not-new {
   background-color: v-bind('COLORS.OFFER_FOREGROUND');
-  margin-bottom: 2%;
   padding: 10px;
 }
 
@@ -183,7 +182,6 @@ export default {
 }
 
 .offer-preview-location {
-  margin-top: 2%;
   font-size: calc(11px + 0.5vw);
   color: v-bind('COLORS.TEXT_SECONDARY');
   text-align: left;
@@ -216,10 +214,12 @@ export default {
     margin-bottom: -30px;
   }
 }
+
 @media (max-width: 850px) {
   .offer-preview-action {
     display: none;
   }
+
   .offer-preview-location {
     margin-bottom: -30px;
   }

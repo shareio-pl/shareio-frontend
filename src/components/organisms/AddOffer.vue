@@ -233,7 +233,6 @@ export default {
   height: 55%;
   margin: 0 auto;
   background-color: v-bind('COLORS.OFFER_FOREGROUND');
-  /* TODO: Fix border */
   border-radius: 8em 25px 25px 25px;
 }
 

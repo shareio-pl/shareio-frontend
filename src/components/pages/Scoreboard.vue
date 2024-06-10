@@ -7,36 +7,26 @@
         <div class="column-title2">Wynik</div>
         <div class="column-title3">Użytkownik</div>
       </div>
-      <ScoreboardPosition
-          v-for="(user) in topUsers.slice(0, 10)"
-          :key="user.userId"
-          :userId="user.userId"
-          :score="user.score"
-          :nameAndSurname="user.nameAndSurname"
-          :position="user.position"
-          :current-user="user.userId === this.currentUser.userId"
-      />
-      <Dots/>
+      <ScoreboardPosition v-for="(user) in topUsers.slice(0, 10)" :key="user.userId" :userId="user.userId"
+        :score="user.score" :nameAndSurname="user.nameAndSurname" :position="user.position"
+        :current-user="user.userId === this.currentUser.userId" />
+      <Dots />
       <div v-if="!isCurrentUserInTopUsers" class="current-user-row">
-        <ScoreboardPosition
-            :userId="currentUser.userId"
-            :score="currentUser.score"
-            :nameAndSurname="currentUser.nameAndSurname"
-            :position="currentUser.position"
-        />
+        <ScoreboardPosition :userId="currentUser.userId" :score="currentUser.score"
+          :nameAndSurname="currentUser.nameAndSurname" :position="currentUser.position" />
       </div>
-      <Dots v-if="!isCurrentUserInTopUsers && isCurrentUserLast"/>
+      <Dots v-if="!isCurrentUserInTopUsers && isCurrentUserLast" />
     </div>
   </div>
 </template>
 
 <script>
-import {COLORS, FONT_SIZES, GATEWAY_ADDRESS} from "../../../public/Consts";
+import { COLORS, FONT_SIZES, GATEWAY_ADDRESS } from "../../../public/Consts";
 import Header from "@/components/organisms/Header.vue";
 import ScoreboardPosition from "@/components/atoms/ScoreboardPosition.vue";
 import axios from "axios";
 import Dots from "@/components/atoms/Dots.vue";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -47,7 +37,7 @@ export default {
       COLORS: COLORS,
       FONT_SIZES: FONT_SIZES,
       topUsers: [],
-      currentUser: { userId: ''},
+      currentUser: { userId: '' },
       lastPosition: '',
     }
   },
@@ -73,11 +63,11 @@ export default {
   methods: {
     async fetchTopUsers() {
       axios.get(GATEWAY_ADDRESS + `/offer/getTopScoreUserList`).then(response => {
-        console.log(response.data)   ; // to delete
+        console.log(response.data); // to delete
         this.topUsers = response.data;
-          }).catch(error => {
+      }).catch(error => {
         console.error('Error fetching top users: ', error);
-        this.emitter.emit('axiosError', {error: error.response.status});
+        this.emitter.emit('axiosError', { error: error.response.status });
       });
     },
     async fetchCurrentUser() {
@@ -85,7 +75,7 @@ export default {
         this.currentUser = response.data;
       }).catch(error => {
         console.error('Error fetching current user: ', error);
-        this.emitter.emit('axiosError', {error: error.response.status});
+        this.emitter.emit('axiosError', { error: error.response.status });
       });
     },
     async fetchNumberOfUsers() {
@@ -93,7 +83,7 @@ export default {
         this.lastPosition = response.data.length;
       }).catch(error => {
         console.error('Error fetching number of all user: ', error);
-        this.emitter.emit('axiosError', {error: error.response.status});
+        this.emitter.emit('axiosError', { error: error.response.status });
       });
     },
   }
@@ -148,9 +138,7 @@ export default {
   width: 64%;
 }
 
-.current-user-row >>> .name {
+.current-user-row ::v-deep .name {
   font-weight: bold;
 }
-
-
 </style>

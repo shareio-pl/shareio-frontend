@@ -381,6 +381,18 @@ textarea {
   display: none;
 }
 
+
+
+@media screen and (min-width: 851px) {
+  .buttonAI {
+    position: absolute;
+    top: 588px;
+    right: 29.2%;
+    width: 37%;
+    height: calc(15px + 2vw);
+  }
+}
+
 @media screen and (max-width: 850px) {
   .add-offer-card {
     flex-direction: column;

@@ -7,7 +7,6 @@
     <div class="select-wrapper" v-if="!isForCountries">
       <select :class="{ 'selected': selectedOption !== '' }" v-model="selectedOption"
         @change="onSortChange(selectedOption)">
-        <!-- TODO: Figure how to make have some color by default... -->
         <option disabled value="">{{ placeholder }}</option>
         <option v-for="(option, index) in options" :key="index" :value="option">
           {{ option.displayName }}

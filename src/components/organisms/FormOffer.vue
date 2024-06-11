@@ -124,7 +124,6 @@ export default {
       this.v$.$validate();
       await this.$nextTick();
       if (this.v$.$error) {
-        // TODO better message and change the error font
         let errorMessage = '';
         if (this.v$.offerTitle.$error) {
           errorMessage += this.offerTitleError + ', ';

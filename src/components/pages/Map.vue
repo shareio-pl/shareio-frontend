@@ -82,7 +82,6 @@ export default {
   },
   methods:
   {
-    // TODO: Optimize this
     async getOfferIds() {
       try {
         const response = await axios.get(GATEWAY_ADDRESS + '/offer/getAllOffers', {

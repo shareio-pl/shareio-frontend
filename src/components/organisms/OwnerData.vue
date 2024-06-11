@@ -99,9 +99,8 @@ export default {
         this.ownerSurname = response.data.surname;
         this.ownerEmail = response.data.email;
         this.ownerImageId = response.data.photoId.id;
-        // TODO - temporary
-        this.ownerStars = 4.5;
-        this.ownerRating = 123;
+        this.ownerStars = 0;
+        this.ownerRating = 0;
       })
         .then(() => {
           this.getImageData(this.ownerImageId);
